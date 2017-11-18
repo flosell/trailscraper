@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+import click
+from trailscraper.s3_download import _s3_key_prefixes
+
+@click.group()
+def root_group():
+    """A command-line tool to get valuable information out of AWS CloudTrail."""
+    pass
+
+
+@click.command()
+@click.option('--past-days', default=0, help='How many days to look into the past. 0 means today')
+@click.option('--bucket', required=True, help='The S3 bucket that contains cloud-trail logs')
+@click.option('--prefix', default="", help='Prefix in the S3 bucket')
+@click.option('--account-id', multiple=True, required=True, help='ID of the account we want to look at')
+@click.option('--region', multiple=True, required=True, help='Regions we want to look at')
+def download(past_days, bucket, prefix, account_id, region):
+    """Downloads CloudTrail Logs from S3."""
+    click.echo("Downloading a number of files from these prefixes:")
+    for prefix in _s3_key_prefixes(prefix, past_days, account_id, region):
+        click.echo(prefix)
+
+
+root_group.add_command(download)
+
+if __name__ == '__main__':
+    root_group()
