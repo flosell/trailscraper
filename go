@@ -25,11 +25,15 @@ goal_test() {
     pytest -v
 }
 
+goal_check() {
+    activate_venv
+    pylint trailscraper
+}
+
 goal_trailscraper() {
     activate_venv
     bin/trailscraper $@
 }
-
 
 goal_setup() {
     if [ ! -d "${VENV_DIR}" ]; then
@@ -49,6 +53,7 @@ else
   echo "usage: $0 <goal>
 goal:
     setup        -- set up development environment
-    test         -- run all tests"
+    test         -- run all tests
+    check        -- run all style checks"
   exit 1
 fi

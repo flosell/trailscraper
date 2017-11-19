@@ -18,7 +18,7 @@ def test_download_log_files():
         download_cloudtrail_logs(
             target_dir=dirpath,
             bucket="some-bucket",
-            prefix="some-prefix/",
+            cloudtrail_prefix="some-prefix/",
             past_days=0,
             account_ids=["000"],
             regions=["some-region-1"])
