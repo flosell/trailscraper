@@ -1,0 +1,80 @@
+{
+  "Records": [
+    {
+      "eventVersion": "1.05",
+      "userIdentity": {
+        "type": "AssumedRole",
+        "principalId": "AAAAAAAAAAAAAAAAAAAAA:AutoScalingDescribeHandlerSession",
+        "arn": "arn:aws:sts::111111111111:assumed-role/someRole/AutoScalingDescribeHandlerSession",
+        "accountId": "111111111111",
+        "accessKeyId": "AAAAAAAAAAAAAAAAAAAAA",
+        "sessionContext": {
+          "attributes": {
+            "mfaAuthenticated": "false",
+            "creationDate": "2017-11-18T00:21:51Z"
+          },
+          "sessionIssuer": {
+            "type": "Role",
+            "principalId": "AAAAAAAAAAAAAAAAAAAAA",
+            "arn": "arn:aws:iam::111111111111:role/someRole",
+            "accountId": "111111111111",
+            "userName": "someRole"
+          }
+        },
+        "invokedBy": "config.amazonaws.com"
+      },
+      "eventTime": "2017-11-18T00:21:51Z",
+      "eventSource": "autoscaling.amazonaws.com",
+      "eventName": "DescribeLaunchConfigurations",
+      "awsRegion": "eu-central-1",
+      "sourceIPAddress": "config.amazonaws.com",
+      "userAgent": "config.amazonaws.com",
+      "requestParameters": null,
+      "responseElements": null,
+      "requestID": "796142d4-cbf6-11e7-8c53-9fdb2434bfb9",
+      "eventID": "a0ed971f-389f-406a-9fcf-887c5ca6903a",
+      "eventType": "AwsApiCall",
+      "recipientAccountId": "111111111111"
+    },
+    {
+      "eventVersion": "1.05",
+      "userIdentity": {
+        "type": "AWSService",
+        "invokedBy": "config.amazonaws.com"
+      },
+      "eventTime": "2017-11-18T00:21:51Z",
+      "eventSource": "sts.amazonaws.com",
+      "eventName": "AssumeRole",
+      "awsRegion": "eu-central-1",
+      "sourceIPAddress": "config.amazonaws.com",
+      "userAgent": "config.amazonaws.com",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::111111111111:role/someRole",
+        "roleSessionName": "AutoScalingDescribeHandlerSession"
+      },
+      "responseElements": {
+        "credentials": {
+          "accessKeyId": "BBBBBBBBBBBBBBBBBBBBB",
+          "expiration": "Nov 18, 2017 1:21:51 AM",
+          "sessionToken": "someSessionToken"
+        },
+        "assumedRoleUser": {
+          "assumedRoleId": "CCCCCCCCCCCCCCCCCCCCC:AutoScalingDescribeHandlerSession",
+          "arn": "arn:aws:sts::111111111111:assumed-role/someRoleOther/AutoScalingDescribeHandlerSession"
+        }
+      },
+      "requestID": "7955d159-cbf6-11e7-b30f-095c9db6bcb3",
+      "eventID": "b25ff7e3-f1cf-4b7f-883d-b09168c454d5",
+      "resources": [
+        {
+          "ARN": "arn:aws:iam::111111111111:role/someRole",
+          "accountId": "111111111111",
+          "type": "AWS::IAM::Role"
+        }
+      ],
+      "eventType": "AwsApiCall",
+      "recipientAccountId": "111111111111",
+      "sharedEventID": "61742ed6-324a-4133-a3ee-1ead9cd1b75c"
+    }
+  ]
+}

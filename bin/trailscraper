@@ -5,6 +5,9 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+from trailscraper.cloudtrail import load_from_dir
+from trailscraper.policy_generator import generate_policy_from_records, render_policy
+
 import click
 from trailscraper.s3_download import download_cloudtrail_logs
 
@@ -21,15 +24,28 @@ def root_group():
 @click.option('--prefix', default="", help='Prefix in the S3 bucket (including trailing slash)')
 @click.option('--account-id', multiple=True, required=True, help='ID of the account we want to look at')
 @click.option('--region', multiple=True, required=True, help='Regions we want to look at')
-@click.option('--target-dir', default="~/.trailscraper/logs", type=click.Path(), help='Where to put logfiles')
-def download(past_days, bucket, prefix, account_id, region, target_dir, ):
+@click.option('--log-dir', default="~/.trailscraper/logs", type=click.Path(), help='Where to put logfiles')
+def download(past_days, bucket, prefix, account_id, region, log_dir):
     """Downloads CloudTrail Logs from S3."""
-    target_dir = os.path.expanduser(target_dir)
+    log_dir = os.path.expanduser(log_dir)
 
-    download_cloudtrail_logs(target_dir, bucket, prefix, past_days, account_id, region)
+    download_cloudtrail_logs(log_dir, bucket, prefix, past_days, account_id, region)
+
+
+@click.command("generate-policy")
+@click.option('--log-dir', default="~/.trailscraper/logs", type=click.Path(), help='Where to put logfiles')
+def generate_policy(log_dir):
+    """Generates a policy that allows the events covered in the log-dir"""
+    log_dir = os.path.expanduser(log_dir)
+    records = load_from_dir(log_dir)
+    policy = generate_policy_from_records(records)
+
+    click.echo(render_policy(policy))
+    pass
 
 
 root_group.add_command(download)
+root_group.add_command(generate_policy)
 
 if __name__ == '__main__':
     logger = logging.getLogger()
