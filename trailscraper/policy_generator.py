@@ -2,9 +2,9 @@
 
 def generate_policy_from_records(records):
     """Generates a policy from a set of records"""
-    pass
+    return {}
 
 
 def render_policy(policy):
     """Renders a given policy as an IAM compatible JSON-String"""
-    pass
+    return '{ "TODO": "a real policy" }'

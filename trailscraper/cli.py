@@ -1,14 +1,10 @@
-#!/usr/bin/env python3
-import logging
-import sys
+"""Command Line Interface for Trailscraper"""
 import os
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import click
 
 from trailscraper.cloudtrail import load_from_dir
 from trailscraper.policy_generator import generate_policy_from_records, render_policy
-
-import click
 from trailscraper.s3_download import download_cloudtrail_logs
 
 
@@ -25,6 +21,7 @@ def root_group():
 @click.option('--account-id', multiple=True, required=True, help='ID of the account we want to look at')
 @click.option('--region', multiple=True, required=True, help='Regions we want to look at')
 @click.option('--log-dir', default="~/.trailscraper/logs", type=click.Path(), help='Where to put logfiles')
+# pylint: disable=too-many-arguments
 def download(past_days, bucket, prefix, account_id, region, log_dir):
     """Downloads CloudTrail Logs from S3."""
     log_dir = os.path.expanduser(log_dir)
@@ -41,19 +38,7 @@ def generate_policy(log_dir):
     policy = generate_policy_from_records(records)
 
     click.echo(render_policy(policy))
-    pass
 
 
 root_group.add_command(download)
 root_group.add_command(generate_policy)
-
-if __name__ == '__main__':
-    logger = logging.getLogger()
-    handler = logging.StreamHandler()
-    formatter = logging.Formatter(
-        '%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    logger.setLevel(logging.INFO)
-
-    root_group()

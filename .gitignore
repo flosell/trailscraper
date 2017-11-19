@@ -2,3 +2,6 @@
 trailscraper-venv
 .cache
 __pycache__
+/dist/
+.eggs/
+/*.egg-info

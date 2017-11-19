@@ -1,5 +1,0 @@
-pytest
-pytest-catchlog
-freezegun
-moto
-pylint

@@ -22,7 +22,7 @@ create_venv() {
 
 goal_test() {
     activate_venv
-    pytest -v
+    python setup.py test
 }
 
 goal_check() {
@@ -32,7 +32,7 @@ goal_check() {
 
 goal_trailscraper() {
     activate_venv
-    bin/trailscraper $@
+    trailscraper-venv/bin/trailscraper $@
 }
 
 goal_setup() {
@@ -42,10 +42,29 @@ goal_setup() {
 
     activate_venv
 
-    pip3 install -r requirements.txt
-    pip3 install -r requirements-test.txt
+    pushd "${SCRIPT_DIR}" > /dev/null
+      pip3 install -r requirements-dev.txt
+      python setup.py develop
+    popd > /dev/null
 }
 
+goal_clean() {
+	rm -rf "${VENV_DIR}"
+
+    pushd "${SCRIPT_DIR}" > /dev/null
+    rm -fr build/
+	rm -fr dist/
+	rm -fr .eggs/
+	find . -name '*.egg-info' -exec rm -fr {} +
+	find . -name '*.egg' -exec rm -f {} +
+
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -fr {} +
+
+    popd > /dev/null
+}
 
 if type -t "goal_$1" &>/dev/null; then
   goal_$1 ${@:2}
