@@ -1,4 +1,5 @@
 """Command Line Interface for Trailscraper"""
+import logging
 import os
 
 import click
@@ -9,9 +10,15 @@ from trailscraper.s3_download import download_cloudtrail_logs
 
 
 @click.group()
-def root_group():
+@click.option('--verbose', default=False, is_flag=True)
+def root_group(verbose):
     """A command-line tool to get valuable information out of AWS CloudTrail."""
-    pass
+    logger = logging.getLogger()
+    if verbose:
+        logger.setLevel(logging.DEBUG)
+        logging.getLogger('botocore').setLevel(logging.INFO)
+        logging.getLogger('s3transfer').setLevel(logging.INFO)
+
 
 
 @click.command()
@@ -35,6 +42,7 @@ def generate_policy(log_dir):
     """Generates a policy that allows the events covered in the log-dir"""
     log_dir = os.path.expanduser(log_dir)
     records = load_from_dir(log_dir)
+
     policy = generate_policy_from_records(records)
 
     click.echo(render_policy(policy))

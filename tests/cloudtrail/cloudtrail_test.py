@@ -1,12 +1,19 @@
-import os
-
-from trailscraper.cloudtrail import parse_records_from_gzipped_file
+from tests.test_utils_testdata import cloudtrail_data, cloudtrail_data_dir
+from trailscraper.cloudtrail import _parse_records_from_gzipped_file, load_from_dir
+from trailscraper.cloudtrail import Record
 
 
 def test_parse_records_from_gzipped_file():
-    parsed_records = parse_records_from_gzipped_file(_testdata_file("someRecords.json.gz"))
-    assert parsed_records == []
+    parsed_records = _parse_records_from_gzipped_file(cloudtrail_data("someRecords.json.gz"))
+    assert parsed_records == [
+        Record("autoscaling.amazonaws.com", "DescribeLaunchConfigurations"),
+        Record("sts.amazonaws.com", "AssumeRole")
+    ]
 
 
-def _testdata_file(filename):
-    os.path.join(os.path.dirname(__file__), 'data', filename)
+def test_load_all_gzipped_files_from_dir():
+    records = load_from_dir(cloudtrail_data_dir())
+    assert records == [
+        Record("autoscaling.amazonaws.com", "DescribeLaunchConfigurations"),
+        Record("sts.amazonaws.com", "AssumeRole")
+    ]

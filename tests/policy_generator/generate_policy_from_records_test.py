@@ -1,0 +1,68 @@
+from awacs.aws import PolicyDocument, Statement, Action
+
+from trailscraper.cloudtrail import Record
+from trailscraper.policy_generator import generate_policy_from_records
+
+
+def test_should_generate_simple_policy():
+    records = [
+        Record("autoscaling.amazonaws.com", "DescribeLaunchConfigurations"),
+        Record("sts.amazonaws.com", "AssumeRole")
+    ]
+
+    assert generate_policy_from_records(records) == PolicyDocument(
+        Version="2012-10-17",
+        Statement=[
+            Statement(
+                Effect="Allow",
+                Action=[
+                    Action('autoscaling', 'DescribeLaunchConfigurations'),
+                    Action('sts', 'AssumeRole'),
+                ],
+                Resource=["*"]
+            )
+        ]
+    )
+
+
+def test_should_remove_duplicate_actions():
+    records = [
+        Record("autoscaling.amazonaws.com", "DescribeLaunchConfigurations"),
+        Record("autoscaling.amazonaws.com", "DescribeLaunchConfigurations"),
+    ]
+
+    assert generate_policy_from_records(records) == PolicyDocument(
+        Version="2012-10-17",
+        Statement=[
+            Statement(
+                Effect="Allow",
+                Action=[
+                    Action('autoscaling', 'DescribeLaunchConfigurations'),
+                ],
+                Resource=["*"]
+            )
+        ]
+    )
+
+
+def test_should_sort_actions_alphabetically():
+    records = [
+        Record("ec2.amazonaws.com", "DescribeSecurityGroups"),
+        Record("rds.amazonaws.com", "ListTagsForResource"),
+        Record("ec2.amazonaws.com", "DescribeInstances"),
+    ]
+
+    assert generate_policy_from_records(records) == PolicyDocument(
+        Version="2012-10-17",
+        Statement=[
+            Statement(
+                Effect="Allow",
+                Action=[
+                    Action("ec2", "DescribeInstances"),
+                    Action("ec2", "DescribeSecurityGroups"),
+                    Action("rds", "ListTagsForResource"),
+                ],
+                Resource=["*"]
+            )
+        ]
+    )
