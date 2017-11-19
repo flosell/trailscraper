@@ -14,4 +14,20 @@ def test_should_output_an_iam_policy_for_a_set_of_cloudtrail_records():
     runner = CliRunner()
     result = runner.invoke(cli.root_group, args=["generate-policy"])
     assert result.exit_code == 0
-    assert result.output == '{ "TODO": "a real policy" }\n'
+    assert result.output == '''\
+{
+    "Statement": [
+        {
+            "Action": [
+                "sts:AssumeRole",
+                "autoscaling:DescribeLaunchConfigurations"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "*"
+            ]
+        }
+    ],
+    "Version": "2012-10-17"
+}
+'''
