@@ -23,7 +23,7 @@ setup(
     description='A command-line tool to get valuable information out of AWS CloudTrail',
     url='http://github.com/flosell/trailscraper',
     author='Florian Sellmayr',
-    author_email='flyingcircus@example.com',
+    author_email='florian.sellmayr@gmail.com',
     license='Apache License 2.0',
     packages=find_packages(include=['trailscraper']),
     zip_safe=False,
