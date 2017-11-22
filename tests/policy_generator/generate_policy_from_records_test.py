@@ -66,3 +66,27 @@ def test_should_sort_actions_alphabetically():
             )
         ]
     )
+
+
+def test_should_include_resources():
+    records = [
+        Record("ec2.amazonaws.com", "DescribeSecurityGroups"),
+        Record("rds.amazonaws.com", "ListTagsForResource",["arn:aws:rds:eu-central-1:111111111111:db:some-db"]),
+        Record("ec2.amazonaws.com", "DescribeInstances"),
+    ]
+
+    assert generate_policy_from_records(records) == PolicyDocument(
+        Version="2012-10-17",
+        Statement=[
+            Statement(
+                Effect="Allow",
+                Action=[
+                    Action("ec2", "DescribeInstances"),
+                    Action("ec2", "DescribeSecurityGroups"),
+                    Action("rds", "ListTagsForResource"),
+                ],
+                Resource=["*","arn:aws:rds:eu-central-1:111111111111:db:some-db"]
+            )
+        ]
+    )
+

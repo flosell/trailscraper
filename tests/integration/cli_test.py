@@ -25,7 +25,8 @@ def test_should_output_an_iam_policy_for_a_set_of_cloudtrail_records():
             ],
             "Effect": "Allow",
             "Resource": [
-                "*"
+                "*",
+                "arn:aws:iam::111111111111:role/someRole"
             ]
         }
     ],

@@ -1,4 +1,5 @@
 """Functions responsible for generating a policy from a set of CloudTrail Records"""
+
 from awacs.aws import Action, PolicyDocument, Statement
 
 
@@ -8,17 +9,19 @@ def _source_to_iam_prefix(event_source):
 
     return special_cases.get(event_source, default_case)
 
+
 def generate_policy_from_records(records):
     """Generates a policy from a set of records"""
-    actions = [Action(_source_to_iam_prefix(record.event_source), record.event_name) for record in set(records)]
+    actions = [Action(_source_to_iam_prefix(record.event_source), record.event_name) for record in records]
+    resources = [arn for record in records for arn in record.resource_arns]
 
     return PolicyDocument(
         Version="2012-10-17",
         Statement=[
             Statement(
                 Effect="Allow",
-                Action=sorted(actions, key=lambda x: x.prefix + x.action),
-                Resource=["*"]
+                Action=sorted(set(actions), key=lambda x: x.prefix + x.action),
+                Resource=sorted(set(resources))
             )
         ]
     )

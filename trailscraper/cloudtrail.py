@@ -8,29 +8,40 @@ import os
 class Record():
     """Represents a CloudTrail record"""
 
-    def __init__(self, event_source, event_name):
+    def __init__(self, event_source, event_name, resource_arns=None):
         self.event_source = event_source
         self.event_name = event_name
+        self.resource_arns = resource_arns or ["*"]
 
     def __repr__(self):
-        return f"Record(event_source={self.event_source} event_name={self.event_name})"
+        return f"Record(event_source={self.event_source} event_name={self.event_name} " \
+               f"resource_arns={self.resource_arns})"
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             return self.event_source == other.event_source and \
-                   self.event_name == other.event_name
+                   self.event_name == other.event_name and \
+                   self.resource_arns == other.resource_arns
 
         return False
 
     def __hash__(self):
-        return hash((self.event_source, self.event_name))
+        return hash((self.event_source, self.event_name, tuple(self.resource_arns)))
 
     def __ne__(self, other):
         return not self.__eq__(other)
 
 
+def _resource_arns(json_record):
+    resources = json_record.get('resources', [])
+    arns = [resource['ARN'] for resource in resources]
+    return arns
+
+
 def _mk_record(json_record):
-    return Record(json_record['eventSource'], json_record['eventName'])
+    return Record(json_record['eventSource'],
+                  json_record['eventName'],
+                  _resource_arns(json_record))
 
 
 def _parse_records_from_gzipped_file(filename):
