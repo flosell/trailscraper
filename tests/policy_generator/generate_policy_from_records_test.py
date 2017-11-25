@@ -83,10 +83,15 @@ def test_should_include_resources():
                 Action=[
                     Action("ec2", "DescribeInstances"),
                     Action("ec2", "DescribeSecurityGroups"),
+                ],
+                Resource=["*"]
+            ),
+            Statement(
+                Effect="Allow",
+                Action=[
                     Action("rds", "ListTagsForResource"),
                 ],
-                Resource=["*","arn:aws:rds:eu-central-1:111111111111:db:some-db"]
+                Resource=["arn:aws:rds:eu-central-1:111111111111:db:some-db"]
             )
         ]
     )
-

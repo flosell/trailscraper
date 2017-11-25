@@ -1,4 +1,5 @@
 """Functions responsible for generating a policy from a set of CloudTrail Records"""
+from itertools import groupby
 
 from awacs.aws import Action, PolicyDocument, Statement
 
@@ -10,20 +11,35 @@ def _source_to_iam_prefix(event_source):
     return special_cases.get(event_source, default_case)
 
 
+def _combine_actions_with_same_resource(statements):
+    statements = list(statements)
+    actions = [action for statement in statements for action in statement.Action]
+    return Statement(
+        Effect="Allow",
+        Action=list(sorted(set(actions), key=lambda action: action.JSONrepr())),
+        Resource=sorted(statements[0].Resource)
+    )
+
+
 def generate_policy_from_records(records):
     """Generates a policy from a set of records"""
-    actions = [Action(_source_to_iam_prefix(record.event_source), record.event_name) for record in records]
-    resources = [arn for record in records for arn in record.resource_arns]
+
+    statements = [
+        Statement(
+            Effect="Allow",
+            Action=[Action(_source_to_iam_prefix(record.event_source), record.event_name)],
+            Resource=sorted(record.resource_arns)
+        ) for record in records
+    ]
+
+    combined_statements = []
+    key_function = lambda statement: statement.Resource
+    for _, statements in groupby(sorted(statements, key=key_function), key=key_function):
+        combined_statements.append(_combine_actions_with_same_resource(statements))
 
     return PolicyDocument(
         Version="2012-10-17",
-        Statement=[
-            Statement(
-                Effect="Allow",
-                Action=sorted(set(actions), key=lambda x: x.prefix + x.action),
-                Resource=sorted(set(resources))
-            )
-        ]
+        Statement=combined_statements,
     )
 
 

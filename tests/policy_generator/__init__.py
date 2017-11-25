@@ -16,8 +16,7 @@ def pdne(self, other):
 
 def actioneq(self, other):
     if isinstance(other, self.__class__):
-        return self.prefix == other.prefix and \
-               self.action == other.action
+        return self.JSONrepr() == other.JSONrepr()
     else:
         return False
 

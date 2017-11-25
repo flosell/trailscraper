@@ -20,12 +20,19 @@ def test_should_output_an_iam_policy_for_a_set_of_cloudtrail_records():
     "Statement": [
         {
             "Action": [
-                "autoscaling:DescribeLaunchConfigurations",
+                "autoscaling:DescribeLaunchConfigurations"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Action": [
                 "sts:AssumeRole"
             ],
             "Effect": "Allow",
             "Resource": [
-                "*",
                 "arn:aws:iam::111111111111:role/someRole"
             ]
         }
