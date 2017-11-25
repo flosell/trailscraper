@@ -21,6 +21,26 @@ def _combine_actions_with_same_resource(statements):
     )
 
 
+def _combine_resources_with_the_same_actions(statement):
+    statement_list = list(statement)
+    resources = [action for statement in statement_list for action in statement.Resource]
+    return Statement(
+        Effect="Allow",
+        Action=statement_list[0].Action,
+        Resource=resources
+    )
+
+
+def _combine_statements_with_the_same_actions(statements):
+    combined_statements = []
+    key_function = lambda statement: statement.Action
+    # pylint: disable=fixme
+    # FIXME: groupby expects sorted statements, otherwise it might not group properly...
+    for _, group in groupby(statements, key=key_function):
+        combined_statements.append(_combine_resources_with_the_same_actions(group))
+    return combined_statements
+
+
 def generate_policy_from_records(records):
     """Generates a policy from a set of records"""
 
@@ -32,15 +52,21 @@ def generate_policy_from_records(records):
         ) for record in records
     ]
 
-    combined_statements = []
-    key_function = lambda statement: statement.Resource
-    for _, statements in groupby(sorted(statements, key=key_function), key=key_function):
-        combined_statements.append(_combine_actions_with_same_resource(statements))
+    combined_statements = _combine_statements_with_the_same_actions(
+        _combine_statements_with_the_same_resources(statements))
 
     return PolicyDocument(
         Version="2012-10-17",
         Statement=combined_statements,
     )
+
+
+def _combine_statements_with_the_same_resources(statements):
+    combined_statements = []
+    key_function = lambda statement: statement.Resource
+    for _, group in groupby(sorted(statements, key=key_function), key=key_function):
+        combined_statements.append(_combine_actions_with_same_resource(group))
+    return combined_statements
 
 
 def render_policy(policy):

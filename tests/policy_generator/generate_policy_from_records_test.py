@@ -68,10 +68,10 @@ def test_should_sort_actions_alphabetically():
     )
 
 
-def test_should_include_resources():
+def test_should_group_by_resources():
     records = [
         Record("ec2.amazonaws.com", "DescribeSecurityGroups"),
-        Record("rds.amazonaws.com", "ListTagsForResource",["arn:aws:rds:eu-central-1:111111111111:db:some-db"]),
+        Record("rds.amazonaws.com", "ListTagsForResource", ["arn:aws:rds:eu-central-1:111111111111:db:some-db"]),
         Record("ec2.amazonaws.com", "DescribeInstances"),
     ]
 
@@ -92,6 +92,29 @@ def test_should_include_resources():
                     Action("rds", "ListTagsForResource"),
                 ],
                 Resource=["arn:aws:rds:eu-central-1:111111111111:db:some-db"]
+            )
+        ]
+    )
+
+
+def test_should_group_by_resources_and_combine_statements_with_same_actions_but_different_resources():
+    records = [
+        Record("rds.amazonaws.com", "ListTagsForResource", ["arn:aws:rds:eu-central-1:111111111111:db:some-db"]),
+        Record("rds.amazonaws.com", "ListTagsForResource", ["arn:aws:rds:eu-central-1:111111111111:db:some-other-db"]),
+    ]
+
+    assert generate_policy_from_records(records) == PolicyDocument(
+        Version="2012-10-17",
+        Statement=[
+            Statement(
+                Effect="Allow",
+                Action=[
+                    Action("rds", "ListTagsForResource"),
+                ],
+                Resource=[
+                    "arn:aws:rds:eu-central-1:111111111111:db:some-db",
+                    "arn:aws:rds:eu-central-1:111111111111:db:some-other-db",
+                ]
             )
         ]
     )

@@ -4,7 +4,7 @@ TODOs
   * [x] Download trails
   * [ ] Filter trails
   * [x] Generate policies with all actions in trail
-  * [ ] Generate policies with resources for the actions
+  * [x] Generate policies with resources for the actions
 * [ ] Release on PyPi
 * [ ] Compatibility with different Python versions
 * [ ] Documentation
