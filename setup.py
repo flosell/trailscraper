@@ -34,4 +34,7 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     setup_requires=setup_requirements,
+
+    # workaround until cloudtools/awacs#87 is merged
+    dependency_links=['http://github.com/flosell/awacs/tarball/add_equality_and_hashes#egg=awacs-0.7.2']
 )
