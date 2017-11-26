@@ -17,10 +17,18 @@ test_requirements = [
     'moto==1.1.24',
 ]
 
+with open('README.rst') as readme_file:
+    readme = readme_file.read()
+
+with open('HISTORY.rst') as history_file:
+    history = history_file.read()
+
+
 setup(
     name='trailscraper',
     version='0.1',
     description='A command-line tool to get valuable information out of AWS CloudTrail',
+    long_description=readme + '\n\n' + history,
     url='http://github.com/flosell/trailscraper',
     author='Florian Sellmayr',
     author_email='florian.sellmayr@gmail.com',

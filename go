@@ -48,6 +48,15 @@ goal_setup() {
     popd > /dev/null
 }
 
+goal_generate-rst() {
+    pushd "${SCRIPT_DIR}" > /dev/null
+    for f in "README.md" "CHANGELOG.md"; do
+        output_file="$(basename ${f} .md).rst"
+        pandoc --from=markdown --to=rst --output="${output_file}" "${f}"
+    done
+    popd > /dev/null
+}
+
 goal_clean() {
 	rm -rf "${VENV_DIR}"
 
