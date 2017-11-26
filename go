@@ -35,19 +35,6 @@ goal_trailscraper() {
     trailscraper-venv/bin/trailscraper $@
 }
 
-goal_setup() {
-    if [ ! -d "${VENV_DIR}" ]; then
-        create_venv
-    fi
-
-    activate_venv
-
-    pushd "${SCRIPT_DIR}" > /dev/null
-      pip3 install -r requirements-dev.txt
-      python setup.py develop
-    popd > /dev/null
-}
-
 goal_generate-rst() {
     pushd "${SCRIPT_DIR}" > /dev/null
     for f in "README.md" "CHANGELOG.md"; do
@@ -57,6 +44,28 @@ goal_generate-rst() {
     popd > /dev/null
 }
 
+goal_install_tools() {
+    sudo apt-get install -y pandoc
+}
+
+goal_setup() {
+    if [ ! -d "${VENV_DIR}" ]; then
+        create_venv
+    fi
+    if [ -n "$TRAVIS_OS_NAME" ]; then
+        goal_install_tools
+    fi
+
+    activate_venv
+    goal_generate-rst
+
+    pushd "${SCRIPT_DIR}" > /dev/null
+      pip3 install -r requirements-dev.txt
+      python setup.py develop
+    popd > /dev/null
+}
+
+
 goal_clean() {
 	rm -rf "${VENV_DIR}"
 
@@ -64,6 +73,8 @@ goal_clean() {
     rm -fr build/
 	rm -fr dist/
 	rm -fr .eggs/
+	rm -f README.rst
+	rm -f CHANGELOG.rst
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -f {} +
 
