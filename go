@@ -44,16 +44,9 @@ goal_generate-rst() {
     popd > /dev/null
 }
 
-goal_install_tools() {
-    apt-get install -y pandoc
-}
-
 goal_setup() {
     if [ ! -d "${VENV_DIR}" ]; then
         create_venv
-    fi
-    if [ -n "$TRAVIS_OS_NAME" ]; then
-        goal_install_tools
     fi
 
     activate_venv
