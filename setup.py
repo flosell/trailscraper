@@ -56,7 +56,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
     ],
-    python_requires='>=3',
+    python_requires='>=3.6',
     # workaround until cloudtools/awacs#87 is merged
     dependency_links=['http://github.com/flosell/awacs/tarball/add_equality_and_hashes#egg=awacs-0.7.2']
 )
