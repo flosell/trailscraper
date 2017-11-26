@@ -1,10 +1,8 @@
 language: python
 python:
-  - 3.5
-  - 3.4
-  - 3.3
+  - 3.6
 install: ./go setup
-script: ./go test
+script: ./go test && ./go check
 addons:
   apt:
     packages:
