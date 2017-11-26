@@ -79,6 +79,15 @@ goal_clean() {
     popd > /dev/null
 }
 
+goal_release() {
+    goal_test
+    goal_check
+
+    goal_generate-rst
+
+    python setup.py sdist bdist_wheel upload --sign --identity 'florian.sellmayr@gmail.com'
+}
+
 goal_push() {
     goal_test
     goal_check
