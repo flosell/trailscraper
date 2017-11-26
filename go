@@ -79,6 +79,12 @@ goal_clean() {
     popd > /dev/null
 }
 
+goal_push() {
+    goal_test
+    goal_check
+    git push
+}
+
 if type -t "goal_$1" &>/dev/null; then
   goal_$1 ${@:2}
 else
