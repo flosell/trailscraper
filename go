@@ -45,7 +45,7 @@ goal_generate-rst() {
 }
 
 goal_install_tools() {
-    sudo apt-get install -y pandoc
+    apt-get install -y pandoc
 }
 
 goal_setup() {
