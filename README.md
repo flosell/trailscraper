@@ -5,7 +5,10 @@ A command-line tool to get valuable information out of AWS CloudTrail
 ## Installation
 
 ```bash
-pip install trailscraper
+# install custom dependeny since PR cloudtools/awacs#87 isn't merged yet
+$ pip install 'http://github.com/flosell/awacs/tarball/add_equality_and_hashes#egg=awacs-0.7.2'
+# install trailscraper
+$ pip install trailscraper
 ```
 
 ## Usage
