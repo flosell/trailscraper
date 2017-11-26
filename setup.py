@@ -42,7 +42,23 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     setup_requires=setup_requirements,
-
+    keywords=["aws","cloud","iam","cloudtrail","trailscraper"],
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Developers',
+        'Intended Audience :: System Administrators',
+        'License :: OSI Approved :: Apache Software License',
+        'Topic :: Software Development :: Code Generators',
+        'Topic :: Utilities',
+        'Topic :: System :: Systems Administration',
+        'Topic :: Security',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+    ],
+    python_requires='>=3',
     # workaround until cloudtools/awacs#87 is merged
     dependency_links=['http://github.com/flosell/awacs/tarball/add_equality_and_hashes#egg=awacs-0.7.2']
 )
