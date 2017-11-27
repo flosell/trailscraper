@@ -8,10 +8,11 @@ import os
 class Record():
     """Represents a CloudTrail record"""
 
-    def __init__(self, event_source, event_name, resource_arns=None):
+    def __init__(self, event_source, event_name, resource_arns=None, assumed_role_arn=None):
         self.event_source = event_source
         self.event_name = event_name
         self.resource_arns = resource_arns or ["*"]
+        self.assumed_role_arn = assumed_role_arn
 
     def __repr__(self):
         return f"Record(event_source={self.event_source} event_name={self.event_name} " \
@@ -21,12 +22,16 @@ class Record():
         if isinstance(other, self.__class__):
             return self.event_source == other.event_source and \
                    self.event_name == other.event_name and \
-                   self.resource_arns == other.resource_arns
+                   self.resource_arns == other.resource_arns and \
+                   self.assumed_role_arn == other.assumed_role_arn
 
         return False
 
     def __hash__(self):
-        return hash((self.event_source, self.event_name, tuple(self.resource_arns)))
+        return hash((self.event_source,
+                     self.event_name,
+                     tuple(self.resource_arns),
+                     self.assumed_role_arn))
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -38,10 +43,29 @@ def _resource_arns(json_record):
     return arns
 
 
-def _mk_record(json_record):
-    return Record(json_record['eventSource'],
-                  json_record['eventName'],
-                  _resource_arns(json_record))
+def _assumed_role_arn(json_record):
+    user_identity = json_record['userIdentity']
+    if 'type' in user_identity \
+            and user_identity['type'] == 'AssumedRole' \
+            and 'sessionContext' in user_identity:
+        return user_identity['sessionContext']['sessionIssuer']['arn']
+    return None
+
+
+def _parse_record(json_record):
+    try:
+        return Record(json_record['eventSource'],
+                      json_record['eventName'],
+                      resource_arns=_resource_arns(json_record),
+                      assumed_role_arn=_assumed_role_arn(json_record))
+    except KeyError as error:
+        logging.warning("Could not parse %s: %s", json_record, error)
+        return None
+
+
+def _parse_records(json_records):
+    parsed_records = [_parse_record(record) for record in json_records]
+    return [r for r in parsed_records if r is not None]
 
 
 def _parse_records_from_gzipped_file(filename):
@@ -50,7 +74,8 @@ def _parse_records_from_gzipped_file(filename):
 
     with gzip.open(filename, 'rb') as file:
         json_data = json.load(file)
-        return [_mk_record(record) for record in json_data['Records']]
+        records = json_data['Records']
+        return _parse_records(records)
 
 
 def load_from_dir(log_dir):

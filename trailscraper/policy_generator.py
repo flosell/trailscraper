@@ -41,15 +41,18 @@ def _combine_statements_with_the_same_actions(statements):
     return combined_statements
 
 
-def generate_policy_from_records(records):
+def generate_policy_from_records(records, arns_to_filter_for=None):
     """Generates a policy from a set of records"""
+
+    if arns_to_filter_for is None:
+        arns_to_filter_for = []
 
     statements = [
         Statement(
             Effect="Allow",
             Action=[Action(_source_to_iam_prefix(record.event_source), record.event_name)],
             Resource=sorted(record.resource_arns)
-        ) for record in records
+        ) for record in records if (record.assumed_role_arn in arns_to_filter_for) or (len(arns_to_filter_for) == 0)
     ]
 
     combined_statements = _combine_statements_with_the_same_actions(

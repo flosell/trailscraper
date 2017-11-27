@@ -20,7 +20,6 @@ def root_group(verbose):
         logging.getLogger('s3transfer').setLevel(logging.INFO)
 
 
-
 @click.command()
 @click.option('--past-days', default=0, help='How many days to look into the past. 0 means today')
 @click.option('--bucket', required=True, help='The S3 bucket that contains cloud-trail logs')
@@ -38,12 +37,14 @@ def download(past_days, bucket, prefix, account_id, region, log_dir):
 
 @click.command("generate-policy")
 @click.option('--log-dir', default="~/.trailscraper/logs", type=click.Path(), help='Where to put logfiles')
-def generate_policy(log_dir):
+@click.option('--filter-assumed-role-arn', multiple=True,
+              help='only consider events from this role (can be used multiple times)')
+def generate_policy(log_dir, filter_assumed_role_arn):
     """Generates a policy that allows the events covered in the log-dir"""
     log_dir = os.path.expanduser(log_dir)
     records = load_from_dir(log_dir)
 
-    policy = generate_policy_from_records(records)
+    policy = generate_policy_from_records(records, filter_assumed_role_arn)
 
     click.echo(render_policy(policy))
 

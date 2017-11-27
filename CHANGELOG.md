@@ -4,6 +4,12 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## 0.2.0
+
+### Added
+
+* Basic filtering for role-arns when generating policy (#3)
+
 ## 0.1.0
 
 _Initial Release_
