@@ -4,6 +4,8 @@ import json
 import logging
 import os
 
+from trailscraper.iam import Statement, Action
+
 
 class Record():
     """Represents a CloudTrail record"""
@@ -35,6 +37,20 @@ class Record():
 
     def __ne__(self, other):
         return not self.__eq__(other)
+
+    def _source_to_iam_prefix(self):
+        special_cases = {'monitoring.amazonaws.com': 'cloudwatch'}
+        default_case = self.event_source.split('.')[0]
+
+        return special_cases.get(self.event_source, default_case)
+
+    def to_statement(self):
+        """Converts record into a matching IAM Policy Statement"""
+        return Statement(
+            Effect="Allow",
+            Action=[Action(self._source_to_iam_prefix(), self.event_name)],
+            Resource=sorted(self.resource_arns)
+        )
 
 
 def _resource_arns(json_record):

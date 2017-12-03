@@ -3,14 +3,8 @@ from functools import reduce
 from itertools import groupby
 
 import toolz as toolz
-from trailscraper.iam import Action, PolicyDocument, Statement
 
-
-def _source_to_iam_prefix(event_source):
-    special_cases = {'monitoring.amazonaws.com': 'cloudwatch'}
-    default_case = event_source.split('.')[0]
-
-    return special_cases.get(event_source, default_case)
+from trailscraper.iam import PolicyDocument, Statement
 
 
 def _combine_statements_with_the_same_actions(statements):
@@ -28,11 +22,8 @@ def generate_policy_from_records(records, arns_to_filter_for=None):
         arns_to_filter_for = []
 
     statements = [
-        Statement(
-            Effect="Allow",
-            Action=[Action(_source_to_iam_prefix(record.event_source), record.event_name)],
-            Resource=sorted(record.resource_arns)
-        ) for record in records if (record.assumed_role_arn in arns_to_filter_for) or (len(arns_to_filter_for) == 0)
+        record.to_statement()
+        for record in records if (record.assumed_role_arn in arns_to_filter_for) or (len(arns_to_filter_for) == 0)
     ]
 
     combined_statements = _combine_statements_with_the_same_actions(
