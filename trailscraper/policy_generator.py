@@ -3,7 +3,7 @@ from functools import reduce
 from itertools import groupby
 
 import toolz as toolz
-from awacs.aws import Action, PolicyDocument, Statement
+from trailscraper.iam import Action, PolicyDocument, Statement
 
 
 def _source_to_iam_prefix(event_source):
@@ -29,7 +29,7 @@ def _combine_statements(statement1, statement2):
 
     effect = statement1.Effect
 
-    actions = list(sorted(set(statement1.Action + statement2.Action), key=lambda action: action.JSONrepr()))
+    actions = list(sorted(set(statement1.Action + statement2.Action), key=lambda action: action.json_repr()))
     resources = list(sorted(set(statement1.Resource + statement2.Resource)))
 
     return Statement(

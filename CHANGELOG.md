@@ -3,7 +3,11 @@
 This changelog contains a loose collection of changes in every release including breaking changes to the API.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
-## 0.2.1
+## 0.3.0
+
+### Changed
+
+* Removed dependency on fork of the awacs-library to simplify installation and development 
 
 ### Fixed
 

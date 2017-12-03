@@ -3,7 +3,6 @@ from setuptools import setup, find_packages
 requirements = [
     'boto3==1.4.7',
     'click==6.7',
-    'awacs==0.7.2',
     'toolz==0.8.2',
 ]
 
@@ -27,7 +26,7 @@ with open('CHANGELOG.rst') as changelog_file:
 
 setup(
     name='trailscraper',
-    version='0.2',
+    version='0.3.0',
     description='A command-line tool to get valuable information out of AWS CloudTrail',
     long_description=readme + '\n\n' + changelog,
     url='http://github.com/flosell/trailscraper',
@@ -58,6 +57,4 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     python_requires='>=3.6',
-    # workaround until cloudtools/awacs#87 is merged
-    dependency_links=['http://github.com/flosell/awacs/tarball/add_equality_and_hashes#egg=awacs-0.7.2']
 )

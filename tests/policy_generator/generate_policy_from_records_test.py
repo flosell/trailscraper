@@ -1,4 +1,4 @@
-from awacs.aws import PolicyDocument, Statement, Action
+from trailscraper.iam import PolicyDocument, Statement, Action
 
 from trailscraper.cloudtrail import Record
 from trailscraper.policy_generator import generate_policy_from_records

@@ -1,5 +1,5 @@
 import pytest
-from awacs.aws import Statement, Action
+from trailscraper.iam import Statement, Action
 
 from trailscraper.policy_generator import _combine_statements
 
