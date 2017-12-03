@@ -3,6 +3,11 @@
 This changelog contains a loose collection of changes in every release including breaking changes to the API.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
+## 0.2.1
+
+### Fixed
+
+* Bug that led to policy-statements with the same set of actions not being combined properly in some cases (#7) 
 
 ## 0.2.0
 

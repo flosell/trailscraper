@@ -3,7 +3,8 @@ from setuptools import setup, find_packages
 requirements = [
     'boto3==1.4.7',
     'click==6.7',
-    'awacs==0.7.2'
+    'awacs==0.7.2',
+    'toolz==0.8.2',
 ]
 
 setup_requirements = [

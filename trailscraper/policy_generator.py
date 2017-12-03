@@ -1,6 +1,7 @@
 """Functions responsible for generating a policy from a set of CloudTrail Records"""
 from itertools import groupby
 
+import toolz as toolz
 from awacs.aws import Action, PolicyDocument, Statement
 
 
@@ -33,10 +34,9 @@ def _combine_resources_with_the_same_actions(statement):
 
 def _combine_statements_with_the_same_actions(statements):
     combined_statements = []
-    key_function = lambda statement: statement.Action
-    # pylint: disable=fixme
-    # FIXME: groupby expects sorted statements, otherwise it might not group properly...
-    for _, group in groupby(statements, key=key_function):
+    key_function = lambda statement: tuple(statement.Action)
+
+    for _, group in toolz.groupby(key_function, statements).items():
         combined_statements.append(_combine_resources_with_the_same_actions(group))
     return combined_statements
 

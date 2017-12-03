@@ -118,3 +118,37 @@ def test_should_group_by_resources_and_combine_statements_with_same_actions_but_
             )
         ]
     )
+
+
+def test_should_group_by_action_and_resource_independent_of_order():
+    records = [
+        Record("rds.amazonaws.com", "ListTagsForResource", ["arn:aws:rds:eu-central-1:111111111111:db:some-db"]),
+        Record("rds.amazonaws.com", "SomethingDifferent", ["arn:aws:rds:eu-central-1:111111111111:db:a-third-db"]),
+        Record("rds.amazonaws.com", "ListTagsForResource", ["arn:aws:rds:eu-central-1:111111111111:db:some-other-db"]),
+    ]
+
+    expected = PolicyDocument(
+        Version="2012-10-17",
+        Statement=[
+            Statement(
+                Effect="Allow",
+                Action=[
+                    Action("rds", "SomethingDifferent"),
+                ],
+                Resource=[
+                    "arn:aws:rds:eu-central-1:111111111111:db:a-third-db",
+                ]
+            ),
+            Statement(
+                Effect="Allow",
+                Action=[
+                    Action("rds", "ListTagsForResource"),
+                ],
+                Resource=[
+                    "arn:aws:rds:eu-central-1:111111111111:db:some-db",
+                    "arn:aws:rds:eu-central-1:111111111111:db:some-other-db",
+                ]
+            ),
+        ])
+    actual = generate_policy_from_records(records)
+    assert actual == expected
