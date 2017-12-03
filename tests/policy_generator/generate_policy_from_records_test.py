@@ -133,20 +133,20 @@ def test_should_group_by_action_and_resource_independent_of_order():
             Statement(
                 Effect="Allow",
                 Action=[
-                    Action("rds", "SomethingDifferent"),
-                ],
-                Resource=[
-                    "arn:aws:rds:eu-central-1:111111111111:db:a-third-db",
-                ]
-            ),
-            Statement(
-                Effect="Allow",
-                Action=[
                     Action("rds", "ListTagsForResource"),
                 ],
                 Resource=[
                     "arn:aws:rds:eu-central-1:111111111111:db:some-db",
                     "arn:aws:rds:eu-central-1:111111111111:db:some-other-db",
+                ]
+            ),
+            Statement(
+                Effect="Allow",
+                Action=[
+                    Action("rds", "SomethingDifferent"),
+                ],
+                Resource=[
+                    "arn:aws:rds:eu-central-1:111111111111:db:a-third-db",
                 ]
             ),
         ])

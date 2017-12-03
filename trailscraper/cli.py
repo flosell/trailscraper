@@ -5,7 +5,7 @@ import os
 import click
 
 from trailscraper.cloudtrail import load_from_dir
-from trailscraper.policy_generator import generate_policy_from_records, render_policy
+from trailscraper.policy_generator import generate_policy_from_records
 from trailscraper.s3_download import download_cloudtrail_logs
 
 
@@ -46,7 +46,7 @@ def generate_policy(log_dir, filter_assumed_role_arn):
 
     policy = generate_policy_from_records(records, filter_assumed_role_arn)
 
-    click.echo(render_policy(policy))
+    click.echo(policy.to_json())
 
 
 root_group.add_command(download)
