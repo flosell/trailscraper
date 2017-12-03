@@ -1,4 +1,5 @@
 """Functions responsible for generating a policy from a set of CloudTrail Records"""
+from functools import reduce
 from itertools import groupby
 
 import toolz as toolz
@@ -12,33 +13,30 @@ def _source_to_iam_prefix(event_source):
     return special_cases.get(event_source, default_case)
 
 
-def _combine_actions_with_same_resource(statements):
-    statements = list(statements)
-    actions = [action for statement in statements for action in statement.Action]
-    return Statement(
-        Effect="Allow",
-        Action=list(sorted(set(actions), key=lambda action: action.JSONrepr())),
-        Resource=sorted(statements[0].Resource)
-    )
-
-
-def _combine_resources_with_the_same_actions(statement):
-    statement_list = list(statement)
-    resources = [action for statement in statement_list for action in statement.Resource]
-    return Statement(
-        Effect="Allow",
-        Action=statement_list[0].Action,
-        Resource=resources
-    )
-
-
 def _combine_statements_with_the_same_actions(statements):
     combined_statements = []
     key_function = lambda statement: tuple(statement.Action)
 
     for _, group in toolz.groupby(key_function, statements).items():
-        combined_statements.append(_combine_resources_with_the_same_actions(group))
+        combined_statements.append(reduce(_combine_statements, group))
     return combined_statements
+
+
+def _combine_statements(statement1, statement2):
+    if statement1.Effect != statement2.Effect:
+        raise ValueError("Trying to combine two statements with differing effects: {} {}".format(statement1.Effect,
+                                                                                                 statement2.Effect))
+
+    effect = statement1.Effect
+
+    actions = list(sorted(set(statement1.Action + statement2.Action), key=lambda action: action.JSONrepr()))
+    resources = list(sorted(set(statement1.Resource + statement2.Resource)))
+
+    return Statement(
+        Effect=effect,
+        Action=actions,
+        Resource=resources,
+    )
 
 
 def generate_policy_from_records(records, arns_to_filter_for=None):
@@ -68,7 +66,7 @@ def _combine_statements_with_the_same_resources(statements):
     combined_statements = []
     key_function = lambda statement: statement.Resource
     for _, group in groupby(sorted(statements, key=key_function), key=key_function):
-        combined_statements.append(_combine_actions_with_same_resource(group))
+        combined_statements.append(reduce(_combine_statements, group))
     return combined_statements
 
 
