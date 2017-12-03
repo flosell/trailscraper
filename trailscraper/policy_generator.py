@@ -18,26 +18,8 @@ def _combine_statements_with_the_same_actions(statements):
     key_function = lambda statement: tuple(statement.Action)
 
     for _, group in toolz.groupby(key_function, statements).items():
-        combined_statements.append(reduce(_combine_statements, group))
+        combined_statements.append(reduce(Statement.merge, group))
     return combined_statements
-
-
-def _combine_statements(statement1, statement2):
-    if statement1.Effect != statement2.Effect:
-        raise ValueError("Trying to combine two statements with differing effects: {} {}".format(statement1.Effect,
-                                                                                                 statement2.Effect))
-
-    effect = statement1.Effect
-
-    actions = list(sorted(set(statement1.Action + statement2.Action), key=lambda action: action.json_repr()))
-    resources = list(sorted(set(statement1.Resource + statement2.Resource)))
-
-    return Statement(
-        Effect=effect,
-        Action=actions,
-        Resource=resources,
-    )
-
 
 def generate_policy_from_records(records, arns_to_filter_for=None):
     """Generates a policy from a set of records"""
@@ -66,7 +48,7 @@ def _combine_statements_with_the_same_resources(statements):
     combined_statements = []
     key_function = lambda statement: statement.Resource
     for _, group in groupby(sorted(statements, key=key_function), key=key_function):
-        combined_statements.append(reduce(_combine_statements, group))
+        combined_statements.append(reduce(Statement.merge, group))
     return combined_statements
 
 

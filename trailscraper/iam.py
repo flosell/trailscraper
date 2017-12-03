@@ -51,6 +51,23 @@ class Statement(BaseElement):
             'Resource': self.Resource,
         }
 
+    def merge(self, other):
+        """Merge two statements into one."""
+        if self.Effect != other.Effect:
+            raise ValueError("Trying to combine two statements with differing effects: {} {}".format(self.Effect,
+                                                                                                     other.Effect))
+
+        effect = self.Effect
+
+        actions = list(sorted(set(self.Action + other.Action), key=lambda action: action.json_repr()))
+        resources = list(sorted(set(self.Resource + other.Resource)))
+
+        return Statement(
+            Effect=effect,
+            Action=actions,
+            Resource=resources,
+        )
+
 
 class PolicyDocument(BaseElement):
     """IAM Policy Doument."""

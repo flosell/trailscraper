@@ -1,10 +1,9 @@
 import pytest
+
 from trailscraper.iam import Statement, Action
 
-from trailscraper.policy_generator import _combine_statements
 
-
-def test_should_combine_two_identical_statements():
+def test_should_merge_two_identical_statements():
     statement1 = Statement(
         Effect="Allow",
         Action=[
@@ -24,11 +23,11 @@ def test_should_combine_two_identical_statements():
         ]
     )
 
-    assert _combine_statements(statement1, statement2) == statement1
-    assert _combine_statements(statement1, statement2) == statement2
+    assert statement1.merge(statement2) == statement1
+    assert statement2.merge(statement1) == statement2
 
 
-def test_should_combine_two_statements_with_different_actions_and_resources():
+def test_should_merge_two_statements_with_different_actions_and_resources():
     statement1 = Statement(
         Effect="Allow",
         Action=[
@@ -49,7 +48,7 @@ def test_should_combine_two_statements_with_different_actions_and_resources():
         ]
     )
 
-    combined = Statement(
+    merged = Statement(
         Effect="Allow",
         Action=[
             Action("some-service", "some-action"),
@@ -61,10 +60,10 @@ def test_should_combine_two_statements_with_different_actions_and_resources():
         ]
     )
 
-    assert _combine_statements(statement1, statement2) == combined
+    assert statement1.merge(statement2) == merged
 
 
-def test_should_combine_deny_statments():
+def test_should_merge_deny_statments():
     statement1 = Statement(
         Effect="Deny",
         Action=[Action("some-service", "some-action")],
@@ -75,7 +74,7 @@ def test_should_combine_deny_statments():
         Action=[Action("some-service", "some-other-action")],
         Resource=["*"])
 
-    combined = Statement(
+    merged = Statement(
         Effect="Deny",
         Action=[
             Action("some-service", "some-action"),
@@ -83,7 +82,7 @@ def test_should_combine_deny_statments():
         ],
         Resource=["*"])
 
-    assert _combine_statements(statement1, statement2) == combined
+    assert statement1.merge(statement2) == merged
 
 
 def test_should_fail_if_effects_arent_the_same():
@@ -97,6 +96,6 @@ def test_should_fail_if_effects_arent_the_same():
         Resource=[])
 
     with pytest.raises(ValueError) as e:
-        _combine_statements(statement1, statement2)
+        statement1.merge(statement2)
 
     assert str(e.value) == "Trying to combine two statements with differing effects: Allow Deny"
