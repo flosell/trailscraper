@@ -28,7 +28,13 @@ def _s3_download_recursive(bucket, prefix, target_dir):
         if not os.path.exists(os.path.dirname(target)):
             os.makedirs(os.path.dirname(target))
         logging.info(f"Downloading {bucket}/{key} to {target}")
-        client.download_file(bucket, key, target)
+
+        if not os.path.exists(target):
+            logging.info(f"Downloading {bucket}/{key} to {target}...")
+            client.download_file(bucket, key, target)
+        else:
+            logging.info(f"Skipping {bucket}/{key}, already exists.")
+
 
     def _download_dir(dist):
         paginator = client.get_paginator('list_objects')

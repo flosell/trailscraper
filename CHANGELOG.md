@@ -3,6 +3,13 @@
 This changelog contains a loose collection of changes in every release including breaking changes to the API.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
+
+## 0.4.0
+
+### Changed
+
+* Do not download CloudTrail Logs from S3 if they already exist in the target folder (#9)
+
 ## 0.3.0
 
 ### Changed
