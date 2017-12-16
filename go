@@ -25,6 +25,11 @@ goal_test() {
     python setup.py test
 }
 
+goal_test-all-versions() {
+    activate_venv
+    tox
+}
+
 goal_check() {
     activate_venv
     pylint trailscraper

@@ -17,12 +17,17 @@ test_requirements = [
     'moto==1.1.24',
 ]
 
-with open('README.rst') as readme_file:
-    readme = readme_file.read()
 
-with open('CHANGELOG.rst') as changelog_file:
-    changelog = changelog_file.read()
+def read_file(filename):
+    try:
+        with open(filename) as readme_file:
+            return readme_file.read()
+    except:
+        return ''
 
+
+readme = read_file('README.rst')
+changelog = read_file('CHANGELOG.rst')
 
 setup(
     name='trailscraper',
@@ -42,7 +47,7 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     setup_requires=setup_requirements,
-    keywords=["aws","cloud","iam","cloudtrail","trailscraper"],
+    keywords=["aws", "cloud", "iam", "cloudtrail", "trailscraper"],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

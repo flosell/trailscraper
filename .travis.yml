@@ -1,8 +1,8 @@
 language: python
 python:
   - 3.6
-install: ./go setup
-script: ./go test && ./go check
+install: pip install -U tox-travis && ./go setup
+script: ./go check && ./go test-all-versions
 addons:
   apt:
     packages:
