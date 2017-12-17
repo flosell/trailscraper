@@ -51,6 +51,7 @@ goal_setup() {
 
     pushd "${SCRIPT_DIR}" > /dev/null
       pip install -r requirements-dev.txt
+      pip install -r requirements.txt
       python setup.py develop
     popd > /dev/null
 }
