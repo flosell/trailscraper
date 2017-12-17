@@ -1,4 +1,4 @@
-import tempfile
+from backports import tempfile
 
 from moto import mock_s3
 

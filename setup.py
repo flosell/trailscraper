@@ -15,6 +15,7 @@ test_requirements = [
     'pytest-catchlog==1.2.2',
     'freezegun==0.3.9',
     'moto==1.1.24',
+    'backports.tempfile==1.0',
 ]
 
 

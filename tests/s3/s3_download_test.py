@@ -1,5 +1,4 @@
-import tempfile
-
+from backports import tempfile
 from freezegun import freeze_time
 from moto import mock_s3
 from tests.test_utils_s3 import file_content, given_a_bucket, given_an_object, given_a_file
