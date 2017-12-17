@@ -50,7 +50,7 @@ goal_setup() {
     goal_generate-rst
 
     pushd "${SCRIPT_DIR}" > /dev/null
-      pip3 install -r requirements-dev.txt
+      pip install -r requirements-dev.txt
       python setup.py develop
     popd > /dev/null
 }
