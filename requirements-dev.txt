@@ -1,5 +1,5 @@
 bumpversion==0.5.3
-pylint==1.7.4
+pylint==1.8.1
 pip==9.0.1
 pytest==3.2.5
 pytest-runner==2.11.1
