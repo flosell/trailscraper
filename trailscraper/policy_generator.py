@@ -4,6 +4,7 @@ import toolz as toolz
 from toolz import pipe
 from toolz.curried import filter as filterz
 from toolz.curried import map as mapz
+from toolz.curried import sorted as sortedz
 
 from trailscraper.cloudtrail import Record
 from trailscraper.iam import PolicyDocument, Statement
@@ -31,7 +32,8 @@ def generate_policy_from_records(records, arns_to_filter_for=None):
                       filterz(_by_role_arns(arns_to_filter_for)),
                       mapz(Record.to_statement),
                       _combine_statements_by(lambda statement: statement.Resource),
-                      _combine_statements_by(lambda statement: statement.Action))
+                      _combine_statements_by(lambda statement: statement.Action),
+                      sortedz())
 
     return PolicyDocument(
         Version="2012-10-17",

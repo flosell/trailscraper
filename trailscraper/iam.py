@@ -68,6 +68,18 @@ class Statement(BaseElement):
             Resource=resources,
         )
 
+    def __action_list_strings(self):
+        return "-".join([a.json_repr() for a in self.Action])
+
+    def __lt__(self, other):
+        if self.Effect != other.Effect:
+            return self.Effect < other.Effect
+        elif self.Action != other.Action:
+            # pylint: disable=W0212
+            return self.__action_list_strings() < other.__action_list_strings()
+
+        return "".join(self.Resource) < "".join(other.Resource)
+
 
 class PolicyDocument(BaseElement):
     """IAM Policy Doument."""
