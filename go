@@ -149,11 +149,14 @@ if type -t "goal_$1" &>/dev/null; then
 else
   echo "usage: $0 <goal>
 goal:
-    setup        -- set up development environment
-    test         -- run all tests
-    check        -- run all style checks
+    setup              -- set up development environment
+    test               -- run all tests
+    test-all-versions  -- run all tests
+    check              -- run all style checks
 
-    release      -- create and publish a new release
-    bump_version -- bump version"
+    trailscraper       -- call the current development state
+
+    release            -- create and publish a new release
+    bump_version       -- bump version"
   exit 1
 fi
