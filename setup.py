@@ -48,7 +48,7 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     setup_requires=setup_requirements,
-    keywords=["aws", "cloud", "iam", "cloudtrail", "trailscraper"],
+    keywords="aws cloud iam cloudtrail trailscraper",
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
