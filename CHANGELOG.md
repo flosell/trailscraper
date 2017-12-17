@@ -4,7 +4,9 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
-## 0.4.0
+## 0.3.0
+
+### Changed
 
 ### Added
 
@@ -13,11 +15,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 ### Changed
 
 * Do not download CloudTrail Logs from S3 if they already exist in the target folder (#9)
-
-## 0.3.0
-
-### Changed
-
 * Removed dependency on fork of the awacs-library to simplify installation and development 
 
 ### Fixed
