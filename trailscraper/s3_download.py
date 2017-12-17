@@ -53,5 +53,5 @@ def _s3_download_recursive(bucket, prefix, target_dir):
 def download_cloudtrail_logs(target_dir, bucket, cloudtrail_prefix, past_days, account_ids, regions):
     """Downloads cloudtrail logs matching the given arguments to the target dir"""
     for prefix in _s3_key_prefixes(cloudtrail_prefix, past_days, account_ids, regions):
-        logging.debug("Downloading logs for %s", prefix)
+        logging.debug(f"Downloading logs for {prefix}")
         _s3_download_recursive(bucket, prefix, target_dir)
