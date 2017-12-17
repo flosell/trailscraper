@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 * Added `--version` command line argument
 
+### Changed
+
+* Set more flexible dependencies
+
 ## 0.3.0
 
 ### Changed

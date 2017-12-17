@@ -1,10 +1,15 @@
 from setuptools import setup, find_packages
 
-requirements = [
-    'boto3==1.4.7',
-    'click==6.7',
-    'toolz==0.8.2',
-]
+def read_file(filename):
+    try:
+        with open(filename) as readme_file:
+            return readme_file.read()
+    except:
+        return ''
+
+
+requirements = read_file('requirements.txt')
+
 
 setup_requirements = [
     'pytest-runner==3.0',
@@ -17,14 +22,6 @@ test_requirements = [
     'moto==1.1.24',
     'backports.tempfile==1.0',
 ]
-
-
-def read_file(filename):
-    try:
-        with open(filename) as readme_file:
-            return readme_file.read()
-    except:
-        return ''
 
 
 readme = read_file('README.rst')

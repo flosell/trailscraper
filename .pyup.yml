@@ -2,3 +2,8 @@
 # see https://pyup.io/docs/configuration/ for all available options
 
 schedule: every week
+requirements:
+  - requirements-dev.txt:
+      update: all
+  - requirements.txt:
+      pin: False
