@@ -9,15 +9,7 @@ activate_venv() {
 }
 
 create_venv() {
-    if which python3 > /dev/null; then
-        PYTHON_BINARY_NAME="python3"
-    else
-        PYTHON_BINARY_NAME="python"
-    fi
-
-    ${PYTHON_BINARY_NAME} --version 2>&1 | grep -q 'Python 3'  || die "python is not Python 3"
-
-    virtualenv -p ${PYTHON_BINARY_NAME} "${VENV_DIR}"
+    virtualenv "${VENV_DIR}"
 }
 
 goal_test() {
