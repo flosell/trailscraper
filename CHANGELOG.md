@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 ## 0.4.0
 
+### Added
+
+* Support for Python >= 2.7
+
 ### Changed
 
 * Do not download CloudTrail Logs from S3 if they already exist in the target folder (#9)
