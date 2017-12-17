@@ -4,12 +4,14 @@ import os
 
 import click
 
+import trailscraper
 from trailscraper.cloudtrail import load_from_dir
 from trailscraper.policy_generator import generate_policy_from_records
 from trailscraper.s3_download import download_cloudtrail_logs
 
 
 @click.group()
+@click.version_option(version=trailscraper.__version__)
 @click.option('--verbose', default=False, is_flag=True)
 def root_group(verbose):
     """A command-line tool to get valuable information out of AWS CloudTrail."""

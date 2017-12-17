@@ -4,6 +4,12 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## 0.3.1
+
+### Added
+
+* Added `--version` command line argument
+
 ## 0.3.0
 
 ### Changed
