@@ -118,6 +118,12 @@ goal_tag_version() {
     git push --tags
 }
 
+goal_bump_version() {
+    part=${1:-patch}
+    activate_venv
+    bumpversion ${part}
+}
+
 goal_release() {
     goal_test-all-versions
     goal_check
@@ -128,6 +134,8 @@ goal_release() {
 
     goal_tag_version
     goal_create_github_release
+    goal_bump_version
+    git push
 }
 
 goal_push() {
@@ -143,6 +151,9 @@ else
 goal:
     setup        -- set up development environment
     test         -- run all tests
-    check        -- run all style checks"
+    check        -- run all style checks
+
+    release      -- create and publish a new release
+    bump_version -- bump version"
   exit 1
 fi
