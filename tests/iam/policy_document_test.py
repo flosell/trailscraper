@@ -1,3 +1,4 @@
+import json
 
 from trailscraper.iam import PolicyDocument, Statement, Action
 
@@ -49,4 +50,4 @@ def test_policy_document_renders_to_json():
     ],
     "Version": "2012-10-17"
 }'''
-    assert pd.to_json() == expected_json
+    assert json.loads(pd.to_json()) == json.loads(expected_json)
