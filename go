@@ -63,6 +63,7 @@ goal_clean() {
     rm -fr build/
 	rm -fr dist/
 	rm -fr .eggs/
+	rm -fr .tox/
 	rm -f README.rst
 	rm -f CHANGELOG.rst
 	find . -name '*.egg-info' -exec rm -fr {} +
