@@ -84,13 +84,50 @@ goal_clean() {
     popd > /dev/null
 }
 
+goal_create_github_release() {
+    # make sure you have the following:
+    # https://github.com/aktau/github-release
+    # https://github.com/mtdowling/chag
+    # $GITHUB_TOKEN is set
+
+    pushd "${SCRIPT_DIR}" > /dev/null
+    VERSION=$(chag latest)
+    CHANGELOG=$(chag contents)
+    USER="flosell"
+    REPO="trailscraper"
+
+    echo "Publishing Release to GitHub: "
+    echo "Version ${VERSION}"
+    echo "${CHANGELOG}"
+    echo
+
+    github-release release \
+        --user ${USER} \
+        --repo ${REPO} \
+        --tag ${VERSION} \
+        --name ${VERSION} \
+        --description "${CHANGELOG}"
+
+    echo "Published release on GitHub"
+    popd > /dev/null
+}
+
+goal_tag_version() {
+    VERSION=$(chag latest)
+    git tag -s ${VERSION}
+    git push --tags
+}
+
 goal_release() {
-    goal_test
+    goal_test-all-versions
     goal_check
 
     goal_generate-rst
 
     python setup.py sdist bdist_wheel upload --sign --identity 'florian.sellmayr@gmail.com'
+
+    goal_tag_version
+    goal_create_github_release
 }
 
 goal_push() {
