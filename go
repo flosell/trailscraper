@@ -114,7 +114,7 @@ goal_create_github_release() {
 
 goal_tag_version() {
     VERSION=$(chag latest)
-    git tag -s ${VERSION}
+    git tag -s ${VERSION} -m "Release ${VERSION}"
     git push --tags
 }
 
