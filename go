@@ -9,7 +9,15 @@ activate_venv() {
 }
 
 create_venv() {
-    virtualenv "${VENV_DIR}"
+    if which python3 > /dev/null; then
+        PYTHON_BINARY_NAME="python3"
+    else
+        PYTHON_BINARY_NAME="python"
+    fi
+
+    ${PYTHON_BINARY_NAME} --version 2>&1 | grep -q 'Python 3'  || die "python is not Python 3"
+
+    virtualenv -p ${PYTHON_BINARY_NAME} "${VENV_DIR}"
 }
 
 goal_test() {
@@ -50,7 +58,7 @@ goal_setup() {
     goal_generate-rst
 
     pushd "${SCRIPT_DIR}" > /dev/null
-      pip install -r requirements-dev.txt
+      pip3 install -r requirements-dev.txt
       python setup.py develop
     popd > /dev/null
 }
@@ -63,7 +71,6 @@ goal_clean() {
     rm -fr build/
 	rm -fr dist/
 	rm -fr .eggs/
-	rm -fr .tox/
 	rm -f README.rst
 	rm -f CHANGELOG.rst
 	find . -name '*.egg-info' -exec rm -fr {} +

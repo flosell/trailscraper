@@ -87,7 +87,7 @@ def _parse_records(json_records):
 
 def _parse_records_from_gzipped_file(filename):
     """Parses CloudTrail Records from a single file"""
-    logging.debug("Loading %s", filename)
+    logging.debug("Loading "+filename)
 
     with gzip.open(filename, 'rt') as file:
         json_data = json.load(file)
