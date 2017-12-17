@@ -7,7 +7,8 @@ import boto3 as boto3
 
 
 def _s3_key_prefix(prefix, date, account_id, region):
-    return f"{prefix}AWSLogs/{account_id}/CloudTrail/{region}/{date.year}/{date.month:02d}/{date.day:02d}"
+    return "{}AWSLogs/{}/CloudTrail/{}/{}/{:02d}/{:02d}" \
+        .format(prefix, account_id, region, date.year, date.month, date.day)
 
 
 def _s3_key_prefixes(prefix, past_days, account_ids, regions):
@@ -27,13 +28,12 @@ def _s3_download_recursive(bucket, prefix, target_dir):
         target = target_dir + os.sep + key
         if not os.path.exists(os.path.dirname(target)):
             os.makedirs(os.path.dirname(target))
-        logging.info(f"Downloading {bucket}/{key} to {target}")
 
         if not os.path.exists(target):
-            logging.info(f"Downloading {bucket}/{key} to {target}...")
+            logging.info("Downloading %s/%s to %s", bucket, key, target)
             client.download_file(bucket, key, target)
         else:
-            logging.info(f"Skipping {bucket}/{key}, already exists.")
+            logging.info("Skipping %s/%s, already exists.", bucket, key)
 
 
     def _download_dir(dist):
@@ -53,5 +53,5 @@ def _s3_download_recursive(bucket, prefix, target_dir):
 def download_cloudtrail_logs(target_dir, bucket, cloudtrail_prefix, past_days, account_ids, regions):
     """Downloads cloudtrail logs matching the given arguments to the target dir"""
     for prefix in _s3_key_prefixes(cloudtrail_prefix, past_days, account_ids, regions):
-        logging.debug(f"Downloading logs for {prefix}")
+        logging.debug("Downloading logs for %s", prefix)
         _s3_download_recursive(bucket, prefix, target_dir)

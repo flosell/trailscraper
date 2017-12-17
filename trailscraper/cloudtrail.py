@@ -17,8 +17,9 @@ class Record():
         self.assumed_role_arn = assumed_role_arn
 
     def __repr__(self):
-        return f"Record(event_source={self.event_source} event_name={self.event_name} " \
-               f"resource_arns={self.resource_arns})"
+
+        return "Record(event_source={} event_name={} resource_arns={})"\
+            .format(self.event_source, self.event_name, self.resource_arns)
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -86,7 +87,7 @@ def _parse_records(json_records):
 
 def _parse_records_from_gzipped_file(filename):
     """Parses CloudTrail Records from a single file"""
-    logging.debug(f"Loading {filename}")
+    logging.debug("Loading "+filename)
 
     with gzip.open(filename, 'rb') as file:
         json_data = json.load(file)
