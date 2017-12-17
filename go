@@ -31,8 +31,12 @@ goal_test-all-versions() {
 }
 
 goal_check() {
-    activate_venv
-    pylint trailscraper
+    if [[ "$(python --version)" =~ 'Python 3\.3.*' ]]; then
+        echo "SKIPPING PYLINT, NOT COMPATIBLE WITH THIS VERSION OF PYTHON"
+    else
+        activate_venv
+        pylint trailscraper
+    fi
 }
 
 goal_trailscraper() {
