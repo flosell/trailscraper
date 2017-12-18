@@ -14,10 +14,11 @@ $ pip install trailscraper
 ## Usage
 
 ```bash
-# Download some logs
+# Download some logs (including us-east-1 for global aws services)
 $ trailscraper download --bucket <some-bucket> \
                         --account-id <some account id> \
                         --region <some region to look at> \ 
+                        --region us-east-1 \ 
                         --past-days <number of past days to look at> \
 # Generate an IAM Policy  
 $ trailscraper generate
