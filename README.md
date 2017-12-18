@@ -60,6 +60,11 @@ $ ./go         # let's see what we can do here
 ```
 
 ### Troubleshooting
+
+#### TrailScraper is missing some events
+
+* Make sure you have logs for the `us-east-1` region. Some global AWS services (e.g. Route53, IAM, STS, CloudFront) use this region. For details, check the [CloudTrail Documentation](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-global-service-events)
+
 #### Click thinks you are in an ASCII environment 
 
 `Click will abort further execution because Python 3 was configured to use ASCII as encoding for the environment.`
