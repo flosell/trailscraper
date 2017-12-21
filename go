@@ -15,8 +15,6 @@ create_venv() {
         PYTHON_BINARY_NAME="python"
     fi
 
-    ${PYTHON_BINARY_NAME} --version 2>&1 | grep -q 'Python 3'  || die "python is not Python 3"
-
     virtualenv -p ${PYTHON_BINARY_NAME} "${VENV_DIR}"
 }
 
@@ -58,7 +56,7 @@ goal_setup() {
     goal_generate-rst
 
     pushd "${SCRIPT_DIR}" > /dev/null
-      pip3 install -r requirements-dev.txt
+      pip install -r requirements-dev.txt
       python setup.py develop
     popd > /dev/null
 }
