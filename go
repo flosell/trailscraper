@@ -3,15 +3,27 @@ set -e
 
 SCRIPT_DIR=$(cd $(dirname $0) ; pwd -P)
 VENV_DIR="${SCRIPT_DIR}/venvs/trailscraper-venv${VENV_POSTFIX}"
+VERSIONS="2.7
+3.4
+3.5
+3.6"
 
 activate_venv() {
     source "${VENV_DIR}/bin/activate"
 }
 
-goal_run_in_docker() {
+goal_in-version() {
     python_version=$1
-    cmd="bash -x /code/go ${@:2}"
+    cmd="/code/go ${@:2}"
+    echo "=============== BEGIN Python ${version} ${cmd} ==============="
     docker run -it -v $(pwd):/code -e VENV_POSTFIX=${python_version} python:${python_version} ${cmd}
+    echo "=============== END Python ${version} ${cmd}   ==============="
+}
+
+goal_in-all-versions() {
+    for version in ${VERSIONS}; do
+        goal_in-version ${version} ${@}
+    done
 }
 
 create_venv() {
@@ -21,17 +33,19 @@ create_venv() {
         PYTHON_BINARY_NAME="python"
     fi
 
-    virtualenv -p ${PYTHON_BINARY_NAME} "${VENV_DIR}"
+    if which virtualenv > /dev/null; then
+        virtualenv -p ${PYTHON_BINARY_NAME} "${VENV_DIR}"
+    else
+        pyvenv "${VENV_DIR}"
+    fi
+
 }
 
 goal_test() {
-    activate_venv
-    python setup.py test
-}
-
-goal_test-all-versions() {
-    activate_venv
-    tox
+    pushd "${SCRIPT_DIR}" > /dev/null
+      activate_venv
+      python setup.py test
+    popd > /dev/null
 }
 
 goal_check() {
@@ -60,9 +74,8 @@ goal_setup() {
         create_venv
     fi
 
-    activate_venv
-
     pushd "${SCRIPT_DIR}" > /dev/null
+      activate_venv
       pip install -r requirements-dev.txt
       python setup.py develop
     popd > /dev/null
@@ -130,7 +143,7 @@ goal_bump_version() {
 }
 
 goal_release() {
-    goal_test-all-versions
+    goal_in-all-versions test
     goal_check
 
     goal_generate-rst
@@ -156,10 +169,12 @@ else
 goal:
     setup              -- set up development environment
     test               -- run all tests
-    test-all-versions  -- run all tests
     check              -- run all style checks
 
     trailscraper       -- call the current development state
+
+    in-version         -- run a go-command in a particular version of python
+    in-all-versions    -- run a go-command in all supported versions of python
 
     release            -- create and publish a new release
     bump_version       -- bump version"

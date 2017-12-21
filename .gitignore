@@ -8,6 +8,5 @@ README.rst
 CHANGELOG.rst g
 CHANGELOG.rst
 build
-.tox
 *.pyc
 venvs

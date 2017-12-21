@@ -4,6 +4,4 @@ pip==9.0.1
 pytest==3.2.5
 pytest-runner==2.11.1
 cryptography==2.1.3
-tox==2.3.1
-tox-travis==0.10
 astroid==1.5.3 # this is a dependency of pylint and needed pinning after we introduced tox (related to https://github.com/PyCQA/pylint/issues/1609)
