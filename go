@@ -63,7 +63,7 @@ goal_check() {
 
 goal_trailscraper() {
     activate_venv
-    trailscraper-venv/bin/trailscraper $@
+    ${VENV_DIR}/bin/trailscraper $@
 }
 
 goal_generate-rst() {

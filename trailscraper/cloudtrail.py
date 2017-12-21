@@ -1,9 +1,11 @@
 """Functions to get CloudTrail records from disk"""
+import datetime
 import gzip
 import json
 import logging
 import os
 
+import boto3
 from trailscraper.iam import Statement, Action
 
 
@@ -102,5 +104,22 @@ def load_from_dir(log_dir):
         for logfile in logfiles:
             if logfile.endswith(".json.gz"):
                 records.extend(_parse_records_from_gzipped_file(os.path.join(root, logfile)))
+
+    return records
+
+
+def load_from_api():
+    """Loads the last 10 hours of cloudtrail events from the API"""
+    client = boto3.client('cloudtrail')
+    paginator = client.get_paginator('lookup_events')
+    now = datetime.datetime.now()
+    response_iterator = paginator.paginate(
+        StartTime=now - datetime.timedelta(hours=10),
+        EndTime=now
+    )
+    records = []
+    for response in response_iterator:
+        for event in response['Events']:
+            records.append(_parse_record(json.loads(event['CloudTrailEvent'])))
 
     return records

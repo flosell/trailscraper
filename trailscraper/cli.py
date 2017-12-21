@@ -5,7 +5,7 @@ import os
 import click
 
 import trailscraper
-from trailscraper.cloudtrail import load_from_dir
+from trailscraper.cloudtrail import load_from_dir, load_from_api
 from trailscraper.policy_generator import generate_policy_from_records
 from trailscraper.s3_download import download_cloudtrail_logs
 
@@ -41,10 +41,15 @@ def download(past_days, bucket, prefix, account_id, region, log_dir):
 @click.option('--log-dir', default="~/.trailscraper/logs", type=click.Path(), help='Where to put logfiles')
 @click.option('--filter-assumed-role-arn', multiple=True,
               help='only consider events from this role (can be used multiple times)')
-def generate_policy(log_dir, filter_assumed_role_arn):
+@click.option('--use-cloudtrail-api', is_flag=True, default=False,
+              help='Pull Events from CloudtrailAPI instead of log-dir')
+def generate_policy(log_dir, filter_assumed_role_arn, use_cloudtrail_api):
     """Generates a policy that allows the events covered in the log-dir"""
     log_dir = os.path.expanduser(log_dir)
-    records = load_from_dir(log_dir)
+    if use_cloudtrail_api:
+        records = load_from_api()
+    else:
+        records = load_from_dir(log_dir)
 
     policy = generate_policy_from_records(records, filter_assumed_role_arn)
 

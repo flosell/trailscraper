@@ -4,6 +4,13 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## 0.3.2
+
+### Added
+
+* Support for CloudTrail `lookup_events` API that allows users to generate a policy without downloading logs from an S3 bucket.
+  Note that this API only returns _["create, modify, and delete API calls"](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-cloudtrail-events-supported-services.html)_
+
 ## 0.3.1
 
 ### Added
