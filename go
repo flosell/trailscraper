@@ -29,8 +29,10 @@ goal_test-all-versions() {
 }
 
 goal_check() {
-    activate_venv
-    pylint trailscraper
+    pushd "${SCRIPT_DIR}" > /dev/null
+      activate_venv
+      pylint trailscraper
+    popd > /dev/null
 }
 
 goal_trailscraper() {
