@@ -2,10 +2,16 @@
 set -e
 
 SCRIPT_DIR=$(cd $(dirname $0) ; pwd -P)
-VENV_DIR="${SCRIPT_DIR}/trailscraper-venv"
+VENV_DIR="${SCRIPT_DIR}/venvs/trailscraper-venv${VENV_POSTFIX}"
 
 activate_venv() {
     source "${VENV_DIR}/bin/activate"
+}
+
+goal_run_in_docker() {
+    python_version=$1
+    cmd="bash -x /code/go ${@:2}"
+    docker run -it -v $(pwd):/code -e VENV_POSTFIX=${python_version} python:${python_version} ${cmd}
 }
 
 create_venv() {
@@ -55,7 +61,6 @@ goal_setup() {
     fi
 
     activate_venv
-    goal_generate-rst
 
     pushd "${SCRIPT_DIR}" > /dev/null
       pip install -r requirements-dev.txt

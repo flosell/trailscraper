@@ -1,5 +1,4 @@
 .idea
-trailscraper-venv
 .cache
 __pycache__
 /dist/
@@ -11,3 +10,4 @@ CHANGELOG.rst
 build
 .tox
 *.pyc
+venvs
