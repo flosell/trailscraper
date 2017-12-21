@@ -2,7 +2,7 @@
 import json
 
 
-class BaseElement:
+class BaseElement(object):
     """Base Class for all IAM Policy classes"""
 
     def json_repr(self):

@@ -7,7 +7,7 @@ import os
 from trailscraper.iam import Statement, Action
 
 
-class Record():
+class Record(object):
     """Represents a CloudTrail record"""
 
     def __init__(self, event_source, event_name, resource_arns=None, assumed_role_arn=None):
@@ -89,8 +89,8 @@ def _parse_records_from_gzipped_file(filename):
     """Parses CloudTrail Records from a single file"""
     logging.debug("Loading "+filename)
 
-    with gzip.open(filename, 'rt') as file:
-        json_data = json.load(file)
+    with gzip.open(filename, 'rt') as unzipped:
+        json_data = json.load(unzipped)
         records = json_data['Records']
         return _parse_records(records)
 
@@ -98,9 +98,9 @@ def _parse_records_from_gzipped_file(filename):
 def load_from_dir(log_dir):
     """Loads all CloudTrail Records in a file"""
     records = []
-    for root, _, files in os.walk(log_dir):
-        for file in files:
-            if file.endswith(".json.gz"):
-                records.extend(_parse_records_from_gzipped_file(os.path.join(root, file)))
+    for root, _, logfiles in os.walk(log_dir):
+        for logfile in logfiles:
+            if logfile.endswith(".json.gz"):
+                records.extend(_parse_records_from_gzipped_file(os.path.join(root, logfile)))
 
     return records

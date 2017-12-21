@@ -23,8 +23,8 @@ def _s3_key_prefixes(prefix, past_days, account_ids, regions):
 def _s3_download_recursive(bucket, prefix, target_dir):
     client = boto3.client('s3')
 
-    def _download_file(file):
-        key = file.get('Key')
+    def _download_file(object_info):
+        key = object_info.get('Key')
         target = target_dir + os.sep + key
         if not os.path.exists(os.path.dirname(target)):
             os.makedirs(os.path.dirname(target))
@@ -44,8 +44,8 @@ def _s3_download_recursive(bucket, prefix, target_dir):
                     _download_dir(subdir.get('Prefix'))
 
             if result.get('Contents') is not None:
-                for file in result.get('Contents'):
-                    _download_file(file)
+                for content in result.get('Contents'):
+                    _download_file(content)
 
     _download_dir(prefix)
 
