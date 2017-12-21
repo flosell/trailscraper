@@ -15,9 +15,15 @@ activate_venv() {
 goal_in-version() {
     python_version=$1
     cmd="/code/go ${@:2}"
-    echo "=============== BEGIN Python ${version} ${cmd} ==============="
-    docker run -it -v $(pwd):/code -e VENV_POSTFIX=${python_version} python:${python_version} ${cmd}
-    echo "=============== END Python ${version} ${cmd}   ==============="
+    echo "=============== BEGIN Python ${python_version} ${cmd} ==============="
+
+    docker run -it \
+               -v $(pwd):/code \
+               -w /code \
+               -e VENV_POSTFIX=${python_version} \
+               python:${python_version} ${cmd}
+
+    echo "=============== END Python ${python_version} ${cmd}   ==============="
 }
 
 goal_in-all-versions() {
