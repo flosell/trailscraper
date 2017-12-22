@@ -20,6 +20,12 @@ def test_parse_records_from_gzipped_file():
     ]
 
 
+def test_parse_records_from_gzipped_file_should_return_empty_for_non_gzipped_files():
+    parsed_records = _parse_records_from_gzipped_file(cloudtrail_data("someRecords.json"))
+    assert parsed_records == []
+
+
+
 def test_load_all_gzipped_files_from_dir():
     records = load_from_dir(cloudtrail_data_dir())
     assert records == [

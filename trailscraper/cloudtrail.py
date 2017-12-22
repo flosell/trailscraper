@@ -96,10 +96,14 @@ def _parse_records_from_gzipped_file(filename):
     """Parses CloudTrail Records from a single file"""
     logging.debug("Loading "+filename)
 
-    with gzip.open(filename, 'rt') as unzipped:
-        json_data = json.load(unzipped)
-        records = json_data['Records']
-        return _parse_records(records)
+    try:
+        with gzip.open(filename, 'rt') as unzipped:
+            json_data = json.load(unzipped)
+            records = json_data['Records']
+            return _parse_records(records)
+    except OSError as error:
+        logging.warning("Could not load %s: %s", filename, error)
+        return []
 
 
 def load_from_dir(log_dir):
