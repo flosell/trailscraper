@@ -11,9 +11,10 @@ def _s3_key_prefix(prefix, date, account_id, region):
         .format(prefix, account_id, region, date.year, date.month, date.day)
 
 
-def _s3_key_prefixes(prefix, past_days, account_ids, regions):
-    now = datetime.datetime.now()
-    days = [now - datetime.timedelta(days=delta_days) for delta_days in range(past_days + 1)]
+def _s3_key_prefixes(prefix, account_ids, regions, from_date, to_date):
+    delta = to_date - from_date
+
+    days = [to_date - datetime.timedelta(days=delta_days) for delta_days in range(delta.days + 1)]
     return [_s3_key_prefix(prefix, day, account_id, region)
             for account_id in account_ids
             for day in days
@@ -49,9 +50,10 @@ def _s3_download_recursive(bucket, prefix, target_dir):
 
     _download_dir(prefix)
 
+
 # pylint: disable=too-many-arguments
-def download_cloudtrail_logs(target_dir, bucket, cloudtrail_prefix, past_days, account_ids, regions):
+def download_cloudtrail_logs(target_dir, bucket, cloudtrail_prefix, account_ids, regions, from_date, to_date):
     """Downloads cloudtrail logs matching the given arguments to the target dir"""
-    for prefix in _s3_key_prefixes(cloudtrail_prefix, past_days, account_ids, regions):
+    for prefix in _s3_key_prefixes(cloudtrail_prefix, account_ids, regions, from_date, to_date):
         logging.debug("Downloading logs for %s", prefix)
         _s3_download_recursive(bucket, prefix, target_dir)

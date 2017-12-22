@@ -11,6 +11,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 * Support for CloudTrail `lookup_events` API that allows users to generate a policy without downloading logs from an S3 bucket.
   Note that this API only returns _["create, modify, and delete API calls"](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-cloudtrail-events-supported-services.html)_
 
+### Changed
+
+* `trailscraper download` now supports `--from` and `--to` flags to specify the timeframe that should be downloaded. Accepts precise (e.g. "2017-10-12") and relative (e.g. "-2days") arguments.
+  This replaces the `--past-days` parameter
+
 ## 0.3.1
 
 ### Added

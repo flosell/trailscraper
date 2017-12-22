@@ -1,9 +1,12 @@
 import datetime
 
 from backports import tempfile
+from click.testing import CliRunner
 from moto import mock_s3
 
 from tests.test_utils_s3 import file_content, given_a_bucket, given_an_object, given_a_file
+from tests.test_utils_testdata import cloudtrail_data_dir
+from trailscraper import cli
 from trailscraper.s3_download import download_cloudtrail_logs
 
 TEST_LOG_KEY = "some-prefix/AWSLogs/000/CloudTrail/some-region-1/2017/01/01/file_name.json.gz"
@@ -27,6 +30,18 @@ def test_download_log_files_and_skip_existing_files():
             to_date=datetime.datetime(2017, 1, 1),
             account_ids=["000"],
             regions=["some-region-1"])
+
+        runner = CliRunner()
+        result = runner.invoke(cli.root_group, args=[
+            "download",
+            "--bucket", "some-bucket",
+            "--region", "some-region-1",
+            "--account-id", "000",
+            "--prefix", "some-prefix/",
+            "--from", "2017-01-01",
+            "--to", "2017-01-01"
+        ])
+        assert result.exit_code == 0
 
         assert file_content(dirpath, TEST_LOG_KEY) == "some-file-content"
         assert file_content(dirpath, TEST_LOG_KEY_EXISTING) == "some-content-already-existing"
