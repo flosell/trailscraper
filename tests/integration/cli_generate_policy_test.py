@@ -8,7 +8,11 @@ from trailscraper import cli
 
 def test_should_output_an_iam_policy_for_a_set_of_cloudtrail_records():
     runner = CliRunner()
-    result = runner.invoke(cli.root_group, args=["generate-policy", "--log-dir", cloudtrail_data_dir()])
+    result = runner.invoke(cli.root_group, args=["generate-policy",
+                                                 "--log-dir", cloudtrail_data_dir(),
+                                                 "--from", "2016-11-10",
+                                                 "--to", "2017-11-20",
+                                                 ])
     assert result.exit_code == 0
     assert json.loads(result.output) == json.loads('''\
 {
@@ -40,8 +44,11 @@ def test_should_output_an_iam_policy_for_a_set_of_cloudtrail_records():
 def test_should_filter_for_assumed_role_arn():
     runner = CliRunner()
     result = runner.invoke(cli.root_group, args=["generate-policy", "--log-dir", cloudtrail_data_dir(),
-                                                 "--filter-assumed-role-arn",
-                                                 "arn:aws:iam::111111111111:role/someRole"])
+                                                 "--from", "2016-11-10",
+                                                 "--to", "2017-11-20",
+                                                 "--filter-assumed-role-arn", "arn:aws:iam::111111111111:role/someRole"
+                                                 ])
+    assert result.exit_code == 0, result.output
     assert json.loads(result.output) == json.loads('''\
 {
     "Statement": [
@@ -58,4 +65,27 @@ def test_should_filter_for_assumed_role_arn():
     "Version": "2012-10-17"
 }
 ''')
-    assert result.exit_code == 0
+
+
+def test_should_filter_for_timeframes():
+    runner = CliRunner()
+    result = runner.invoke(cli.root_group, args=["generate-policy", "--log-dir", cloudtrail_data_dir(),
+                                                 "--from", "2017-11-19 00:00:00",
+                                                 "--to", "2017-11-19 01:00:00"])
+    assert result.exit_code == 0, result.output
+    assert json.loads(result.output) == json.loads('''\
+{
+    "Statement": [
+        {
+            "Action": [
+                "autoscaling:DescribeLaunchConfigurations"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "*"
+            ]
+        }
+    ],
+    "Version": "2012-10-17"
+}
+''')

@@ -1,11 +1,15 @@
+import datetime
+
 from trailscraper.cloudtrail import Record
 from trailscraper.iam import Statement, Action
 
 
 def test_should_have_a_string_representation():
     assert str(Record("sts.amazonaws.com", "AssumeRole",
-                      resource_arns=["arn:aws:iam::111111111111:role/someRole"])) == \
-           "Record(event_source=sts.amazonaws.com event_name=AssumeRole resource_arns=['arn:aws:iam::111111111111:role/someRole'])"
+                      resource_arns=["arn:aws:iam::111111111111:role/someRole"],
+                      event_time=datetime.datetime(2017, 11, 19, 0, 21, 51))) == \
+           "Record(event_source=sts.amazonaws.com event_name=AssumeRole event_time=2017-11-19 00:21:51 " \
+           "resource_arns=['arn:aws:iam::111111111111:role/someRole'])"
 
 
 def test_should_know_about_equality():

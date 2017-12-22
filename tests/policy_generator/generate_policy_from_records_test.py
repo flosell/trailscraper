@@ -1,3 +1,5 @@
+import datetime
+
 from trailscraper.iam import PolicyDocument, Statement, Action
 
 from trailscraper.cloudtrail import Record
@@ -152,3 +154,25 @@ def test_should_group_by_action_and_resource_independent_of_order():
         ])
     actual = generate_policy_from_records(records)
     assert actual == expected
+
+
+def test_should_filter_for_event_time():
+    records = [
+        Record("autoscaling.amazonaws.com", "DescribeLaunchConfigurations", event_time=datetime.datetime(2017, 1, 1)),
+        Record("sts.amazonaws.com", "AssumeRole", event_time=datetime.datetime(2017, 6, 6))
+    ]
+
+    assert generate_policy_from_records(records,
+                                        from_date=datetime.datetime(2017, 1, 1),
+                                        to_date=datetime.datetime(2017, 3, 1)) == PolicyDocument(
+        Version="2012-10-17",
+        Statement=[
+            Statement(
+                Effect="Allow",
+                Action=[
+                    Action('autoscaling', 'DescribeLaunchConfigurations'),
+                ],
+                Resource=["*"]
+            )
+        ]
+    )

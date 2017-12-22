@@ -35,9 +35,9 @@ def root_group(verbose):
 @click.option('--log-dir', default="~/.trailscraper/logs", type=click.Path(),
               help='Where to put logfiles')
 @click.option('--from', 'from_s', default="one day ago", type=click.STRING,
-              help='Start date, e.g. "2017-01-01" or "-1days"')
+              help='Start date, e.g. "2017-01-01" or "-1days". Defaults to "one day ago".')
 @click.option('--to', 'to_s', default="now", type=click.STRING,
-              help='End date, e.g. "2017-01-01" or "now"')
+              help='End date, e.g. "2017-01-01" or "now". Defaults to "now".')
 # pylint: disable=too-many-arguments
 def download(bucket, prefix, account_id, region, log_dir, from_s, to_s):
     """Downloads CloudTrail Logs from S3."""
@@ -56,7 +56,11 @@ def download(bucket, prefix, account_id, region, log_dir, from_s, to_s):
               help='only consider events from this role (can be used multiple times)')
 @click.option('--use-cloudtrail-api', is_flag=True, default=False,
               help='Pull Events from CloudtrailAPI instead of log-dir')
-def generate_policy(log_dir, filter_assumed_role_arn, use_cloudtrail_api):
+@click.option('--from', 'from_s', default="one day ago", type=click.STRING,
+              help='Start date, e.g. "2017-01-01" or "-1days"')
+@click.option('--to', 'to_s', default="now", type=click.STRING,
+              help='End date, e.g. "2017-01-01" or "now"')
+def generate_policy(log_dir, filter_assumed_role_arn, use_cloudtrail_api, from_s, to_s):
     """Generates a policy that allows the events covered in the log-dir"""
     log_dir = os.path.expanduser(log_dir)
     if use_cloudtrail_api:
@@ -64,7 +68,10 @@ def generate_policy(log_dir, filter_assumed_role_arn, use_cloudtrail_api):
     else:
         records = load_from_dir(log_dir)
 
-    policy = generate_policy_from_records(records, filter_assumed_role_arn)
+    from_date = time_utils.parse_human_readable_time(from_s)
+    to_date = time_utils.parse_human_readable_time(to_s)
+
+    policy = generate_policy_from_records(records, filter_assumed_role_arn, from_date, to_date)
 
     click.echo(policy.to_json())
 

@@ -12,21 +12,24 @@ from trailscraper.iam import Statement, Action
 class Record(object):
     """Represents a CloudTrail record"""
 
-    def __init__(self, event_source, event_name, resource_arns=None, assumed_role_arn=None):
+    # pylint: disable=too-many-arguments
+    def __init__(self, event_source, event_name, resource_arns=None, assumed_role_arn=None, event_time=None):
         self.event_source = event_source
         self.event_name = event_name
+        self.event_time = event_time
         self.resource_arns = resource_arns or ["*"]
         self.assumed_role_arn = assumed_role_arn
 
     def __repr__(self):
 
-        return "Record(event_source={} event_name={} resource_arns={})"\
-            .format(self.event_source, self.event_name, self.resource_arns)
+        return "Record(event_source={} event_name={} event_time={} resource_arns={})"\
+            .format(self.event_source, self.event_name, self.event_time, self.resource_arns)
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             return self.event_source == other.event_source and \
                    self.event_name == other.event_name and \
+                   self.event_time == other.event_time and \
                    self.resource_arns == other.resource_arns and \
                    self.assumed_role_arn == other.assumed_role_arn
 
@@ -35,6 +38,7 @@ class Record(object):
     def __hash__(self):
         return hash((self.event_source,
                      self.event_name,
+                     self.event_time,
                      tuple(self.resource_arns),
                      self.assumed_role_arn))
 
@@ -75,6 +79,7 @@ def _parse_record(json_record):
     try:
         return Record(json_record['eventSource'],
                       json_record['eventName'],
+                      event_time=datetime.datetime.strptime(json_record['eventTime'], "%Y-%m-%dT%H:%M:%SZ"),
                       resource_arns=_resource_arns(json_record),
                       assumed_role_arn=_assumed_role_arn(json_record))
     except KeyError as error:
