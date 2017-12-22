@@ -1,6 +1,12 @@
 import datetime
 
-from backports import tempfile
+import sys
+
+if sys.version_info[0] < 3:
+    from backports import tempfile
+else:
+    import tempfile
+
 from moto import mock_s3
 
 from tests.test_utils_s3 import file_content, given_a_bucket, given_an_object, given_a_file

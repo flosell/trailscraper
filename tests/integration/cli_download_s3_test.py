@@ -1,6 +1,12 @@
 import datetime
 
-from backports import tempfile
+import sys
+
+if sys.version_info[0] < 3:
+    from backports import tempfile
+else:
+    import tempfile
+
 from click.testing import CliRunner
 from moto import mock_s3
 

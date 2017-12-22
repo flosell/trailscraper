@@ -1,4 +1,9 @@
-from backports import tempfile
+import sys
+
+if sys.version_info[0] < 3:
+    from backports import tempfile
+else:
+    import tempfile
 
 from moto import mock_s3
 
@@ -30,5 +35,3 @@ def test_download_multiple_files_from_multiple_nested_dirs():
         assert file_content(dirpath, "foo/bar.log") == "foo/bar"
         assert file_content(dirpath, "foo/baz.log") == "foo/baz"
         assert file_content(dirpath, "foo/bar/baz.log") == "foo/bar/baz"
-
-
