@@ -70,8 +70,14 @@ $ ./go         # let's see what we can do here
 
 `Click will abort further execution because Python 3 was configured to use ASCII as encoding for the environment.`
 
-Set these environment variables:
+Set environment variables that describe your locale, e.g. :
+```
+export LC_ALL=de_DE.utf-8
+export LANG=de_DE.utf-8
+```
+or 
 ```
 LC_ALL=C.UTF-8
 LANG=C.UTF-8
 ```
+For details, see http://click.pocoo.org/5/python3/#python-3-surrogate-handling
