@@ -117,14 +117,13 @@ def load_from_dir(log_dir):
     return records
 
 
-def load_from_api():
+def load_from_api(from_date, to_date):
     """Loads the last 10 hours of cloudtrail events from the API"""
     client = boto3.client('cloudtrail')
     paginator = client.get_paginator('lookup_events')
-    now = datetime.datetime.now()
     response_iterator = paginator.paginate(
-        StartTime=now - datetime.timedelta(hours=10),
-        EndTime=now
+        StartTime=from_date,
+        EndTime=to_date,
     )
     records = []
     for response in response_iterator:

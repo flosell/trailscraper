@@ -63,13 +63,13 @@ def download(bucket, prefix, account_id, region, log_dir, from_s, to_s):
 def generate_policy(log_dir, filter_assumed_role_arn, use_cloudtrail_api, from_s, to_s):
     """Generates a policy that allows the events covered in the log-dir"""
     log_dir = os.path.expanduser(log_dir)
-    if use_cloudtrail_api:
-        records = load_from_api()
-    else:
-        records = load_from_dir(log_dir)
-
     from_date = time_utils.parse_human_readable_time(from_s)
     to_date = time_utils.parse_human_readable_time(to_s)
+
+    if use_cloudtrail_api:
+        records = load_from_api(from_date, to_date)
+    else:
+        records = load_from_dir(log_dir)
 
     policy = generate_policy_from_records(records, filter_assumed_role_arn, from_date, to_date)
 
