@@ -23,7 +23,7 @@
         },
         "invokedBy": "config.amazonaws.com"
       },
-      "eventTime": "2017-11-19T00:21:51Z",
+      "eventTime": "2017-12-11T15:01:51Z",
       "eventSource": "autoscaling.amazonaws.com",
       "eventName": "DescribeLaunchConfigurations",
       "awsRegion": "eu-central-1",
@@ -42,7 +42,7 @@
         "type": "AWSService",
         "invokedBy": "config.amazonaws.com"
       },
-      "eventTime": "2017-11-18T00:21:51Z",
+      "eventTime": "2017-12-11T15:04:51Z",
       "eventSource": "sts.amazonaws.com",
       "eventName": "AssumeRole",
       "awsRegion": "eu-central-1",

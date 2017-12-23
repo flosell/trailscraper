@@ -16,6 +16,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 * `trailscraper download` now supports `--from` and `--to` flags to specify the timeframe that should be downloaded. Accepts precise (e.g. "2017-10-12") and relative (e.g. "-2days") arguments.
 * `trailscraper generate-policy` now supports `--from` and `--to` to filter events to consider for the generated policy. Accepts precise (e.g. "2017-10-12") and relative (e.g. "-2days") arguments.
 
+* Performance optimizations: `generate-policy` only reads logfiles for the timeframe requested
+
 ### Fixed
 
 * Ignore record files that can't be read (e.g. not valid GZIP)

@@ -4,6 +4,7 @@ import gzip
 import json
 import logging
 import os
+import re
 
 import boto3
 from trailscraper.iam import Statement, Action
@@ -21,8 +22,7 @@ class Record(object):
         self.assumed_role_arn = assumed_role_arn
 
     def __repr__(self):
-
-        return "Record(event_source={} event_name={} event_time={} resource_arns={})"\
+        return "Record(event_source={} event_name={} event_time={} resource_arns={})" \
             .format(self.event_source, self.event_name, self.event_time, self.resource_arns)
 
     def __eq__(self, other):
@@ -60,6 +60,45 @@ class Record(object):
         )
 
 
+class LogFile(object):
+    """Represents a single CloudTrail Log File"""
+
+    def __init__(self, path):
+        self._path = path
+
+    def timestamp(self):
+        """Returns the timestamp the log file was delivered"""
+
+        timestamp_part = self.filename().split('_')[3]
+        return datetime.datetime.strptime(timestamp_part, "%Y%m%dT%H%MZ")
+
+    def filename(self):
+        """Name of the logfile (without path)"""
+        return os.path.split(self._path)[-1]
+
+    def has_valid_filename(self):
+        """Returns if the log file represented has a valid filename"""
+        pattern = re.compile(r"[0-9]+_CloudTrail_[a-z0-9-]+_[0-9TZ]+_[a-zA-Z0-9]+\.json\.gz")
+        return pattern.match(self.filename())
+
+    def records(self):
+        """Returns CloudTrail Records in this log file"""
+        logging.debug("Loading " + self._path)
+
+        try:
+            with gzip.open(self._path, 'rt') as unzipped:
+                json_data = json.load(unzipped)
+                records = json_data['Records']
+                return _parse_records(records)
+        except OSError as error:
+            logging.warning("Could not load %s: %s", self._path, error)
+            return []
+
+    def contains_events_for_timeframe(self, from_date, to_date):
+        """Returns true if this logfile likely contains events in the relevant timeframe"""
+        return from_date <= self.timestamp() <= to_date + datetime.timedelta(hours=1)
+
+
 def _resource_arns(json_record):
     resources = json_record.get('resources', [])
     arns = [resource['ARN'] for resource in resources]
@@ -92,27 +131,17 @@ def _parse_records(json_records):
     return [r for r in parsed_records if r is not None]
 
 
-def _parse_records_from_gzipped_file(filename):
-    """Parses CloudTrail Records from a single file"""
-    logging.debug("Loading "+filename)
-
-    try:
-        with gzip.open(filename, 'rt') as unzipped:
-            json_data = json.load(unzipped)
-            records = json_data['Records']
-            return _parse_records(records)
-    except OSError as error:
-        logging.warning("Could not load %s: %s", filename, error)
-        return []
-
-
-def load_from_dir(log_dir):
+def load_from_dir(log_dir, from_date, to_date):
     """Loads all CloudTrail Records in a file"""
     records = []
-    for root, _, logfiles in os.walk(log_dir):
-        for logfile in logfiles:
-            if logfile.endswith(".json.gz"):
-                records.extend(_parse_records_from_gzipped_file(os.path.join(root, logfile)))
+    for root, _, files_in_dir in os.walk(log_dir):
+        for file_in_dir in files_in_dir:
+            logfile = LogFile(os.path.join(root, file_in_dir))
+            if logfile.has_valid_filename():
+                if logfile.contains_events_for_timeframe(from_date, to_date):
+                    records.extend(logfile.records())
+            else:
+                logging.warning("Invalid filename: %s", logfile.filename())
 
     return records
 

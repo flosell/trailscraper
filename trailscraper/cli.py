@@ -69,7 +69,7 @@ def generate_policy(log_dir, filter_assumed_role_arn, use_cloudtrail_api, from_s
     if use_cloudtrail_api:
         records = load_from_api(from_date, to_date)
     else:
-        records = load_from_dir(log_dir)
+        records = load_from_dir(log_dir, from_date, to_date)
 
     policy = generate_policy_from_records(records, filter_assumed_role_arn, from_date, to_date)
 
