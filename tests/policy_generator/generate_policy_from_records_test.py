@@ -1,5 +1,7 @@
 import datetime
+import logging
 
+from trailscraper import policy_generator
 from trailscraper.iam import PolicyDocument, Statement, Action
 
 from trailscraper.cloudtrail import Record
@@ -176,3 +178,36 @@ def test_should_filter_for_event_time():
             )
         ]
     )
+
+
+def test_should_warn_if_passed_no_records(caplog):
+    records = []
+
+    assert generate_policy_from_records(records,
+                                        from_date=datetime.datetime(2010, 1, 1),
+                                        to_date=datetime.datetime(2010, 1, 2)) == PolicyDocument(
+        Version="2012-10-17",
+        Statement=[]
+    )
+
+    assert caplog.record_tuples == [
+        ('root', logging.WARNING, policy_generator.NO_RECORDS_WARNING),
+    ]
+
+
+def test_should_warn_if_records_passed_but_filtered_away(caplog):
+    records = [
+        Record("autoscaling.amazonaws.com", "DescribeLaunchConfigurations", event_time=datetime.datetime(2017, 1, 1)),
+        Record("sts.amazonaws.com", "AssumeRole", event_time=datetime.datetime(2017, 6, 6))
+    ]
+
+    assert generate_policy_from_records(records,
+                                        from_date=datetime.datetime(2010, 1, 1),
+                                        to_date=datetime.datetime(2010, 1, 2)) == PolicyDocument(
+        Version="2012-10-17",
+        Statement=[]
+    )
+
+    assert caplog.record_tuples == [
+        ('root', logging.WARNING, policy_generator.ALL_RECORDS_FILTERED),
+    ]
