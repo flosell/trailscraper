@@ -63,7 +63,7 @@ goal_check() {
 
 goal_trailscraper() {
     activate_venv
-    ${VENV_DIR}/bin/trailscraper $@
+    ${VENV_DIR}/bin/trailscraper "$@"
 }
 
 goal_generate-rst() {
@@ -169,7 +169,7 @@ goal_push() {
 }
 
 if type -t "goal_$1" &>/dev/null; then
-  goal_$1 ${@:2}
+  goal_$1 "${@:2}"
 else
   echo "usage: $0 <goal>
 goal:
