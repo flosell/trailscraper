@@ -4,27 +4,16 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
-## 0.3.2
+## 0.3.1
 
 ### Added
 
 * Support for CloudTrail `lookup_events` API that allows users to generate a policy without downloading logs from an S3 bucket.
   Note that this API only returns _["create, modify, and delete API calls"](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-cloudtrail-events-supported-services.html)_
-
-### Changed
-
 * `trailscraper download` now supports `--from` and `--to` flags to specify the timeframe that should be downloaded. Accepts precise (e.g. "2017-10-12") and relative (e.g. "-2days") arguments.
 * `trailscraper generate-policy` now supports `--from` and `--to` to filter events to consider for the generated policy. Accepts precise (e.g. "2017-10-12") and relative (e.g. "-2days") arguments.
 
 * Performance optimizations: `generate-policy` only reads logfiles for the timeframe requested
-
-### Fixed
-
-* Ignore record files that can't be read (e.g. not valid GZIP)
-
-## 0.3.1
-
-### Added
 
 * Added `--version` command line argument
 
@@ -32,9 +21,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 * Set more flexible dependencies
 
-## 0.3.0
+### Removed
 
-### Changed
+* Removed `--past-days` parameter in `trailscraper download`. Was replaced by `--from` and `--to` (see above)
+
+### Fixed
+
+* Ignore record files that can't be read (e.g. not valid GZIP)
+
+## 0.3.0
 
 ### Added
 
