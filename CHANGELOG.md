@@ -4,7 +4,7 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
-## 0.3.1
+## 0.4.0
 
 ### Added
 
