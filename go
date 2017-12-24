@@ -149,7 +149,7 @@ goal_bump_version() {
 }
 
 goal_release() {
-    goal_in-all-versions test
+    goal_test
     goal_check
 
     goal_generate-rst
