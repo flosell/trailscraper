@@ -95,19 +95,22 @@ goal_clean() {
 	rm -rf "${VENV_DIR}"
 
     pushd "${SCRIPT_DIR}" > /dev/null
+    set +e # It's OK if some of the things we want to delete aren't there
+
     rm -fr build/
 	rm -fr dist/
 	rm -fr .eggs/
 	rm -f README.rst
 	rm -f CHANGELOG.rst
-	find . -name '*.egg-info' -exec rm -fr {} +
-	find . -name '*.egg' -exec rm -f {} +
+	find . -name '*.egg-info' -exec rm -vfr {} +
+	find . -name '*.egg' -exec rm -vf {} +
 
-	find . -name '*.pyc' -exec rm -f {} +
-	find . -name '*.pyo' -exec rm -f {} +
-	find . -name '*~' -exec rm -f {} +
-	find . -name '__pycache__' -exec rm -fr {} +
+	find . -name '*.pyc' -exec rm -vf {} +
+	find . -name '*.pyo' -exec rm -vf {} +
+	find . -name '*~' -exec rm -vf {} +
+	find . -name '__pycache__' -exec rm -vfr {} +
 
+    set -e
     popd > /dev/null
 }
 
