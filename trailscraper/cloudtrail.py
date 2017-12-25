@@ -51,11 +51,15 @@ class Record(object):
 
         return special_cases.get(self.event_source, default_case)
 
+    def _event_name_to_iam_action(self):
+        regex = re.compile(r"([a-zA-Z]+)[0-9v_]+$")
+        return regex.sub(r"\1", self.event_name)
+
     def to_statement(self):
         """Converts record into a matching IAM Policy Statement"""
         return Statement(
             Effect="Allow",
-            Action=[Action(self._source_to_iam_prefix(), self.event_name)],
+            Action=[Action(self._source_to_iam_prefix(), self._event_name_to_iam_action())],
             Resource=sorted(self.resource_arns)
         )
 

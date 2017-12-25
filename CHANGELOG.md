@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 ### Fixed
 
 * Ignore record files that can't be read (e.g. not valid GZIP) in Python 2.7 (was only working in Python 3.* before)
-
+* Fixed permissions generated for services that include the API version date (e.g. Lambda, CloudFront) (#20)
 
 ## 0.4.0
 

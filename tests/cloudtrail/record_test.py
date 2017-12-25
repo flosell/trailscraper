@@ -73,15 +73,44 @@ def test_should_convert_special_event_sources_properly():
     assert record.to_statement() == expected_statment
 
 
+def test_should_convert_special_actions_properly():
+    record = Record("lambda", "ListVersionsByFunction20150331")
+
+    expected_statment = Statement(
+        Effect="Allow",
+        Action=[
+            Action("lambda", "ListVersionsByFunction"),
+
+        ],
+        Resource=["*"]
+    )
+
+    assert record.to_statement() == expected_statment
+
+
 def test_should_map_normal_event_sources_to_iam_prefix():
     assert Record('autoscaling.amazonaws.com', "something")._source_to_iam_prefix() == 'autoscaling'
     assert Record('sts.amazonaws.com', "something")._source_to_iam_prefix() == 'sts'
     assert Record('ec2.amazonaws.com', "something")._source_to_iam_prefix() == 'ec2'
 
 
-def test_should_map_special_cases():
+def test_should_map_special_cases_of_event_sources():
     assert Record('monitoring.amazonaws.com', "something")._source_to_iam_prefix() == 'cloudwatch'
 
 
 def test_should_map_unknown_sources():
     assert Record('unknown.amazonaws.com', "something")._source_to_iam_prefix() == 'unknown'
+
+
+def test_should_map_normal_event_names_to_iam_actions():
+    assert Record('autoscaling.amazonaws.com', "DescribeAutoScalingGroups")._event_name_to_iam_action() == \
+           'DescribeAutoScalingGroups'
+
+
+def test_should_map_event_names_with_timestamps_to_iam_actions():
+    assert Record('lambda', "ListVersionsByFunction20150331")._event_name_to_iam_action() == \
+           'ListVersionsByFunction'
+    assert Record('lambda', "GetFunctionConfiguration20150331v2")._event_name_to_iam_action() == \
+           'GetFunctionConfiguration'
+    assert Record('cloudfront', "UpdateDistribution2016_11_25")._event_name_to_iam_action() == \
+           'UpdateDistribution'
