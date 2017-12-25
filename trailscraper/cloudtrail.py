@@ -90,10 +90,7 @@ class LogFile(object):
                 json_data = json.load(unzipped)
                 records = json_data['Records']
                 return _parse_records(records)
-        except OSError as error:
-            logging.warning("Could not load %s: %s", self._path, error)
-            return []
-        except IOError as error:
+        except (IOError, OSError) as error:
             logging.warning("Could not load %s: %s", self._path, error)
             return []
 
