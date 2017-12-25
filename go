@@ -10,6 +10,9 @@ VERSIONS="2.7
 
 activate_venv() {
     source "${VENV_DIR}/bin/activate"
+    python --version
+    pip --version
+    which python
 }
 
 goal_in-version() {
@@ -33,8 +36,14 @@ goal_in-all-versions() {
 }
 
 create_venv() {
+    python --version
+    pip --version
+    which python
+
+    PYTHON_BINARY_NAME="python"
+
     if which virtualenv > /dev/null; then
-        virtualenv "${VENV_DIR}"
+        virtualenv -p ${PYTHON_BINARY_NAME} "${VENV_DIR}"
     else
         pyvenv "${VENV_DIR}"
     fi
