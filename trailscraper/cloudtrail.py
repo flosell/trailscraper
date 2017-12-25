@@ -93,6 +93,9 @@ class LogFile(object):
         except OSError as error:
             logging.warning("Could not load %s: %s", self._path, error)
             return []
+        except IOError as error:
+            logging.warning("Could not load %s: %s", self._path, error)
+            return []
 
     def contains_events_for_timeframe(self, from_date, to_date):
         """Returns true if this logfile likely contains events in the relevant timeframe"""

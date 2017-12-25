@@ -46,5 +46,5 @@ def test_parse_records_from_gzipped_file():
 
 
 def test_parse_records_from_gzipped_file_should_return_empty_for_non_gzipped_files():
-    logfile = LogFile(cloudtrail_data("someRecords.json"))
+    logfile = LogFile(cloudtrail_data("111111111111_CloudTrail_eu-central-1_20171211T1505Z_A6kvhMoVeCsc7v8U.json"))
     assert logfile.records() == []

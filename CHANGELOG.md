@@ -4,6 +4,13 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## 0.4.1
+
+### Fixed
+
+* Ignore record files that can't be read (e.g. not valid GZIP) in Python 2.7 (was only working in Python 3.* before)
+
+
 ## 0.4.0
 
 ### Added
