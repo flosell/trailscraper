@@ -20,7 +20,7 @@ goal_in-version() {
     cmd="/code/go ${@:2}"
     echo "=============== BEGIN Python ${python_version} ${cmd} ==============="
 
-    docker run -it \
+    docker run -i \
                -v $(pwd):/code \
                -w /code \
                -e VENV_POSTFIX=${python_version} \
@@ -30,9 +30,13 @@ goal_in-version() {
 }
 
 goal_in-all-versions() {
-    for version in ${VERSIONS}; do
-        goal_in-version ${version} ${@}
-    done
+    if [ "${parallel}" == "parallel" ]; then
+        parallel --tag "./go in-version {} ${@}" ::: "$VERSIONS"
+    else
+        for version in ${VERSIONS}; do
+            goal_in-version ${version} ${@}
+        done
+    fi
 }
 
 create_venv() {
