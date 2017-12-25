@@ -83,7 +83,7 @@ class LogFile(object):
 
     def records(self):
         """Returns CloudTrail Records in this log file"""
-        logging.debug("Loading " + self._path)
+        logging.debug("Loading %s", self._path)
 
         try:
             with gzip.open(self._path, 'rt') as unzipped:
