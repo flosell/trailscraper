@@ -33,14 +33,8 @@ goal_in-all-versions() {
 }
 
 create_venv() {
-    if which python3 > /dev/null; then
-        PYTHON_BINARY_NAME="python3"
-    else
-        PYTHON_BINARY_NAME="python"
-    fi
-
     if which virtualenv > /dev/null; then
-        virtualenv -p ${PYTHON_BINARY_NAME} "${VENV_DIR}"
+        virtualenv "${VENV_DIR}"
     else
         pyvenv "${VENV_DIR}"
     fi
