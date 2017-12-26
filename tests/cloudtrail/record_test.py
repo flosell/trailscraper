@@ -1,5 +1,6 @@
 import datetime
 
+from tests.test_utils_iam import all_iam_permissions_known_in_cloudonaut, all_aws_api_methods
 from trailscraper.cloudtrail import Record
 from trailscraper.iam import Statement, Action
 
@@ -114,3 +115,15 @@ def test_should_map_event_names_with_timestamps_to_iam_actions():
            'GetFunctionConfiguration'
     assert Record('cloudfront', "UpdateDistribution2016_11_25")._event_name_to_iam_action() == \
            'UpdateDistribution'
+
+
+def test_that_all_api_calls_in_botocore_map_to_something_thats_known_in_cloudonauts_iam_overview():
+    actions = []
+    for api_call in all_aws_api_methods():
+        x = api_call.split(":")
+        r = Record(x[0], x[1])
+        if r.event_source in ['ec2']:
+            actions.append(r.to_statement().Action[0].json_repr())
+
+    for action in set(actions):
+        assert action in all_iam_permissions_known_in_cloudonaut()

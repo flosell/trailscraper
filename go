@@ -15,6 +15,15 @@ activate_venv() {
     which python
 }
 
+goal_regenerate_iam_data() {
+    tmp_dir=$(mktemp -d)
+    pushd ${tmp_dir} > /dev/null
+        git clone --depth 1 git@github.com:widdix/complete-aws-iam-reference.git
+        cd complete-aws-iam-reference/tools
+        node md2json.js > ${SCRIPT_DIR}/tests/iam.json
+    popd > /dev/null
+}
+
 goal_in-version() {
     python_version=$1
     cmd="/code/go ${@:2}"
