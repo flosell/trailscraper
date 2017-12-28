@@ -164,7 +164,7 @@ goal_release() {
 
     goal_generate-rst
 
-    python setup.py sdist bdist_wheel upload --sign --identity 'florian.sellmayr@gmail.com'
+    python setup.py sdist bdist_wheel upload --sign --identity 'florian.sellmayr@gmail.com' -r 'https://www.python.org/pypi'
 
     goal_tag_version
     goal_create_github_release
