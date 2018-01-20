@@ -63,15 +63,14 @@ class Record(object):
         return special_cases.get(self.event_source, default_case)
 
     def _event_name_to_iam_action(self):
-        def regex_sub(r, subs):
-            regex = re.compile(r)
+        def _regex_sub(expr, subs):
+            regex = re.compile(expr)
             return lambda s: regex.sub(subs, s)
 
         return pipe(self.event_name,
-                    regex_sub(r"DeleteBucketCors", "PutBucketCORS"),
-                    regex_sub(r"([a-zA-Z]+)[0-9v_]+$", r"\1", ),
-                    regex_sub(r"Cors$", "CORS"),
-        )
+                    _regex_sub(r"DeleteBucketCors", "PutBucketCORS"),
+                    _regex_sub(r"([a-zA-Z]+)[0-9v_]+$", r"\1", ),
+                    _regex_sub(r"Cors$", "CORS"))
 
     def to_statement(self):
         """Converts record into a matching IAM Policy Statement"""
