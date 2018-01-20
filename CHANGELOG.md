@@ -8,8 +8,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 ### Fixed
 
-* Various special cases in mapping CloudTrail to IAM Actions: 
-  * S3 CORS actions 
+* Fixed arious special cases in mapping CloudTrail to IAM Actions:
+  * S3 CORS actions
+  * DynamoDB Streams
+  * Tagging
+  * App Stream 2
+  * Lex
+  * Mechanical Turk
 
 ## 0.4.1
 

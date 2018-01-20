@@ -48,7 +48,16 @@ class Record(object):
         return not self.__eq__(other)
 
     def _source_to_iam_prefix(self):
-        special_cases = {'monitoring.amazonaws.com': 'cloudwatch'}
+        special_cases = {
+            'monitoring.amazonaws.com': 'cloudwatch',
+            'appstream2.amazonaws.com': 'appstream',
+            'models.lex.amazonaws.com': 'lex',
+            'runtime.lex.amazonaws.com': 'lex',
+            'mturk-requester.amazonaws.com': 'mechanicalturk',
+            'streams.dynamodb.amazonaws.com': 'dynamodb',
+            'tagging.amazonaws.com': 'tag',
+        }
+
         default_case = self.event_source.split('.')[0]
 
         return special_cases.get(self.event_source, default_case)
