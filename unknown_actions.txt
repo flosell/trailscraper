@@ -193,9 +193,13 @@ appsync:UpdateDataSource
 appsync:UpdateGraphqlApi
 appsync:UpdateResolver
 appsync:UpdateType
+autoscaling:CreateScalingPlan
+autoscaling:DeleteScalingPlan
 autoscaling:DeleteScalingPolicy
 autoscaling:DeregisterScalableTarget
 autoscaling:DescribeScalableTargets
+autoscaling:DescribeScalingPlanResources
+autoscaling:DescribeScalingPlans
 autoscaling:DescribeScalingPolicies
 autoscaling:PutScheduledAction
 autoscaling:RegisterScalableTarget
@@ -309,6 +313,7 @@ codecommit:UpdateComment
 codecommit:UpdatePullRequestDescription
 codecommit:UpdatePullRequestStatus
 codecommit:UpdatePullRequestTitle
+codedeploy:DeleteGitHubAccountToken
 codedeploy:PutLifecycleEventHookExecutionStatus
 codestar:ListTagsForProject
 codestar:TagProject
@@ -618,7 +623,10 @@ gamelift:UpdateMatchmakingConfiguration
 gamelift:ValidateMatchmakingRuleSet
 glacier:ListProvisionedCapacity
 glacier:PurchaseProvisionedCapacity
+glue:BatchDeleteTableVersion
 glue:BatchStopJobRun
+glue:DeleteTableVersion
+glue:GetTableVersion
 glue:UpdateCrawlerSchedule
 greengrass:CreateResourceDefinition
 greengrass:CreateResourceDefinitionVersion
@@ -1165,6 +1173,9 @@ support:DescribeTrustedAdvisorCheckSummaries
 support:DescribeTrustedAdvisorChecks
 support:RefreshTrustedAdvisorCheck
 support:ResolveCase
+transcribe:GetTranscriptionJob
+transcribe:ListTranscriptionJobs
+transcribe:StartTranscriptionJob
 translate:TranslateText
 waf-regional:CreateGeoMatchSet
 waf-regional:CreateRegexMatchSet
