@@ -67,6 +67,17 @@ $ ./go         # let's see what we can do here
 
 * Make sure you have logs for the `us-east-1` region. Some global AWS services (e.g. Route53, IAM, STS, CloudFront) use this region. For details, check the [CloudTrail Documentation](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-global-service-events)
 
+#### TrailScraper generated actions that aren't IAM actions
+
+This is totally possible. Unfortunately, there is no good, machine-readable documentation on how CloudTrail events
+map to IAM actions so TrailScraper is using heuristics to figure out the right actions. These heuristics likely don't
+cover all special cases of the AWS world.
+
+This is where you come in: If you find a special case that's not covered by TrailScraper, 
+please [open a new issue](https://github.com/flosell/trailscraper/issues/new) or, even better, submit a pull request.
+
+For more details, check out the [contribution guide](./CONTRIBUTING.md) 
+
 #### Click thinks you are in an ASCII environment 
 
 `Click will abort further execution because Python 3 was configured to use ASCII as encoding for the environment.`
@@ -82,3 +93,4 @@ LC_ALL=C.UTF-8
 LANG=C.UTF-8
 ```
 For details, see http://click.pocoo.org/5/python3/#python-3-surrogate-handling
+
