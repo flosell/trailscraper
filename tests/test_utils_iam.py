@@ -36,7 +36,7 @@ def all_iam_permissions_known_in_policy_simulator():
         return set([line.rstrip('\n') for line in iam_file.readlines()])
 
 
-def all_known_iam_permissions():
+def all_known_iam_actions():
     return all_iam_permissions_known_in_policy_simulator().union(all_iam_permissions_known_in_cloudonaut())
 
 
