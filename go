@@ -15,13 +15,27 @@ activate_venv() {
     which python
 }
 
-goal_regenerate_iam_data() {
+goal_regenerate_iam_data_from_cloudonaut() {
     tmp_dir=$(mktemp -d)
     pushd ${tmp_dir} > /dev/null
         git clone --depth 1 git@github.com:widdix/complete-aws-iam-reference.git
         cd complete-aws-iam-reference/tools
-        node md2json.js > ${SCRIPT_DIR}/tests/iam.json
+        node md2json.js > ${SCRIPT_DIR}/tests/iam-actions-from-cloudonaut.json
     popd > /dev/null
+}
+
+goal_regenerate_iam_data_from_policy_sim() {
+    curl https://raw.githubusercontent.com/rvedotrc/aws-iam-reference/master/all-actions.txt > ${SCRIPT_DIR}/tests/iam-actions-from-policy-sim.txt
+}
+
+goal_regenerate_iam_data() {
+    goal_regenerate_iam_data_from_cloudonaut
+    goal_regenerate_iam_data_from_policy_sim
+}
+goal_unknown-actions() {
+    activate_venv
+
+    python "${SCRIPT_DIR}/tests/list_unknown_actions.py" > unknown_actions.txt
 }
 
 goal_in-version() {
@@ -202,6 +216,9 @@ goal:
     in-all-versions    -- run a go-command in all supported versions of python
 
     release            -- create and publish a new release
-    bump_version       -- bump version"
+    bump_version       -- bump version
+
+    unknown-actions    -- regenerate list of unknown actions
+    "
   exit 1
 fi
