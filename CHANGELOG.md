@@ -4,6 +4,13 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## 0.4.2
+
+### Fixed
+
+* Various special cases in mapping CloudTrail to IAM Actions: 
+  * S3 CORS actions 
+
 ## 0.4.1
 
 ### Fixed

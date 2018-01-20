@@ -1127,7 +1127,6 @@ s3:CompleteMultipartUpload
 s3:CopyObject
 s3:CreateMultipartUpload
 s3:DeleteBucketAnalyticsConfiguration
-s3:DeleteBucketCors
 s3:DeleteBucketEncryption
 s3:DeleteBucketInventoryConfiguration
 s3:DeleteBucketLifecycle
@@ -1138,7 +1137,6 @@ s3:DeleteObjectTagging
 s3:DeleteObjects
 s3:GetBucketAccelerateConfiguration
 s3:GetBucketAnalyticsConfiguration
-s3:GetBucketCors
 s3:GetBucketEncryption
 s3:GetBucketInventoryConfiguration
 s3:GetBucketLifecycle
@@ -1159,7 +1157,6 @@ s3:ListObjectsV
 s3:ListParts
 s3:PutBucketAccelerateConfiguration
 s3:PutBucketAnalyticsConfiguration
-s3:PutBucketCors
 s3:PutBucketEncryption
 s3:PutBucketInventoryConfiguration
 s3:PutBucketLifecycle

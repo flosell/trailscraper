@@ -118,3 +118,8 @@ def test_should_map_event_names_with_timestamps_to_iam_actions():
            'UpdateDistribution'
 
 
+def test_should_fix_cors():
+    assert Record('s3', "PutBucketCors")._event_name_to_iam_action() == \
+           'PutBucketCORS'
+    assert Record('s3', "DeleteBucketCors")._event_name_to_iam_action() == \
+           'PutBucketCORS'
