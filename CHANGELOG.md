@@ -9,13 +9,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 ### Fixed
 
 * Fixed various special cases in mapping CloudTrail to IAM Actions:
-  * S3
-  * DynamoDB Streams
-  * Tagging
-  * STS
+  * API Gateway
   * App Stream 2
+  * DynamoDB Streams
   * Lex
   * Mechanical Turk
+  * S3
+  * STS
+  * Tagging
 
 ## 0.4.1
 
