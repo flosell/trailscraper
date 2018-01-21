@@ -9,6 +9,7 @@ import re
 import boto3
 from toolz import pipe
 
+from trailscraper.boto_service_definitions import operation_definition
 from trailscraper.iam import Statement, Action
 
 
@@ -109,7 +110,7 @@ class Record(object):
                 'UploadPartCopy': 'PutObject',
             },
             'kms.amazonaws.com': {
-                'ReEncrypt': 'ReEncrypt*' # not precise. See #27 for more details.
+                'ReEncrypt': 'ReEncrypt*'  # not precise. See #27 for more details.
             }
         }
 
@@ -128,10 +129,29 @@ class Record(object):
                     _regex_sub(r"([a-zA-Z]+)[0-9v_]+$", r"\1", ),
                     _regex_sub(r"Cors$", "CORS"))
 
+    def _to_api_gateway_statement(self):
+        op_def = operation_definition("apigateway", self.event_name)
+
+        http_method = op_def['http']['method']
+        request_uri = op_def['http']['requestUri']
+
+        resource_path = re.compile(r"{[a-zA-Z_]+}").sub("*", request_uri)
+
+        region = "*"  # use proper region from requestParameters
+
+        return Statement(
+            Effect="Allow",
+            Action=[Action("apigateway", http_method)],
+            Resource=["arn:aws:apigateway:{}::{}".format(region, resource_path)]
+        )
+
     def to_statement(self):
         """Converts record into a matching IAM Policy Statement"""
         if self.event_source == "sts.amazonaws.com" and self.event_name == "GetCallerIdentity":
             return None
+
+        if self.event_source == "apigateway.amazonaws.com":
+            return self._to_api_gateway_statement()
 
         return Statement(
             Effect="Allow",

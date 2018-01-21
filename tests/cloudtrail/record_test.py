@@ -90,6 +90,36 @@ def test_should_convert_special_actions_properly():
     assert record.to_statement() == expected_statment
 
 
+def test_should_convert_api_gateway_events_properly():
+    record = Record("apigateway.amazonaws.com", "CreateRestApi")
+
+    expected_statment = Statement(
+        Effect="Allow",
+        Action=[
+            Action("apigateway", "POST"),
+
+        ],
+        Resource=["arn:aws:apigateway:*::/restapis"]
+    )
+
+    assert record.to_statement() == expected_statment
+
+
+def test_should_convert_api_gateway_events_with_parameters_properly():
+    record = Record("apigateway.amazonaws.com", "UpdateMethod")
+
+    expected_statment = Statement(
+        Effect="Allow",
+        Action=[
+            Action("apigateway", "PATCH"),
+
+        ],
+        Resource=["arn:aws:apigateway:*::/restapis/*/resources/*/methods/*"]
+    )
+
+    assert record.to_statement() == expected_statment
+
+
 def test_should_not_return_statement_for_sts_get_caller_identity_as_it_is_always_allowed():
     assert Record('sts.amazonaws.com', "GetCallerIdentity").to_statement() is None
 

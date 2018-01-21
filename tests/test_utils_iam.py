@@ -1,20 +1,14 @@
-import fnmatch
 import json
 import logging
-
 import os
-from pkg_resources import resource_filename, Requirement
+
+from trailscraper.boto_service_definitions import boto_service_definition_files
 
 
 def all_aws_api_methods():
-    botocore_data_dir = resource_filename(Requirement.parse("botocore"), "botocore/data")
-    files = [os.path.join(root, file_in_dir) for root, _, files_in_dir in os.walk(botocore_data_dir)
-             for file_in_dir in files_in_dir
-             if fnmatch.fnmatch(file_in_dir, 'service-*.json')]
-
     result = []
 
-    for line in files:
+    for line in boto_service_definition_files():
         data = json.load(open(line.strip()))
         if 'operations' in data:
             for action in data['operations']:
