@@ -63,11 +63,64 @@ class Record(object):
         return special_cases.get(self.event_source, default_case)
 
     def _event_name_to_iam_action(self):
+        special_cases = {
+            's3.amazonaws.com': {
+                'CompleteMultipartUpload': 'PutObject',
+                'CopyObject': 'PutObject',
+                'CreateMultipartUpload': 'PutObject',
+                'DeleteBucketAnalyticsConfiguration': 'PutAnalyticsConfiguration',
+                'DeleteBucketEncryption': 'PutEncryptionConfiguration',
+                'DeleteBucketInventoryConfiguration': 'PutInventoryConfiguration',
+                'DeleteBucketLifecycle': 'PutLifecycleConfiguration',
+                'DeleteBucketMetricsConfiguration': 'PutMetricsConfiguration',
+                'DeleteBucketReplication': 'DeleteReplicationConfiguration',
+                'DeleteBucketTagging': 'PutBucketTagging',
+                'DeleteObjects': 'DeleteObject',
+                'GetBucketAccelerateConfiguration': 'GetAccelerateConfiguration',
+                'GetBucketAnalyticsConfiguration': 'GetAnalyticsConfiguration',
+                'GetBucketEncryption': 'GetEncryptionConfiguration',
+                'GetBucketInventoryConfiguration': 'GetInventoryConfiguration',
+                'GetBucketLifecycle': 'GetLifecycleConfiguration',
+                'GetBucketLifecycleConfiguration': 'GetLifecycleConfiguration',
+                'GetBucketMetricsConfiguration': 'GetMetricsConfiguration',
+                'GetBucketNotificationConfiguration': 'GetBucketNotification',
+                'GetBucketReplication': 'GetReplicationConfiguration',
+                'HeadBucket': 'ListBucket',
+                'HeadObject': 'GetObject',
+                'ListBucketAnalyticsConfigurations': 'GetAnalyticsConfiguration',
+                'ListBucketInventoryConfigurations': 'GetInventoryConfiguration',
+                'ListBucketMetricsConfigurations': 'GetMetricsConfiguration',
+                'ListBuckets': 'ListAllMyBuckets',
+                'ListMultipartUploads': 'ListBucketMultipartUploads',
+                'ListObjectVersions': 'ListBucketVersions',
+                'ListObjects': 'ListBucket',
+                'ListObjectsV2': 'ListBucket',
+                'ListParts': 'ListMultipartUploadParts',
+                'PutBucketAccelerateConfiguration': 'PutAccelerateConfiguration',
+                'PutBucketAnalyticsConfiguration': 'PutAnalyticsConfiguration',
+                'PutBucketEncryption': 'PutEncryptionConfiguration',
+                'PutBucketInventoryConfiguration': 'PutInventoryConfiguration',
+                'PutBucketLifecycle': 'PutLifecycleConfiguration',
+                'PutBucketLifecycleConfiguration': 'PutLifecycleConfiguration',
+                'PutBucketMetricsConfiguration': 'PutMetricsConfiguration',
+                'PutBucketNotificationConfiguration': 'PutBucketNotification',
+                'PutBucketReplication': 'DeleteReplicationConfiguration',
+                'UploadPart': 'PutObject',
+                'UploadPartCopy': 'PutObject',
+            }
+        }
+
         def _regex_sub(expr, subs):
             regex = re.compile(expr)
             return lambda s: regex.sub(subs, s)
 
+        def _special_case_mappings(event_name):
+            return special_cases \
+                .get(self.event_source, {}) \
+                .get(event_name, event_name)
+
         return pipe(self.event_name,
+                    _special_case_mappings,
                     _regex_sub(r"DeleteBucketCors", "PutBucketCORS"),
                     _regex_sub(r"([a-zA-Z]+)[0-9v_]+$", r"\1", ),
                     _regex_sub(r"Cors$", "CORS"))
