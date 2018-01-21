@@ -109,7 +109,7 @@ class Record(object):
                 'UploadPartCopy': 'PutObject',
             },
             'kms.amazonaws.com': {
-                'ReEncrypt': 'ReEncrypt*' # TODO: not precise. See #27 for more details.
+                'ReEncrypt': 'ReEncrypt*' # not precise. See #27 for more details.
             }
         }
 
