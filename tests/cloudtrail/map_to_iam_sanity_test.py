@@ -802,7 +802,6 @@ KNOWN_UNKNOWNS = {
     "kinesisvideo:UntagStream",
     "kinesisvideo:UpdateDataRetention",
     "kinesisvideo:UpdateStream",
-    "kms:ReEncrypt",
     "lambda:AddEventSource",
     "lambda:DeleteFunctionConcurrency",
     "lambda:GetEventSource",

@@ -107,6 +107,9 @@ class Record(object):
                 'PutBucketReplication': 'DeleteReplicationConfiguration',
                 'UploadPart': 'PutObject',
                 'UploadPartCopy': 'PutObject',
+            },
+            'kms.amazonaws.com': {
+                'ReEncrypt': 'ReEncrypt*' # TODO: not precise. See #27 for more details.
             }
         }
 
