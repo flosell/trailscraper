@@ -1162,7 +1162,6 @@ KNOWN_UNKNOWNS = {
     "states:DescribeStateMachineForExecution",
     "states:UpdateStateMachine",
     "storagegateway:NotifyWhenUploaded",
-    "sts:GetCallerIdentity", # TODO: always allowed, this maps to no-statement
     "support:AddAttachmentsToSet",
     "support:AddCommunicationToCase",
     "support:CreateCase",
@@ -1300,7 +1299,9 @@ def unknown_actions():
     for api_call in all_aws_api_methods():
         x = api_call.split(":")
         r = Record(x[0] + ".amazonaws.com", x[1])
-        iam_actions_from_api_calls.add(r.to_statement().Action[0].json_repr())
+        statement = r.to_statement()
+        if statement is not None:
+            iam_actions_from_api_calls.add(statement.Action[0].json_repr())
 
     known_actions = all_known_iam_actions()
 

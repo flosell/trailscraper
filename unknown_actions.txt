@@ -1158,7 +1158,6 @@ ssm:SendAutomationSignal
 states:DescribeStateMachineForExecution
 states:UpdateStateMachine
 storagegateway:NotifyWhenUploaded
-sts:GetCallerIdentity
 support:AddAttachmentsToSet
 support:AddCommunicationToCase
 support:CreateCase

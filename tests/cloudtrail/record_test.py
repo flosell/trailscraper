@@ -90,6 +90,10 @@ def test_should_convert_special_actions_properly():
     assert record.to_statement() == expected_statment
 
 
+def test_should_not_return_statement_for_sts_get_caller_identity_as_it_is_always_allowed():
+    assert Record('sts.amazonaws.com', "GetCallerIdentity").to_statement() is None
+
+
 def test_should_map_normal_event_sources_to_iam_prefix():
     assert Record('autoscaling.amazonaws.com', "something")._source_to_iam_prefix() == 'autoscaling'
     assert Record('sts.amazonaws.com', "something")._source_to_iam_prefix() == 'sts'

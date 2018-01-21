@@ -74,6 +74,9 @@ class Record(object):
 
     def to_statement(self):
         """Converts record into a matching IAM Policy Statement"""
+        if self.event_source == "sts.amazonaws.com" and self.event_name == "GetCallerIdentity":
+            return None
+
         return Statement(
             Effect="Allow",
             Action=[Action(self._source_to_iam_prefix(), self._event_name_to_iam_action())],

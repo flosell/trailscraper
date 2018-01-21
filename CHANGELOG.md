@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
   * S3 CORS actions
   * DynamoDB Streams
   * Tagging
+  * STS
   * App Stream 2
   * Lex
   * Mechanical Turk

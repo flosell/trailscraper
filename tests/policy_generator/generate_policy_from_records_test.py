@@ -179,6 +179,25 @@ def test_should_filter_for_event_time():
         ]
     )
 
+def test_should_allow_events_that_dont_map_to_statement():
+    records = [
+        Record("autoscaling.amazonaws.com", "DescribeLaunchConfigurations"),
+        Record("sts.amazonaws.com", "GetCallerIdentity")
+    ]
+
+    assert generate_policy_from_records(records) == PolicyDocument(
+        Version="2012-10-17",
+        Statement=[
+            Statement(
+                Effect="Allow",
+                Action=[
+                    Action('autoscaling', 'DescribeLaunchConfigurations'),
+                ],
+                Resource=["*"]
+            )
+        ]
+    )
+
 
 def test_should_warn_if_passed_no_records(caplog):
     records = []
