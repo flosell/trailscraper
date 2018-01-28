@@ -22,7 +22,7 @@ $ trailscraper download --bucket some-bucket \
                         --from 'two days ago' \
                         --to 'now' \
 # Generate an IAM Policy  
-$ trailscraper generate
+$ trailscraper generate-policy
 {
     "Statement": [
         {
