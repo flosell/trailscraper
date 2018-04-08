@@ -4,6 +4,12 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## 0.4.3
+
+### Added
+
+* New command `trailscraper last-event-timestamp` to get the last known event timestamp.
+  Useful to find out if CloudTrail already knows about the events you are interested in.
 ## 0.4.2
 
 ### Fixed
