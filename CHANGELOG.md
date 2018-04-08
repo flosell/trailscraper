@@ -13,7 +13,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 ### Added
 
 * New command `trailscraper last-event-timestamp` to get the last known event timestamp.
-  Useful to find out if CloudTrail already knows about the events you are interested in.
+* New flag `trailscraper download --wait` to wait until events for the specified timeframe are found.
+  Useful if you are waiting for CloudTrail to ship logs for a recent operation.
 
 
 ## 0.4.2
