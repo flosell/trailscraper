@@ -8,16 +8,14 @@ import re
 
 import boto3
 from toolz import pipe
+from toolz.curried import filter as filterz
+from toolz.curried import last as lastz
+from toolz.curried import map as mapz
+from toolz.curried import mapcat as mapcatz
+from toolz.curried import sorted as sortedz
 
 from trailscraper.boto_service_definitions import operation_definition
 from trailscraper.iam import Statement, Action
-from toolz.curried import map as mapz
-from toolz.curried import mapcat as mapcatz
-from toolz.curried import concat as concatz
-from toolz.curried import sorted as sortedz
-from toolz.curried import first as firstz
-from toolz.curried import filter as filterz
-from toolz.curried import last as lastz
 
 
 class Record(object):
@@ -239,20 +237,20 @@ def _parse_records(json_records):
 
 
 def _valid_log_files(log_dir):
-    def valid_or_warn(log_file):
+    def _valid_or_warn(log_file):
         if log_file.has_valid_filename():
             return True
-        else:
-            logging.warning("Invalid filename: %s", log_file.filename())
-            return False
 
-    def to_paths((root, _, files_in_dir)):
+        logging.warning("Invalid filename: %s", log_file.filename())
+        return False
+
+    def _to_paths((root, _, files_in_dir)):
         return [os.path.join(root, file_in_dir) for file_in_dir in files_in_dir]
 
     return pipe(os.walk(log_dir),
-                mapcatz(to_paths),
+                mapcatz(_to_paths),
                 mapz(LogFile),
-                filterz(valid_or_warn))
+                filterz(_valid_or_warn))
 
 
 def load_from_dir(log_dir, from_date, to_date):
@@ -266,13 +264,13 @@ def load_from_dir(log_dir, from_date, to_date):
 
 
 def last_event_timestamp_in_dir(log_dir):
+    """Return the timestamp of the most recent event in the given directory"""
     most_recent_file = pipe(_valid_log_files(log_dir),
                             sortedz(key=LogFile.timestamp),
                             lastz,
                             LogFile.records,
                             sortedz(key=lambda record: record.event_time),
-                            lastz
-                            )
+                            lastz)
 
     return most_recent_file.event_time
 
