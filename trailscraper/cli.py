@@ -6,7 +6,7 @@ import click
 
 import trailscraper
 from trailscraper import time_utils
-from trailscraper.cloudtrail import load_from_dir, load_from_api
+from trailscraper.cloudtrail import load_from_dir, load_from_api, last_event_timestamp_in_dir
 from trailscraper.policy_generator import generate_policy_from_records
 from trailscraper.s3_download import download_cloudtrail_logs
 
@@ -75,6 +75,14 @@ def generate_policy(log_dir, filter_assumed_role_arn, use_cloudtrail_api, from_s
 
     click.echo(policy.to_json())
 
+@click.command("last-event-timestamp")
+@click.option('--log-dir', default="~/.trailscraper/logs", type=click.Path(),
+              help='Where to put logfiles')
+def last_event_timestamp(log_dir):
+    log_dir = os.path.expanduser(log_dir)
+    click.echo(last_event_timestamp_in_dir(log_dir))
+
 
 root_group.add_command(download)
 root_group.add_command(generate_policy)
+root_group.add_command(last_event_timestamp)

@@ -11,6 +11,13 @@ from toolz import pipe
 
 from trailscraper.boto_service_definitions import operation_definition
 from trailscraper.iam import Statement, Action
+from toolz.curried import map as mapz
+from toolz.curried import mapcat as mapcatz
+from toolz.curried import concat as concatz
+from toolz.curried import sorted as sortedz
+from toolz.curried import first as firstz
+from toolz.curried import filter as filterz
+from toolz.curried import last as lastz
 
 
 class Record(object):
@@ -231,19 +238,43 @@ def _parse_records(json_records):
     return [r for r in parsed_records if r is not None]
 
 
+def _valid_log_files(log_dir):
+    def valid_or_warn(log_file):
+        if log_file.has_valid_filename():
+            return True
+        else:
+            logging.warning("Invalid filename: %s", log_file.filename())
+            return False
+
+    def to_paths((root, _, files_in_dir)):
+        return [os.path.join(root, file_in_dir) for file_in_dir in files_in_dir]
+
+    return pipe(os.walk(log_dir),
+                mapcatz(to_paths),
+                mapz(LogFile),
+                filterz(valid_or_warn))
+
+
 def load_from_dir(log_dir, from_date, to_date):
     """Loads all CloudTrail Records in a file"""
     records = []
-    for root, _, files_in_dir in os.walk(log_dir):
-        for file_in_dir in files_in_dir:
-            logfile = LogFile(os.path.join(root, file_in_dir))
-            if logfile.has_valid_filename():
-                if logfile.contains_events_for_timeframe(from_date, to_date):
-                    records.extend(logfile.records())
-            else:
-                logging.warning("Invalid filename: %s", logfile.filename())
+    for logfile in _valid_log_files(log_dir):
+        if logfile.contains_events_for_timeframe(from_date, to_date):
+            records.extend(logfile.records())
 
     return records
+
+
+def last_event_timestamp_in_dir(log_dir):
+    most_recent_file = pipe(_valid_log_files(log_dir),
+                            sortedz(key=LogFile.timestamp),
+                            lastz,
+                            LogFile.records,
+                            sortedz(key=lambda record: record.event_time),
+                            lastz
+                            )
+
+    return most_recent_file.event_time
 
 
 def load_from_api(from_date, to_date):
