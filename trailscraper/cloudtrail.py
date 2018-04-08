@@ -244,7 +244,8 @@ def _valid_log_files(log_dir):
         logging.warning("Invalid filename: %s", log_file.filename())
         return False
 
-    def _to_paths((root, _, files_in_dir)):
+    def _to_paths(tuple):
+        root, _, files_in_dir = tuple
         return [os.path.join(root, file_in_dir) for file_in_dir in files_in_dir]
 
     return pipe(os.walk(log_dir),
