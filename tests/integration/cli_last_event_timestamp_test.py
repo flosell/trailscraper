@@ -12,5 +12,5 @@ def test_should_output_the_timestamp_of_the_last_event():
                                                  "--log-dir", cloudtrail_data_dir()
                                                  ])
     assert result.exit_code == 0
-    assert result.output == "2017-12-11 15:04:51\n"
+    assert result.output == "2017-12-11 15:04:51+00:00\n"
 

@@ -1,6 +1,6 @@
 boto3>=1.4.7
 click>=6.7
 toolz>=0.8.2
-dateparser>=0.6.0
+dateparser==0.6.0
 pytz>=2017.3
 python-dateutil<2.7.0

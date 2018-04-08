@@ -6,10 +6,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 ## 0.4.3
 
+### Fixed
+
+* Made trailscraper timezone-aware. Until now, trailscraper implicitly treated everything as UTC, meaning relative timestamps (e.g. `now`, `two hours ago`) didn't work properly when filtering logfiles to download or records to generate from. (#39) 
+
 ### Added
 
 * New command `trailscraper last-event-timestamp` to get the last known event timestamp.
   Useful to find out if CloudTrail already knows about the events you are interested in.
+
+
 ## 0.4.2
 
 ### Fixed
