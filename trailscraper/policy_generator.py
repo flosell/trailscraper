@@ -2,6 +2,7 @@
 import datetime
 import logging
 
+import pytz
 import toolz as toolz
 from toolz import pipe
 from toolz.curried import filter as filterz
@@ -48,8 +49,8 @@ def _warn_filtered_away(warned_about_no_records):
 
 def generate_policy_from_records(records,
                                  arns_to_filter_for=None,
-                                 from_date=datetime.datetime(1970, 1, 1),
-                                 to_date=datetime.datetime.now()):
+                                 from_date=datetime.datetime(1970, 1, 1, tzinfo=pytz.utc),
+                                 to_date=datetime.datetime.now(tz=pytz.utc)):
     """Generates a policy from a set of records"""
 
     if not records:

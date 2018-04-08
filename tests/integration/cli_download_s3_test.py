@@ -2,6 +2,8 @@ import datetime
 
 import sys
 
+import pytz
+
 if sys.version_info[0] < 3:
     from backports import tempfile
 else:
@@ -32,8 +34,8 @@ def test_download_log_files_and_skip_existing_files():
             target_dir=dirpath,
             bucket="some-bucket",
             cloudtrail_prefix="some-prefix/",
-            from_date=datetime.datetime(2017, 1, 1),
-            to_date=datetime.datetime(2017, 1, 1),
+            from_date=datetime.datetime(2017, 1, 1, tzinfo=pytz.utc),
+            to_date=datetime.datetime(2017, 1, 1, tzinfo=pytz.utc),
             account_ids=["000"],
             regions=["some-region-1"])
 

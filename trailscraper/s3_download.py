@@ -4,6 +4,7 @@ import logging
 import os
 
 import boto3 as boto3
+import pytz as pytz
 
 
 def _s3_key_prefix(prefix, date, account_id, region):
@@ -12,7 +13,7 @@ def _s3_key_prefix(prefix, date, account_id, region):
 
 
 def _s3_key_prefixes(prefix, account_ids, regions, from_date, to_date):
-    delta = to_date - from_date
+    delta = to_date.astimezone(pytz.utc) - from_date.astimezone(pytz.utc)
 
     days = [to_date - datetime.timedelta(days=delta_days) for delta_days in range(delta.days + 1)]
     return [_s3_key_prefix(prefix, day, account_id, region)

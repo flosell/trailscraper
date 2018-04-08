@@ -70,8 +70,8 @@ def test_should_filter_for_assumed_role_arn():
 def test_should_filter_for_timeframes():
     runner = CliRunner()
     result = runner.invoke(cli.root_group, args=["generate-policy", "--log-dir", cloudtrail_data_dir(),
-                                                 "--from", "2017-12-11 15:00:00",
-                                                 "--to", "2017-12-11 15:02:00"])
+                                                 "--from", "2017-12-11 15:00:00Z",
+                                                 "--to", "2017-12-11 15:02:00Z"])
     assert result.exit_code == 0, result.output
     assert json.loads(result.output) == json.loads('''\
 {

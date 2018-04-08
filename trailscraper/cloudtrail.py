@@ -7,6 +7,7 @@ import os
 import re
 
 import boto3
+import pytz
 from toolz import pipe
 from toolz.curried import filter as filterz
 from toolz.curried import last as lastz
@@ -175,7 +176,7 @@ class LogFile(object):
         """Returns the timestamp the log file was delivered"""
 
         timestamp_part = self.filename().split('_')[3]
-        return datetime.datetime.strptime(timestamp_part, "%Y%m%dT%H%MZ")
+        return datetime.datetime.strptime(timestamp_part, "%Y%m%dT%H%MZ").replace(tzinfo=pytz.utc)
 
     def filename(self):
         """Name of the logfile (without path)"""
@@ -223,7 +224,7 @@ def _parse_record(json_record):
     try:
         return Record(json_record['eventSource'],
                       json_record['eventName'],
-                      event_time=datetime.datetime.strptime(json_record['eventTime'], "%Y-%m-%dT%H:%M:%SZ"),
+                      event_time=datetime.datetime.strptime(json_record['eventTime'], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=pytz.utc),
                       resource_arns=_resource_arns(json_record),
                       assumed_role_arn=_assumed_role_arn(json_record))
     except KeyError as error:
