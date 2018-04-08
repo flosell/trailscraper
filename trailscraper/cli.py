@@ -1,9 +1,9 @@
 """Command Line Interface for Trailscraper"""
 import logging
 import os
+import time
 
 import click
-import time
 
 import trailscraper
 from trailscraper import time_utils
@@ -54,7 +54,9 @@ def download(bucket, prefix, account_id, region, log_dir, from_s, to_s, wait):
     if wait:
         last_timestamp = last_event_timestamp_in_dir(log_dir)
         while last_timestamp <= to_date:
-            click.echo("CloudTrail logs haven't caught up to "+str(to_date)+" yet. Most recent timestamp: "+str(last_timestamp.astimezone(to_date.tzinfo))+". Trying again in 60sec.")
+            click.echo("CloudTrail logs haven't caught up to "+str(to_date)+" yet. "+
+                       "Most recent timestamp: "+str(last_timestamp.astimezone(to_date.tzinfo))+". "+
+                       "Trying again in 60sec.")
 
             time.sleep(60*1)
 
