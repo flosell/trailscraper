@@ -10,3 +10,4 @@ CHANGELOG.rst
 build
 *.pyc
 venvs
+.pytest_cache
