@@ -1,3 +1,6 @@
+import os
+import pytest
+
 from tests.test_utils_iam import all_aws_api_methods, all_known_iam_actions
 from trailscraper.cloudtrail import Record
 
@@ -1182,5 +1185,6 @@ def unknown_actions():
     return iam_actions_from_api_calls.difference(known_actions)
 
 
+@pytest.mark.skipif(os.getenv('INCLUDE_IAM_SANITY_TEST', None) is None, reason="changes often")
 def test_api_calls_map_to_known_iam_action():
     assert unknown_actions() == KNOWN_UNKNOWNS.union(UNDOCUMENTED)
