@@ -4,7 +4,7 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
-## 0.4.3
+## 0.4.4
 
 ### Fixed
 
@@ -16,6 +16,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 * New flag `trailscraper download --wait` to wait until events for the specified timeframe are found.
   Useful if you are waiting for CloudTrail to ship logs for a recent operation.
 
+
+## 0.4.3
+
+_skipped because of release-problems_
 
 ## 0.4.2
 
