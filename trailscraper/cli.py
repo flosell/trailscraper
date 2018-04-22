@@ -7,8 +7,9 @@ import time
 import click
 
 import trailscraper
-from trailscraper import time_utils
-from trailscraper.cloudtrail import load_from_dir, load_from_api, last_event_timestamp_in_dir, filter_records
+from trailscraper import time_utils, policy_generator
+from trailscraper.cloudtrail import load_from_dir, load_from_api, last_event_timestamp_in_dir, filter_records, \
+    parse_records
 from trailscraper.policy_generator import generate_policy_from_records
 from trailscraper.s3_download import download_cloudtrail_logs
 
@@ -121,6 +122,16 @@ def select(log_dir, filter_assumed_role_arn, use_cloudtrail_api, from_s, to_s):
     click.echo(json.dumps({"Records": filtered_records_as_json}))
 
 
+@click.command("generate")
+def generate():
+    """Generates a policy that allows the events passed in through STDIN"""
+    stdin = click.get_text_stream('stdin')
+    records = parse_records(json.load(stdin)['Records'])
+
+    policy = policy_generator.generate_policy(records)
+    click.echo(policy.to_json())
+
+
 @click.command("last-event-timestamp")
 @click.option('--log-dir', default="~/.trailscraper/logs", type=click.Path(),
               help='Where to put logfiles')
@@ -133,4 +144,5 @@ def last_event_timestamp(log_dir):
 root_group.add_command(download)
 root_group.add_command(generate_policy)
 root_group.add_command(select)
+root_group.add_command(generate)
 root_group.add_command(last_event_timestamp)

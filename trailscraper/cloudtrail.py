@@ -196,7 +196,7 @@ class LogFile(object):
             with gzip.open(self._path, 'rt') as unzipped:
                 json_data = json.load(unzipped)
                 records = json_data['Records']
-                return _parse_records(records)
+                return parse_records(records)
         except (IOError, OSError) as error:
             logging.warning("Could not load %s: %s", self._path, error)
             return []
@@ -235,7 +235,7 @@ def _parse_record(json_record):
         return None
 
 
-def _parse_records(json_records):
+def parse_records(json_records):
     parsed_records = [_parse_record(record) for record in json_records]
     return [r for r in parsed_records if r is not None]
 

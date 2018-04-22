@@ -5,7 +5,7 @@ import pytz
 from tests.test_utils_testdata import cloudtrail_data_dir
 from trailscraper.cloudtrail import Record
 from trailscraper.cloudtrail import load_from_dir, _parse_record, \
-    _parse_records
+    parse_records
 
 
 def test_load_gzipped_files_in_timeframe_from_dir():
@@ -67,8 +67,8 @@ def test_parse_record_should_be_able_to_cope_with_missing_session_context_in_ass
 
 
 def test_parse_records_should_ignore_records_that_cant_be_parsed():
-    assert _parse_records([{},
-                           {'eventVersion': '1.05',
+    assert parse_records([{},
+                          {'eventVersion': '1.05',
                             'userIdentity': {'type': 'SomeType'},
                             'eventSource': 'someSource',
                             'eventName': 'SomeEvent',
