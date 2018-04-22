@@ -36,7 +36,7 @@ def generate_policy_from_records(records,
 
     filtered_records = list(filter_records(records, arns_to_filter_for, from_date, to_date))
 
-    if len(filtered_records) == 0 and records:
+    if filtered_records and records:
         logging.warning(ALL_RECORDS_FILTERED)
 
     return generate_policy(filtered_records)

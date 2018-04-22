@@ -23,7 +23,8 @@ class Record(object):
     """Represents a CloudTrail record"""
 
     # pylint: disable=too-many-arguments
-    def __init__(self, event_source, event_name, resource_arns=None, assumed_role_arn=None, event_time=None, raw_source=None):
+    def __init__(self, event_source, event_name,
+                 resource_arns=None, assumed_role_arn=None, event_time=None, raw_source=None):
         self.event_source = event_source
         self.event_name = event_name
         self.raw_source = raw_source
@@ -236,6 +237,7 @@ def _parse_record(json_record):
 
 
 def parse_records(json_records):
+    """Convert JSON Records into Record objects"""
     parsed_records = [_parse_record(record) for record in json_records]
     return [r for r in parsed_records if r is not None]
 
@@ -312,6 +314,7 @@ def filter_records(records,
                    arns_to_filter_for=None,
                    from_date=datetime.datetime(1970, 1, 1, tzinfo=pytz.utc),
                    to_date=datetime.datetime.now(tz=pytz.utc)):
+    """Filter records so they match the given condition"""
     return pipe(records,
                 filterz(_by_timeframe(from_date, to_date)),
                 filterz(_by_role_arns(arns_to_filter_for)))
