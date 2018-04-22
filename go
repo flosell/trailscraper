@@ -10,9 +10,6 @@ VERSIONS="2.7
 
 activate_venv() {
     source "${VENV_DIR}/bin/activate"
-    python --version
-    pip --version
-    which python
 }
 
 goal_regenerate_iam_data_from_cloudonaut() {
