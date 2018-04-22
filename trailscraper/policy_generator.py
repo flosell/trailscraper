@@ -9,7 +9,7 @@ from toolz.curried import filter as filterz
 from toolz.curried import map as mapz
 from toolz.curried import sorted as sortedz
 
-from trailscraper.cloudtrail import Record
+from trailscraper.cloudtrail import Record, filter_records
 from trailscraper.iam import PolicyDocument, Statement
 
 NO_RECORDS_WARNING = "No cloudtrail records found in input! Did you download the right logfiles? " \
@@ -26,47 +26,29 @@ def _combine_statements_by(key):
     return _result
 
 
-def _by_role_arns(arns_to_filter_for):
-    if arns_to_filter_for is None:
-        arns_to_filter_for = []
-
-    return lambda record: (record.assumed_role_arn in arns_to_filter_for) or (len(arns_to_filter_for) == 0)
-
-
-def _by_timeframe(from_date, to_date):
-    return lambda record: record.event_time is None or \
-                          (from_date <= record.event_time <= to_date)
-
-
-def _warn_filtered_away(warned_about_no_records):
-    def _doit(statements):
-        if not statements and not warned_about_no_records:
-            logging.warning(ALL_RECORDS_FILTERED)
-        return statements
-
-    return _doit
-
-
 def generate_policy_from_records(records,
                                  arns_to_filter_for=None,
                                  from_date=datetime.datetime(1970, 1, 1, tzinfo=pytz.utc),
                                  to_date=datetime.datetime.now(tz=pytz.utc)):
-    """Generates a policy from a set of records"""
-
+    """Generates a policy from a set of records that matches the given conditions"""
     if not records:
         logging.warning(NO_RECORDS_WARNING)
-        warned_about_no_records = True
-    else:
-        warned_about_no_records = False
 
-    statements = pipe(records,
-                      filterz(_by_timeframe(from_date, to_date)),
-                      filterz(_by_role_arns(arns_to_filter_for)),
+    filtered_records = list(filter_records(records, arns_to_filter_for, from_date, to_date))
+
+    if len(filtered_records) == 0 and records:
+        logging.warning(ALL_RECORDS_FILTERED)
+
+    return generate_policy(filtered_records)
+
+
+def generate_policy(selected_records):
+    """Generates a policy from a set of records"""
+    statements = pipe(selected_records,
                       mapz(Record.to_statement),
                       filterz(lambda statement: statement is not None),
                       _combine_statements_by(lambda statement: statement.Resource),
                       _combine_statements_by(lambda statement: statement.Action),
-                      _warn_filtered_away(warned_about_no_records),
                       sortedz())
 
     return PolicyDocument(

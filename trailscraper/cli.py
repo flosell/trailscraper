@@ -1,4 +1,5 @@
 """Command Line Interface for Trailscraper"""
+import json
 import logging
 import os
 import time
@@ -7,7 +8,7 @@ import click
 
 import trailscraper
 from trailscraper import time_utils
-from trailscraper.cloudtrail import load_from_dir, load_from_api, last_event_timestamp_in_dir
+from trailscraper.cloudtrail import load_from_dir, load_from_api, last_event_timestamp_in_dir, filter_records
 from trailscraper.policy_generator import generate_policy_from_records
 from trailscraper.s3_download import download_cloudtrail_logs
 
@@ -90,6 +91,36 @@ def generate_policy(log_dir, filter_assumed_role_arn, use_cloudtrail_api, from_s
 
     click.echo(policy.to_json())
 
+
+@click.command("select")
+@click.option('--log-dir', default="~/.trailscraper/logs", type=click.Path(),
+              help='Where to put logfiles')
+@click.option('--filter-assumed-role-arn', multiple=True,
+              help='only consider events from this role (can be used multiple times)')
+@click.option('--use-cloudtrail-api', is_flag=True, default=False,
+              help='Pull Events from CloudtrailAPI instead of log-dir')
+@click.option('--from', 'from_s', default="one day ago", type=click.STRING,
+              help='Start date, e.g. "2017-01-01" or "-1days"')
+@click.option('--to', 'to_s', default="now", type=click.STRING,
+              help='End date, e.g. "2017-01-01" or "now"')
+def select(log_dir, filter_assumed_role_arn, use_cloudtrail_api, from_s, to_s):
+    """Finds all CloudTrail records matching the given filters and prints them."""
+    log_dir = os.path.expanduser(log_dir)
+    from_date = time_utils.parse_human_readable_time(from_s)
+    to_date = time_utils.parse_human_readable_time(to_s)
+
+    if use_cloudtrail_api:
+        records = load_from_api(from_date, to_date)
+    else:
+        records = load_from_dir(log_dir, from_date, to_date)
+
+    filtered_records = filter_records(records, filter_assumed_role_arn, from_date, to_date)
+
+    filtered_records_as_json = [record.raw_source for record in filtered_records]
+
+    click.echo(json.dumps({"Records": filtered_records_as_json}))
+
+
 @click.command("last-event-timestamp")
 @click.option('--log-dir', default="~/.trailscraper/logs", type=click.Path(),
               help='Where to put logfiles')
@@ -101,4 +132,5 @@ def last_event_timestamp(log_dir):
 
 root_group.add_command(download)
 root_group.add_command(generate_policy)
+root_group.add_command(select)
 root_group.add_command(last_event_timestamp)

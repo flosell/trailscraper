@@ -23,9 +23,10 @@ class Record(object):
     """Represents a CloudTrail record"""
 
     # pylint: disable=too-many-arguments
-    def __init__(self, event_source, event_name, resource_arns=None, assumed_role_arn=None, event_time=None):
+    def __init__(self, event_source, event_name, resource_arns=None, assumed_role_arn=None, event_time=None, raw_source=None):
         self.event_source = event_source
         self.event_name = event_name
+        self.raw_source = raw_source
         self.event_time = event_time
         self.resource_arns = resource_arns or ["*"]
         self.assumed_role_arn = assumed_role_arn
@@ -227,7 +228,8 @@ def _parse_record(json_record):
                       event_time=datetime.datetime.strptime(json_record['eventTime'],
                                                             "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=pytz.utc),
                       resource_arns=_resource_arns(json_record),
-                      assumed_role_arn=_assumed_role_arn(json_record))
+                      assumed_role_arn=_assumed_role_arn(json_record),
+                      raw_source=json_record)
     except KeyError as error:
         logging.warning("Could not parse %s: %s", json_record, error)
         return None
@@ -292,3 +294,24 @@ def load_from_api(from_date, to_date):
             records.append(_parse_record(json.loads(event['CloudTrailEvent'])))
 
     return records
+
+
+def _by_timeframe(from_date, to_date):
+    return lambda record: record.event_time is None or \
+                          (from_date <= record.event_time <= to_date)
+
+
+def _by_role_arns(arns_to_filter_for):
+    if arns_to_filter_for is None:
+        arns_to_filter_for = []
+
+    return lambda record: (record.assumed_role_arn in arns_to_filter_for) or (len(arns_to_filter_for) == 0)
+
+
+def filter_records(records,
+                   arns_to_filter_for=None,
+                   from_date=datetime.datetime(1970, 1, 1, tzinfo=pytz.utc),
+                   to_date=datetime.datetime.now(tz=pytz.utc)):
+    return pipe(records,
+                filterz(_by_timeframe(from_date, to_date)),
+                filterz(_by_role_arns(arns_to_filter_for)))
