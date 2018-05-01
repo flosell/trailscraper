@@ -130,6 +130,41 @@ $ ./go check   # run some style checks
 $ ./go         # let's see what we can do here
 ```
 
+### FAQ
+
+#### How can I generate policies in CloudFormation YAML instead of JSON? 
+
+TrailScraper doesn't provide this. But you can use [cfn-flip](https://github.com/awslabs/aws-cfn-template-flip) to do it:
+
+```
+$ trailscraper select | trailscraper generate | cfn-flip
+Statement:
+  - Action:
+      - ec2:DescribeInstances
+    Effect: Allow
+    Resource:
+      - '*'
+```
+
+#### How can I generate policies in Terraform HCL instead of JSON? 
+
+TrailScraper doesn't provide this. But you can use [iam-policy-json-to-terraform](https://github.com/flosell/iam-policy-json-to-terraform) to do it:
+
+```
+$ trailscraper select | trailscraper generate | iam-policy-json-to-terraform
+data "aws_iam_policy_document" "policy" {
+  statement {
+    sid       = ""
+    effect    = "Allow"
+    resources = ["*"]
+
+    actions = [
+      "ec2:DescribeInstances",
+    ]
+  }
+}
+```
+
 ### Troubleshooting
 
 #### TrailScraper is missing some events
