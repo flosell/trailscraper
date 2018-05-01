@@ -23,9 +23,44 @@ $ trailscraper download --bucket some-bucket \
                         --to 'now' \
 ```
 
-### Find CloudTrail events and generate an IAM Policy (<0.5.0)
+### Find CloudTrail events matching a filter (>=0.5.0)
+
 ```
-$ trailscraper generate-policy
+$ trailscraper select --filter-assumed-role-arn some-arn \ 
+                      --from 'one hour ago' \ 
+                      --to 'now'
+{
+  "Records": [
+    {
+      "eventTime": "2017-12-11T15:01:51Z",
+      "eventSource": "autoscaling.amazonaws.com",
+      "eventName": "DescribeLaunchConfigurations",
+...
+```
+
+### Generate Policy from some CloudTrail records (>=0.5.0)
+
+```
+$ gzcat some-records.json.gz | trailscraper generate
+{
+    "Statement": [
+        {
+            "Action": [
+                "ec2:DescribeInstances"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "*"
+            ]
+        }
+    ],
+    "Version": "2012-10-17"
+} 
+```
+
+### Find CloudTrail events and generate an IAM Policy (>=0.5.0)
+```
+$ trailscraper select | trailscraper generate
 {
     "Statement": [
         {
@@ -55,44 +90,9 @@ $ trailscraper generate-policy
 } 
 ```
 
-### Find CloudTrail events matching a filter (>=0.5.0) (unreleased)
-
+### Find CloudTrail events and generate an IAM Policy (<0.5.0)
 ```
-$ trailscraper select --filter-assumed-role-arn some-arn \ 
-                      --from 'one hour ago' \ 
-                      --to 'now'
-{
-  "Records": [
-    {
-      "eventTime": "2017-12-11T15:01:51Z",
-      "eventSource": "autoscaling.amazonaws.com",
-      "eventName": "DescribeLaunchConfigurations",
-...
-```
-
-### Generate Policy from some CloudTrail records (>=0.5.0) (unreleased)
-
-```
-$ gzcat some-records.json.gz | trailscraper generate
-{
-    "Statement": [
-        {
-            "Action": [
-                "ec2:DescribeInstances"
-            ],
-            "Effect": "Allow",
-            "Resource": [
-                "*"
-            ]
-        }
-    ],
-    "Version": "2012-10-17"
-} 
-```
-
-### Find CloudTrail events and generate an IAM Policy (>=0.5.0) (unreleased)
-```
-$ trailscraper select | trailscraper generate
+$ trailscraper generate-policy
 {
     "Statement": [
         {
