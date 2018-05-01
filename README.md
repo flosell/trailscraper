@@ -122,18 +122,9 @@ $ trailscraper select | trailscraper generate
 } 
 ```
 
-## Development
+## FAQ
 
-```bash
-$ ./go setup   # set up venv, dependencies and tools
-$ ./go test    # run some tests
-$ ./go check   # run some style checks
-$ ./go         # let's see what we can do here
-```
-
-### FAQ
-
-#### How can I generate policies in CloudFormation YAML instead of JSON? 
+### How can I generate policies in CloudFormation YAML instead of JSON? 
 
 TrailScraper doesn't provide this. But you can use [cfn-flip](https://github.com/awslabs/aws-cfn-template-flip) to do it:
 
@@ -147,7 +138,7 @@ Statement:
       - '*'
 ```
 
-#### How can I generate policies in Terraform HCL instead of JSON? 
+### How can I generate policies in Terraform HCL instead of JSON? 
 
 TrailScraper doesn't provide this. But you can use [iam-policy-json-to-terraform](https://github.com/flosell/iam-policy-json-to-terraform) to do it:
 
@@ -166,13 +157,11 @@ data "aws_iam_policy_document" "policy" {
 }
 ```
 
-### Troubleshooting
-
-#### TrailScraper is missing some events
+### Why is TrailScraper missing some events?
 
 * Make sure you have logs for the `us-east-1` region. Some global AWS services (e.g. Route53, IAM, STS, CloudFront) use this region. For details, check the [CloudTrail Documentation](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-global-service-events)
 
-#### TrailScraper generated actions that aren't IAM actions
+### Why are some TrailScraper-generated actions not real IAM actions?
 
 This is totally possible. Unfortunately, there is no good, machine-readable documentation on how CloudTrail events
 map to IAM actions so TrailScraper is using heuristics to figure out the right actions. These heuristics likely don't
@@ -183,7 +172,7 @@ please [open a new issue](https://github.com/flosell/trailscraper/issues/new) or
 
 For more details, check out the [contribution guide](./CONTRIBUTING.md) 
 
-#### Click thinks you are in an ASCII environment 
+### Why does click think I am in an ASCII environment? 
 
 `Click will abort further execution because Python 3 was configured to use ASCII as encoding for the environment.`
 
@@ -199,3 +188,11 @@ LANG=C.UTF-8
 ```
 For details, see http://click.pocoo.org/5/python3/#python-3-surrogate-handling
 
+## Development
+
+```bash
+$ ./go setup   # set up venv, dependencies and tools
+$ ./go test    # run some tests
+$ ./go check   # run some style checks
+$ ./go         # let's see what we can do here
+```
