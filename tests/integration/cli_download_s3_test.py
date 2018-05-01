@@ -1,5 +1,4 @@
 import datetime
-
 import sys
 
 import pytz
@@ -13,7 +12,6 @@ from click.testing import CliRunner
 from moto import mock_s3
 
 from tests.test_utils_s3 import file_content, given_a_bucket, given_an_object, given_a_file
-from tests.test_utils_testdata import cloudtrail_data_dir
 from trailscraper import cli
 from trailscraper.s3_download import download_cloudtrail_logs
 

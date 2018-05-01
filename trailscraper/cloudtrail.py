@@ -18,6 +18,9 @@ from toolz.curried import sorted as sortedz
 from trailscraper.boto_service_definitions import operation_definition
 from trailscraper.iam import Statement, Action
 
+ALL_RECORDS_FILTERED = "No records matching your criteria found! Did you use the right filters? " \
+                       "Did you download the right logfiles? "\
+                       "It might take about 15 minutes for events to turn up in CloudTrail logs."
 
 class Record(object):
     """Represents a CloudTrail record"""
@@ -315,6 +318,8 @@ def filter_records(records,
                    from_date=datetime.datetime(1970, 1, 1, tzinfo=pytz.utc),
                    to_date=datetime.datetime.now(tz=pytz.utc)):
     """Filter records so they match the given condition"""
-    return pipe(records,
-                filterz(_by_timeframe(from_date, to_date)),
-                filterz(_by_role_arns(arns_to_filter_for)))
+    result = list(pipe(records, filterz(_by_timeframe(from_date, to_date)), filterz(_by_role_arns(arns_to_filter_for))))
+    if not result and records:
+        logging.warning(ALL_RECORDS_FILTERED)
+
+    return result

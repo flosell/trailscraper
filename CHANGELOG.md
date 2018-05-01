@@ -4,6 +4,22 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## 0.5.0
+
+**Breaking CLI changes**: split up `generate-policy` into `select` and `generate` (#38)
+
+### Added
+
+* New command `select` to print all CloudTrail records matching a filter to stdout
+* New command `generate` to take CloudTrail records from stdin and generate a policy for it
+
+### Removed
+
+* Removed command `generate-policy`, replaced with `select` and `generate`. Use pipes to produce the same behavior: 
+  ```bash
+  $ trailscraper select | trailscraper generate
+  ```
+
 ## 0.4.4
 
 ### Fixed
