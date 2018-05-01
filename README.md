@@ -23,7 +23,7 @@ $ trailscraper download --bucket some-bucket \
                         --to 'now' \
 ```
 
-# Find CloudTrail events and generate an IAM Policy (<0.5.0)
+### Find CloudTrail events and generate an IAM Policy (<0.5.0)
 ```
 $ trailscraper generate-policy
 {
