@@ -67,6 +67,7 @@ $ trailscraper select --filter-assumed-role-arn some-arn \
       "eventTime": "2017-12-11T15:01:51Z",
       "eventSource": "autoscaling.amazonaws.com",
       "eventName": "DescribeLaunchConfigurations",
+...
 ```
 
 ### Generate Policy from some CloudTrail records (>=0.5.0) (unreleased)
