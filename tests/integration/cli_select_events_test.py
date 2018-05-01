@@ -9,9 +9,6 @@ def test_should_output_all_cloudtrail_records_in_data_dir():
     runner = CliRunner()
     result = runner.invoke(cli.root_group, args=["select",
                                                  "--log-dir", cloudtrail_data_dir(),
-                                                 # TODO: ideally, the default should be no filtering at all
-                                                 "--from", "2016-12-10",
-                                                 "--to", "2017-12-20",
                                                  ])
     expected_json = json.load(open(cloudtrail_data("111111111111_CloudTrail_eu-central-1_20171211T1505Z_A6kvhMoVeCsc7v8U.json")))
 
@@ -23,9 +20,6 @@ def test_should_output_cloudrail_records_filtered_by_role_arn():
     runner = CliRunner()
     result = runner.invoke(cli.root_group, args=["select",
                                                  "--log-dir", cloudtrail_data_dir(),
-                                                 # TODO: ideally, the default should be no filtering at all
-                                                 "--from", "2016-12-10",
-                                                 "--to", "2017-12-20",
                                                  "--filter-assumed-role-arn", "arn:aws:iam::111111111111:role/someRole"
                                                  ])
     expected_json = json.load(open(cloudtrail_data("111111111111_CloudTrail_eu-central-1_20171211T1505Z_A6kvhMoVeCsc7v8U.json")))
@@ -38,7 +32,6 @@ def test_should_output_cloudrail_records_filtered_by_timeframe():
     runner = CliRunner()
     result = runner.invoke(cli.root_group, args=["select",
                                                  "--log-dir", cloudtrail_data_dir(),
-                                                 # TODO: ideally, the default should be no filtering at all
                                                  "--from", "2017-12-11 15:00:00Z",
                                                  "--to", "2017-12-11 15:02:00Z"])
     expected_json = json.load(open(cloudtrail_data("111111111111_CloudTrail_eu-central-1_20171211T1505Z_A6kvhMoVeCsc7v8U.json")))

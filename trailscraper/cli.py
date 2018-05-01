@@ -72,7 +72,7 @@ def download(bucket, prefix, account_id, region, log_dir, from_s, to_s, wait):
               help='only consider events from this role (can be used multiple times)')
 @click.option('--use-cloudtrail-api', is_flag=True, default=False,
               help='Pull Events from CloudtrailAPI instead of log-dir')
-@click.option('--from', 'from_s', default="one day ago", type=click.STRING,
+@click.option('--from', 'from_s', default="1970-01-01", type=click.STRING,
               help='Start date, e.g. "2017-01-01" or "-1days"')
 @click.option('--to', 'to_s', default="now", type=click.STRING,
               help='End date, e.g. "2017-01-01" or "now"')

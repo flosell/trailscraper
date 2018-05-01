@@ -13,6 +13,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 * New command `select` to print all CloudTrail records matching a filter to stdout
 * New command `generate` to take CloudTrail records from stdin and generate a policy for it
 
+### Changed
+
+* New command `select` defaults to not filtering at all whereas `generate-policy` filtered for recent events by default.
+  Changed to make filtering more explicit and predictable instead of surprising users who wonder why their events don't show up
+
 ### Removed
 
 * Removed command `generate-policy`, replaced with `select` and `generate`. Use pipes to produce the same behavior: 
