@@ -17,17 +17,30 @@ goal_regenerate_iam_data_from_cloudonaut() {
     pushd ${tmp_dir} > /dev/null
         git clone --depth 1 git@github.com:widdix/complete-aws-iam-reference.git
         cd complete-aws-iam-reference/tools
-        node md2json.js > ${SCRIPT_DIR}/tests/iam-actions-from-cloudonaut.json
+        node md2json.js | \
+            tee ${SCRIPT_DIR}/tests/iam-actions-from-cloudonaut.json | \
+            jq -r '.[] | .service+":"+.action' | \
+            sort | \
+            uniq > ${SCRIPT_DIR}/tests/iam-actions-from-cloudonaut.txt
     popd > /dev/null
 }
 
 goal_regenerate_iam_data_from_policy_sim() {
-    curl https://raw.githubusercontent.com/rvedotrc/aws-iam-reference/master/all-actions.txt > ${SCRIPT_DIR}/tests/iam-actions-from-policy-sim.txt
+    curl https://raw.githubusercontent.com/rvedotrc/aws-iam-reference/master/all-actions.txt |\
+        sort | \
+        uniq > ${SCRIPT_DIR}/tests/iam-actions-from-policy-sim.txt
+}
+
+goal_merge_iam_data() {
+    cat ${SCRIPT_DIR}/tests/iam-actions-from-cloudonaut.txt \
+        ${SCRIPT_DIR}/tests/iam-actions-from-policy-sim.txt | \
+      sort | uniq >   ${SCRIPT_DIR}/tests/known-iam-actions.txt
 }
 
 goal_regenerate_iam_data() {
     goal_regenerate_iam_data_from_cloudonaut
     goal_regenerate_iam_data_from_policy_sim
+    goal_merge_iam_data
 }
 goal_unknown-actions() {
     activate_venv
@@ -203,19 +216,20 @@ if type -t "goal_$1" &>/dev/null; then
 else
   echo "usage: $0 <goal>
 goal:
-    setup              -- set up development environment
-    test               -- run all tests
-    check              -- run all style checks
+    setup               -- set up development environment
+    test                -- run all tests
+    check               -- run all style checks
 
-    trailscraper       -- call the current development state
+    trailscraper        -- call the current development state
 
-    in-version         -- run a go-command in a particular version of python
-    in-all-versions    -- run a go-command in all supported versions of python
+    in-version          -- run a go-command in a particular version of python
+    in-all-versions     -- run a go-command in all supported versions of python
 
-    release            -- create and publish a new release
-    bump_version       -- bump version
+    release             -- create and publish a new release
+    bump_version        -- bump version
 
-    unknown-actions    -- regenerate list of unknown actions
+    regenerate_iam_data -- regenerate list of known iam actions
+    unknown-actions     -- regenerate list of unknown actions
     "
   exit 1
 fi

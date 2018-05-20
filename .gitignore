@@ -11,3 +11,4 @@ build
 *.pyc
 venvs
 .pytest_cache
+tests/iam-actions-from-*

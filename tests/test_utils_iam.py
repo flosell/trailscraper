@@ -19,19 +19,9 @@ def all_aws_api_methods():
     return set(result)
 
 
-def all_iam_permissions_known_in_cloudonaut():
-    with open(os.path.join(os.path.dirname(__file__), 'iam-actions-from-cloudonaut.json')) as iam_file:
-        iam_json = json.loads(iam_file.read())
-        return set([d['service'] + ":" + d['action'] for d in iam_json])
-
-
-def all_iam_permissions_known_in_policy_simulator():
-    with open(os.path.join(os.path.dirname(__file__), 'iam-actions-from-policy-sim.txt')) as iam_file:
-        return set([line.rstrip('\n') for line in iam_file.readlines()])
-
-
 def all_known_iam_actions():
-    return all_iam_permissions_known_in_policy_simulator().union(all_iam_permissions_known_in_cloudonaut())
+    with open(os.path.join(os.path.dirname(__file__), 'known-iam-actions.txt')) as iam_file:
+        return set([line.rstrip('\n') for line in iam_file.readlines()])
 
 
 def test_all_aws_api_methods():
@@ -43,16 +33,9 @@ def test_all_aws_api_methods():
 
 
 def test_all_iam_permissions_known_in_cloudonaut():
-    permissions = all_iam_permissions_known_in_cloudonaut()
+    permissions = all_known_iam_actions()
 
     assert permissions != []
     assert "ec2:DescribeInstances" in permissions
     assert len(permissions) == len(set(permissions)), "expected no duplicates"
 
-
-def test_all_iam_permissions_known_in_policy_simulator():
-    permissions = all_iam_permissions_known_in_policy_simulator()
-
-    assert permissions != []
-    assert "ec2:DescribeInstances" in permissions
-    assert len(permissions) == len(set(permissions)), "expected no duplicates"

@@ -1,7 +1,5 @@
 import datetime
 
-from tests.test_utils_iam import all_iam_permissions_known_in_cloudonaut, all_aws_api_methods, \
-    all_iam_permissions_known_in_policy_simulator, all_known_iam_actions
 from trailscraper.cloudtrail import Record
 from trailscraper.iam import Statement, Action
 
