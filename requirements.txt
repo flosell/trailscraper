@@ -2,6 +2,6 @@ boto3>=1.4.7
 click>=6.7
 toolz>=0.8.2
 # Pinned dateparser because of bug in 0.7.0: https://github.com/scrapinghub/dateparser/issues/383
-dateparser==0.6.0
+dateparser==0.7.0
 pytz>=2017.3
 python-dateutil<2.7.0

@@ -1,8 +1,8 @@
 bumpversion==0.5.3
-pylint==1.8.2
-pip==9.0.1
-pytest==3.4.0
-pytest-runner==4.0
-cryptography==2.1.4
-setuptools==38.5.1
-astroid==1.6.1 # this is a dependency of pylint and needed pinning after we introduced tox (related to https://github.com/PyCQA/pylint/issues/1609)
+pylint==1.9.1
+pip==10.0.1
+pytest==3.6.0
+pytest-runner==4.2
+cryptography==2.2.2
+setuptools==39.2.0
+astroid==1.6.4 # this is a dependency of pylint and needed pinning after we introduced tox (related to https://github.com/PyCQA/pylint/issues/1609)
