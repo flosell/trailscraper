@@ -1,6 +1,6 @@
 bumpversion==0.5.3
 pylint==1.9.1
-pip==9.0.1
+pip==10.0.1
 pytest==3.4.0
 pytest-runner==4.0
 cryptography==2.1.4
