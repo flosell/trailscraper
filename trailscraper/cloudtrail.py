@@ -212,7 +212,7 @@ class LogFile(object):
 
 def _resource_arns(json_record):
     resources = json_record.get('resources', [])
-    arns = [resource['ARN'] for resource in resources]
+    arns = [resource['ARN'] for resource in resources if 'ARN' in resource]
     return arns
 
 

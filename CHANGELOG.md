@@ -4,6 +4,12 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## 0.5.1
+
+### Fixed
+
+* Fixed parsing events that contain resources without an ARN (e.g. `s3:ListObjects`) #51
+
 ## 0.5.0
 
 **Breaking CLI changes**: split up `generate-policy` into `select` and `generate` (#38)

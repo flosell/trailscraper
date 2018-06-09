@@ -66,12 +66,32 @@ def test_parse_record_should_be_able_to_cope_with_missing_session_context_in_ass
                   event_time=datetime.datetime(2017, 11, 19, 0, 21, 51, tzinfo=pytz.utc))
 
 
+def test_parse_record_should_be_able_to_cope_with_missing_arn_in_resource():
+    assert _parse_record({'eventVersion': '1.05',
+                          'eventTime': '2018-05-15T02:18:43Z',
+                          'eventName': 'ListObjects',
+                          'eventSource': 's3.amazonaws.com',
+                          'userIdentity': {'type': 'AssumedRole', 'principalId': 'some-key:some-user',
+                                           'arn': 'arn:aws:sts::111111111111:assumed-role/some-role/some-user',
+                                           'accountId': '111111111111'},
+                          'resources': [
+                              {'ARNPrefix': 'arn:aws:s3:::some-bucket/env:/',
+                               'type': 'AWS::S3::Object'},
+                              {'type': 'AWS::S3::Bucket',
+                               'ARN': 'arn:aws:s3:::some-bucket',
+                               'accountId': '201571571865'}],
+                          }) == \
+           Record('s3.amazonaws.com', 'ListObjects',
+                  event_time=datetime.datetime(2018, 05, 15, 2, 18, 43, tzinfo=pytz.utc),
+                  resource_arns=["arn:aws:s3:::some-bucket"])
+
+
 def test_parse_records_should_ignore_records_that_cant_be_parsed():
     assert parse_records([{},
                           {'eventVersion': '1.05',
-                            'userIdentity': {'type': 'SomeType'},
-                            'eventSource': 'someSource',
-                            'eventName': 'SomeEvent',
-                            'eventTime': '2017-11-19T00:21:51Z'}]) == \
+                           'userIdentity': {'type': 'SomeType'},
+                           'eventSource': 'someSource',
+                           'eventName': 'SomeEvent',
+                           'eventTime': '2017-11-19T00:21:51Z'}]) == \
            [Record('someSource', 'SomeEvent',
                    event_time=datetime.datetime(2017, 11, 19, 0, 21, 51, tzinfo=pytz.utc))]
