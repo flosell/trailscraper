@@ -82,7 +82,7 @@ def test_parse_record_should_be_able_to_cope_with_missing_arn_in_resource():
                                'accountId': '201571571865'}],
                           }) == \
            Record('s3.amazonaws.com', 'ListObjects',
-                  event_time=datetime.datetime(2018, 05, 15, 2, 18, 43, tzinfo=pytz.utc),
+                  event_time=datetime.datetime(2018, 5, 15, 2, 18, 43, tzinfo=pytz.utc),
                   resource_arns=["arn:aws:s3:::some-bucket"])
 
 
