@@ -3,6 +3,8 @@ import json
 import os
 
 import re
+
+import six
 from toolz import pipe
 from toolz.curried import groupby as groupbyz
 from toolz.curried import map as mapz
@@ -153,7 +155,11 @@ def _parse_statements(json_data):
 
 def parse_policy_document(stream):
     """Parse a stream of JSON data to a PolicyDocument object"""
-    json_dict = json.load(stream)
+    if isinstance(stream, six.string_types):
+        json_dict = json.loads(stream)
+    else:
+        json_dict = json.load(stream)
+
     return PolicyDocument(_parse_statements(json_dict['Statement']), Version=json_dict['Version'])
 
 

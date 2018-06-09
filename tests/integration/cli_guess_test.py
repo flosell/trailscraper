@@ -1,9 +1,3 @@
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
-
-
 from click.testing import CliRunner
 
 from trailscraper import cli
@@ -64,7 +58,6 @@ def test_should_guess_create_statements():
     )
 
     runner = CliRunner()
-    result = runner.invoke(cli.root_group, args=["guess"], input=StringIO(input_policy.to_json()))
+    result = runner.invoke(cli.root_group, args=["guess"], input=input_policy.to_json())
     assert result.exit_code == 0
-    assert parse_policy_document(StringIO(result.output)) == expected_output
-
+    assert parse_policy_document(result.output) == expected_output
