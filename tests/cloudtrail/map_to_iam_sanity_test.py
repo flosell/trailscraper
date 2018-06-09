@@ -1,10 +1,13 @@
 import os
+
 import pytest
 
-from tests.test_utils_iam import all_aws_api_methods, all_known_iam_actions
+from tests.test_utils_iam import all_aws_api_methods
 from trailscraper.cloudtrail import Record
 
 # Actions that we know are supported but aren't in our documentation just yet:
+from trailscraper.iam import all_known_iam_permissions
+
 UNDOCUMENTED = {
     "elasticbeanstalk:CreatePlatformVersion",
     "elasticbeanstalk:DeletePlatformVersion",
@@ -1180,7 +1183,7 @@ def unknown_actions():
         if statement is not None:
             iam_actions_from_api_calls.add(statement.Action[0].json_repr())
 
-    known_actions = all_known_iam_actions()
+    known_actions = all_known_iam_permissions()
 
     return iam_actions_from_api_calls.difference(known_actions)
 

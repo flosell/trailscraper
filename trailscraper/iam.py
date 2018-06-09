@@ -1,5 +1,11 @@
 """Classes to deal with IAM Policies"""
 import json
+import os
+
+import re
+from toolz import pipe
+from toolz.curried import groupby as groupbyz
+from toolz.curried import map as mapz
 
 
 class BaseElement(object):
@@ -34,6 +40,25 @@ class Action(BaseElement):
 
     def json_repr(self):
         return ':'.join([self.prefix, self.action])
+
+    def _base_action(self):
+        without_prefix = re.sub(r"(Describe)|(Create)|(Delete)|(Update)", "", self.action)
+        without_plural = re.sub(r"s$", "", without_prefix)
+
+        return without_plural
+
+    def matching_actions(self):
+        """Return a matching create action for this Action"""
+        potential_matches = [
+            Action(prefix=self.prefix, action="Create" + self._base_action()),
+            Action(prefix=self.prefix, action="Update" + self._base_action()),
+            Action(prefix=self.prefix, action="Delete" + self._base_action()),
+            Action(prefix=self.prefix, action="Describe" + self._base_action()),
+            Action(prefix=self.prefix, action="Describe" + self._base_action()+"s"),
+        ]
+        return [potential_match for potential_match in potential_matches
+                                if potential_match in known_iam_actions(self.prefix) and potential_match != self]
+
 
 
 class Statement(BaseElement):
@@ -106,3 +131,42 @@ class IAMJSONEncoder(json.JSONEncoder):
         if hasattr(o, 'json_repr'):
             return o.json_repr()
         return json.JSONEncoder.default(self, o)
+
+
+def _parse_action(action):
+    parts = action.split(":")
+    return Action(parts[0], parts[1])
+
+
+def _parse_statement(statement):
+    return Statement(Action=[_parse_action(action) for action in statement['Action']],
+                     Effect=statement['Effect'],
+                     Resource=statement['Resource'])
+
+
+def _parse_statements(json_data):
+    # TODO: jsonData could also be dict, aka one statement; similar things happen in the rest of the policy # pylint: disable=fixme
+    # https://github.com/flosell/iam-policy-json-to-terraform/blob/fafc231/converter/decode.go#L12-L22
+    return [_parse_statement(statement) for statement in json_data]
+
+
+def parse_policy_document(stream):
+    """Parse a stream of JSON data to a PolicyDocument object"""
+    json_dict = json.load(stream)
+    return PolicyDocument(_parse_statements(json_dict['Statement']), Version=json_dict['Version'])
+
+
+def all_known_iam_permissions():
+    "Return a list of all known IAM actions"
+    with open(os.path.join(os.path.dirname(__file__), 'known-iam-actions.txt')) as iam_file:
+        return set([line.rstrip('\n') for line in iam_file.readlines()])
+
+
+def known_iam_actions(prefix):
+    """Return known IAM actions for a prefix, e.g. all ec2 actions"""
+    # This could be memoized for performance improvements
+    knowledge = pipe(all_known_iam_permissions(),
+                     mapz(_parse_action),
+                     groupbyz(lambda x: x.prefix))
+
+    return knowledge.get(prefix, [])

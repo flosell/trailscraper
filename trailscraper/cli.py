@@ -10,6 +10,8 @@ import trailscraper
 from trailscraper import time_utils, policy_generator
 from trailscraper.cloudtrail import load_from_dir, load_from_api, last_event_timestamp_in_dir, filter_records, \
     parse_records
+from trailscraper.guess import guess_statements
+from trailscraper.iam import parse_policy_document
 from trailscraper.s3_download import download_cloudtrail_logs
 
 
@@ -104,6 +106,15 @@ def generate():
     click.echo(policy.to_json())
 
 
+@click.command("guess")
+def guess():
+    """Extend a policy passed in through STDIN by guessing related actions"""
+    stdin = click.get_text_stream('stdin')
+    policy = parse_policy_document(stdin)
+    policy = guess_statements(policy)
+    click.echo(policy.to_json())
+
+
 @click.command("last-event-timestamp")
 @click.option('--log-dir', default="~/.trailscraper/logs", type=click.Path(),
               help='Where to put logfiles')
@@ -116,4 +127,5 @@ def last_event_timestamp(log_dir):
 root_group.add_command(download)
 root_group.add_command(select)
 root_group.add_command(generate)
+root_group.add_command(guess)
 root_group.add_command(last_event_timestamp)

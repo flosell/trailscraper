@@ -1,11 +1,13 @@
-import json
 from StringIO import StringIO
 
+from click.testing import CliRunner
+
+from trailscraper import cli
 from trailscraper.iam import PolicyDocument, Statement, Action, parse_policy_document
 
 
-def test_policy_document_renders_to_json():
-    pd = PolicyDocument(
+def test_should_guess_create_statements():
+    input_policy = PolicyDocument(
         Version="2012-10-17",
         Statement=[
             Statement(
@@ -27,41 +29,21 @@ def test_policy_document_renders_to_json():
         ]
     )
 
-    expected_json = '''\
-{
-    "Statement": [
-        {
-            "Action": [
-                "autoscaling:DescribeLaunchConfigurations"
-            ],
-            "Effect": "Allow",
-            "Resource": [
-                "*"
-            ]
-        },
-        {
-            "Action": [
-                "sts:AssumeRole"
-            ],
-            "Effect": "Allow",
-            "Resource": [
-                "arn:aws:iam::111111111111:role/someRole"
-            ]
-        }
-    ],
-    "Version": "2012-10-17"
-}'''
-    assert json.loads(pd.to_json()) == json.loads(expected_json)
-
-
-def test_json_parses_to_policy_document():
-    pd = PolicyDocument(
+    expected_output = PolicyDocument(
         Version="2012-10-17",
         Statement=[
             Statement(
                 Effect="Allow",
                 Action=[
                     Action('autoscaling', 'DescribeLaunchConfigurations'),
+                ],
+                Resource=["*"]
+            ),
+            Statement(
+                Effect="Allow",
+                Action=[
+                    Action('autoscaling', 'CreateLaunchConfiguration'),
+                    Action('autoscaling', 'DeleteLaunchConfiguration'),
                 ],
                 Resource=["*"]
             ),
@@ -77,5 +59,8 @@ def test_json_parses_to_policy_document():
         ]
     )
 
-    assert parse_policy_document(StringIO(pd.to_json())).to_json() == pd.to_json()
+    runner = CliRunner()
+    result = runner.invoke(cli.root_group, args=["guess"], input=StringIO(input_policy.to_json()))
+    assert result.exit_code == 0
+    assert parse_policy_document(StringIO(result.output)) == expected_output
 
