@@ -56,8 +56,9 @@ class Action(BaseElement):
             Action(prefix=self.prefix, action="Describe" + self._base_action()),
             Action(prefix=self.prefix, action="Describe" + self._base_action()+"s"),
         ]
-        return [potential_match for potential_match in potential_matches
-                                if potential_match in known_iam_actions(self.prefix) and potential_match != self]
+        return [potential_match
+                for potential_match in potential_matches
+                if potential_match in known_iam_actions(self.prefix) and potential_match != self]
 
 
 
