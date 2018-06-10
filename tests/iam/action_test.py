@@ -64,8 +64,14 @@ def test_find_create_action(test_input, expected):
 
     # TODO:
     # * Encrypt/Decrypt/GenerateDataKey?
-    # * Put
     # * ecr:BatchDeleteImage, ecr:BatchGetImage
     # * deregister
     # * modify
     # * remove
+    # apigateway:DELETE
+    # apigateway:GET
+    # apigateway:HEAD
+    # apigateway:OPTIONS
+    # apigateway:PATCH
+    # apigateway:POST
+    # apigateway:PUT
