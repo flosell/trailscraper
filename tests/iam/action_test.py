@@ -8,6 +8,8 @@ from trailscraper.iam import Action
     (Action('autoscaling', 'CreateLaunchConfiguration'), "LaunchConfiguration"),
     (Action('autoscaling', 'DeleteLaunchConfiguration'), "LaunchConfiguration"),
     (Action('autoscaling', 'UpdateAutoScalingGroup'), "AutoScalingGroup"),
+    (Action('ec2', 'DetachVolume'), "Volume"),
+    (Action('ec2', 'AttachVolume'), "Volume"),
 ])
 def test_create_base_action(test_input, expected):
     assert test_input._base_action() == expected
@@ -36,13 +38,19 @@ def test_create_base_action(test_input, expected):
         Action('autoscaling', 'UpdateAutoScalingGroup'),
         Action('autoscaling', 'DescribeAutoScalingGroups'),
     ]),
+    (Action('ec2', 'DetachVolume'), [
+        # Is this the best result? Aren't we usually just interested in Attach-Detach?
+        Action('ec2', 'CreateVolume'),
+        Action('ec2', 'DeleteVolume'),
+        Action('ec2', 'AttachVolume'),
+        Action('ec2', 'DescribeVolumes'),
+    ]),
 ])
 def test_find_create_action(test_input, expected):
     assert test_input.matching_actions() == expected
 
 
-# TODO:
-# * Attach/Detach?
-# * list
-# * Encrypt/Decrypt/GenerateDataKey?
-# * Put
+    # TODO:
+    # * list
+    # * Encrypt/Decrypt/GenerateDataKey?
+    # * Put

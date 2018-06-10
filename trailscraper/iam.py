@@ -36,6 +36,15 @@ class BaseElement(object):
 class Action(BaseElement):
     """Action in an IAM Policy."""
 
+    BASE_ACTION_PREFIXES=[
+        "Describe",
+        "Create",
+        "Delete",
+        "Update",
+        "Detach",
+        "Attach",
+    ]
+
     def __init__(self, prefix, action):
         self.action = action
         self.prefix = prefix
@@ -44,20 +53,21 @@ class Action(BaseElement):
         return ':'.join([self.prefix, self.action])
 
     def _base_action(self):
-        without_prefix = re.sub(r"(Describe)|(Create)|(Delete)|(Update)", "", self.action)
+        without_prefix = self.action
+        for prefix in self.BASE_ACTION_PREFIXES:
+            without_prefix = re.sub(prefix, "", without_prefix)
+
         without_plural = re.sub(r"s$", "", without_prefix)
 
         return without_plural
 
     def matching_actions(self):
         """Return a matching create action for this Action"""
-        potential_matches = [
-            Action(prefix=self.prefix, action="Create" + self._base_action()),
-            Action(prefix=self.prefix, action="Update" + self._base_action()),
-            Action(prefix=self.prefix, action="Delete" + self._base_action()),
-            Action(prefix=self.prefix, action="Describe" + self._base_action()),
-            Action(prefix=self.prefix, action="Describe" + self._base_action()+"s"),
-        ]
+        potential_matches = [Action(prefix=self.prefix, action=action_prefix+ self._base_action())
+                             for action_prefix in self.BASE_ACTION_PREFIXES]
+
+        potential_matches.append(Action(prefix=self.prefix, action="Describe" + self._base_action()+"s"))
+
         return [potential_match
                 for potential_match in potential_matches
                 if potential_match in known_iam_actions(self.prefix) and potential_match != self]
