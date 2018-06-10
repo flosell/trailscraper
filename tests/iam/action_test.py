@@ -14,7 +14,7 @@ from trailscraper.iam import Action
     (Action('s3', 'PutObject'), "Object"),
     (Action('s3', 'GetObject'), "Object"),
 ])
-def test_create_base_action(test_input, expected):
+def test_base_action(test_input, expected):
     assert test_input._base_action() == expected
 
 
@@ -58,7 +58,7 @@ def test_create_base_action(test_input, expected):
         Action('s3', 'ListObjects'),
     ]),
 ])
-def test_find_create_action(test_input, expected):
+def test_find_matching_actions(test_input, expected):
     assert test_input.matching_actions() == expected
 
 

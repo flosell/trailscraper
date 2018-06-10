@@ -4,7 +4,7 @@ from trailscraper import cli
 from trailscraper.iam import PolicyDocument, Statement, Action, parse_policy_document
 
 
-def test_should_guess_create_statements():
+def test_should_guess_all_matching_statements():
     input_policy = PolicyDocument(
         Version="2012-10-17",
         Statement=[
