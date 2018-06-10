@@ -61,3 +61,44 @@ def test_should_guess_all_matching_statements():
     result = runner.invoke(cli.root_group, args=["guess"], input=input_policy.to_json())
     assert result.exit_code == 0
     assert parse_policy_document(result.output) == expected_output
+
+
+def test_should_guess_only_specific_actions_and_fix_upper_lowercase():
+    input_policy = PolicyDocument(
+        Version="2012-10-17",
+        Statement=[
+            Statement(
+                Effect="Allow",
+                Action=[
+                    Action('ec2', 'DetachVolume'),
+                ],
+                Resource=["*"]
+            ),
+        ]
+    )
+
+    expected_output = PolicyDocument(
+        Version="2012-10-17",
+        Statement=[
+            Statement(
+                Effect="Allow",
+                Action=[
+                    Action('ec2', 'DetachVolume'),
+                ],
+                Resource=["*"]
+            ),
+            Statement(
+                Effect="Allow",
+                Action=[
+                    Action('ec2', 'AttachVolume'),
+                    Action('ec2', 'DescribeVolumes'),
+                ],
+                Resource=["*"]
+            ),
+        ]
+    )
+
+    runner = CliRunner()
+    result = runner.invoke(cli.root_group, args=["guess", "--only", "Attach", "--only", "describe"], input=input_policy.to_json())
+    assert result.exit_code == 0
+    assert parse_policy_document(result.output) == expected_output

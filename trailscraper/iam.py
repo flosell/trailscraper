@@ -9,6 +9,8 @@ from toolz import pipe
 from toolz.curried import groupby as groupbyz
 from toolz.curried import map as mapz
 
+BASE_ACTION_PREFIXES = ["Describe", "Create", "Delete", "Update", "Detach", "Attach", "List", "Put", "Get", ]
+
 
 class BaseElement(object):
     """Base Class for all IAM Policy classes"""
@@ -36,18 +38,6 @@ class BaseElement(object):
 class Action(BaseElement):
     """Action in an IAM Policy."""
 
-    BASE_ACTION_PREFIXES = [
-        "Describe",
-        "Create",
-        "Delete",
-        "Update",
-        "Detach",
-        "Attach",
-        "List",
-        "Put",
-        "Get",
-    ]
-
     def __init__(self, prefix, action):
         self.action = action
         self.prefix = prefix
@@ -57,20 +47,24 @@ class Action(BaseElement):
 
     def _base_action(self):
         without_prefix = self.action
-        for prefix in self.BASE_ACTION_PREFIXES:
+        for prefix in BASE_ACTION_PREFIXES:
             without_prefix = re.sub(prefix, "", without_prefix)
 
         without_plural = re.sub(r"s$", "", without_prefix)
 
         return without_plural
 
-    def matching_actions(self):
+    def matching_actions(self, allowed_prefixes):
         """Return a matching create action for this Action"""
-        potential_matches = [Action(prefix=self.prefix, action=action_prefix+ self._base_action())
-                             for action_prefix in self.BASE_ACTION_PREFIXES]
 
-        potential_matches.append(Action(prefix=self.prefix, action="Describe" + self._base_action()+"s"))
-        potential_matches.append(Action(prefix=self.prefix, action="List" + self._base_action()+"s"))
+        if not allowed_prefixes:
+            allowed_prefixes = BASE_ACTION_PREFIXES
+
+        potential_matches = [Action(prefix=self.prefix, action=action_prefix + self._base_action())
+                             for action_prefix in allowed_prefixes]
+
+        potential_matches += [Action(prefix=self.prefix, action=action_prefix + self._base_action() + "s")
+                              for action_prefix in allowed_prefixes]
 
         return [potential_match
                 for potential_match in potential_matches

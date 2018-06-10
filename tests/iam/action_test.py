@@ -42,7 +42,6 @@ def test_base_action(test_input, expected):
         Action('autoscaling', 'DescribeAutoScalingGroups'),
     ]),
     (Action('ec2', 'DetachVolume'), [
-        # Is this the best result? Aren't we usually just interested in Attach-Detach?
         Action('ec2', 'CreateVolume'),
         Action('ec2', 'DeleteVolume'),
         Action('ec2', 'AttachVolume'),
@@ -58,9 +57,17 @@ def test_base_action(test_input, expected):
         Action('s3', 'ListObjects'),
     ]),
 ])
-def test_find_matching_actions(test_input, expected):
-    assert test_input.matching_actions() == expected
+def test_find_matching_actions_without_filtering(test_input, expected):
+    assert test_input.matching_actions(allowed_prefixes=None) == expected
 
+
+@pytest.mark.parametrize("test_input,expected,allowed_prefixes", [
+    (Action('ec2', 'DetachVolume'), [
+        Action('ec2', 'AttachVolume'),
+    ], ['Attach']),
+])
+def test_find_matching_actions_with_filtering(test_input, expected, allowed_prefixes):
+    assert test_input.matching_actions(allowed_prefixes=allowed_prefixes) == expected
 
     # TODO:
     # * Encrypt/Decrypt/GenerateDataKey?

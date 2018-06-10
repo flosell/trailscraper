@@ -107,11 +107,16 @@ def generate():
 
 
 @click.command("guess")
-def guess():
+@click.option("--only", multiple=True,
+              help='Only guess actions with the given prefix, e.g. Describe (can be passed multiple times)')
+def guess(only):
     """Extend a policy passed in through STDIN by guessing related actions"""
     stdin = click.get_text_stream('stdin')
     policy = parse_policy_document(stdin)
-    policy = guess_statements(policy)
+
+    allowed_prefixes = [s.title() for s in only]
+
+    policy = guess_statements(policy, allowed_prefixes)
     click.echo(policy.to_json())
 
 
