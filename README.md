@@ -13,13 +13,14 @@ $ pip install trailscraper
 
 ## Usage
 
-* [Download some logs (including us-east-1 for global aws services)](#download-some-logs-including-us-east-1-for-global-aws-services)
-* [Find CloudTrail events matching a filter (&gt;=0.5.0)](#find-cloudtrail-events-matching-a-filter-050)
-* [Generate Policy from some CloudTrail records (&gt;=0.5.0)](#generate-policy-from-some-cloudtrail-records-050)
+* [Download some logs](#download-some-logs)
+* [Find CloudTrail events matching a filter](#find-cloudtrail-events-matching-a-filter)
+* [Generate Policy from some CloudTrail records](#generate-policy-from-some-cloudtrail-records)
 * [Extend existing policy by guessing matching actions](#extend-existing-policy-by-guessing-matching-actions)
-* [Find CloudTrail events and generate an IAM Policy (&gt;=0.5.0)](#find-cloudtrail-events-and-generate-an-iam-policy-050)
-* [Find CloudTrail events and generate an IAM Policy (&lt;0.5.0)](#find-cloudtrail-events-and-generate-an-iam-policy-050-1)
-### Download some logs (including us-east-1 for global aws services)
+* [Find CloudTrail events and generate an IAM Policy](#find-cloudtrail-events-and-generate-an-iam-policy)
+
+### Download some logs
+
 ```
 $ trailscraper download --bucket some-bucket \
                         --account-id some-account-id \
@@ -28,8 +29,9 @@ $ trailscraper download --bucket some-bucket \
                         --from 'two days ago' \
                         --to 'now' \
 ```
+_Note: Include us-east-1 to download logs for global services. See [below](#why-is-trailscraper-missing-some-events) for details_
 
-### Find CloudTrail events matching a filter (>=0.5.0)
+### Find CloudTrail events matching a filter
 
 ```
 $ trailscraper select --filter-assumed-role-arn some-arn \ 
@@ -44,7 +46,7 @@ $ trailscraper select --filter-assumed-role-arn some-arn \
 ...
 ```
 
-### Generate Policy from some CloudTrail records (>=0.5.0)
+### Generate Policy from some CloudTrail records
 
 ```
 $ gzcat some-records.json.gz | trailscraper generate
@@ -123,41 +125,9 @@ $ cat minimal-policy.json | ./go trailscraper guess --only Get
 }
 ```
 
-### Find CloudTrail events and generate an IAM Policy (>=0.5.0)
+### Find CloudTrail events and generate an IAM Policy
 ```
 $ trailscraper select | trailscraper generate
-{
-    "Statement": [
-        {
-            "Action": [
-                "ec2:DescribeInstances",
-                "ec2:DescribeSecurityGroups",
-                "ec2:DescribeSubnets",
-                "ec2:DescribeVolumes",
-                "ec2:DescribeVpcs",
-            ],
-            "Effect": "Allow",
-            "Resource": [
-                "*"
-            ]
-        },
-        {
-            "Action": [
-                "sts:AssumeRole"
-            ],
-            "Effect": "Allow",
-            "Resource": [
-                "arn:aws:iam::1111111111:role/someRole"
-            ]
-        }
-    ],
-    "Version": "2012-10-17"
-} 
-```
-
-### Find CloudTrail events and generate an IAM Policy (<0.5.0)
-```
-$ trailscraper generate-policy
 {
     "Statement": [
         {
