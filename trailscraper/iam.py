@@ -44,6 +44,8 @@ class Action(BaseElement):
         "Detach",
         "Attach",
         "List",
+        "Put",
+        "Get",
     ]
 
     def __init__(self, prefix, action):
@@ -68,6 +70,7 @@ class Action(BaseElement):
                              for action_prefix in self.BASE_ACTION_PREFIXES]
 
         potential_matches.append(Action(prefix=self.prefix, action="Describe" + self._base_action()+"s"))
+        potential_matches.append(Action(prefix=self.prefix, action="List" + self._base_action()+"s"))
 
         return [potential_match
                 for potential_match in potential_matches
