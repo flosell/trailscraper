@@ -3,7 +3,7 @@
 [![PyPi Release](https://img.shields.io/pypi/v/trailscraper.svg)](https://pypi.python.org/pypi/trailscraper)
 [![Build Status](https://travis-ci.org/flosell/trailscraper.svg?branch=master)](https://travis-ci.org/flosell/trailscraper)
 
-A command-line tool to get valuable information out of AWS CloudTrail
+A command-line tool to get valuable information out of AWS CloudTrail and a general purpose toolbox for working with IAM policies
 
 ## Installation
 
