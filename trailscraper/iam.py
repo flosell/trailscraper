@@ -36,7 +36,7 @@ class BaseElement(object):
 class Action(BaseElement):
     """Action in an IAM Policy."""
 
-    BASE_ACTION_PREFIXES=[
+    BASE_ACTION_PREFIXES = [
         "Describe",
         "Create",
         "Delete",
