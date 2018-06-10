@@ -59,3 +59,7 @@ def test_find_create_action(test_input, expected):
     # TODO:
     # * Encrypt/Decrypt/GenerateDataKey?
     # * Put
+    # * ecr:BatchDeleteImage, ecr:BatchGetImage
+    # * deregister
+    # * modify
+    # * remove
