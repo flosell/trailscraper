@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 ## 0.5.1
 
+### Added
+
+* New command `guess` to extend existing policy by guessing matching actions #22
+
 ### Fixed
 
 * Fixed parsing events that contain resources without an ARN (e.g. `s3:ListObjects`) #51

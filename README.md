@@ -16,9 +16,9 @@ $ pip install trailscraper
 * [Download some logs (including us-east-1 for global aws services)](#download-some-logs-including-us-east-1-for-global-aws-services)
 * [Find CloudTrail events matching a filter (&gt;=0.5.0)](#find-cloudtrail-events-matching-a-filter-050)
 * [Generate Policy from some CloudTrail records (&gt;=0.5.0)](#generate-policy-from-some-cloudtrail-records-050)
+* [Extend existing policy by guessing matching actions](#extend-existing-policy-by-guessing-matching-actions)
 * [Find CloudTrail events and generate an IAM Policy (&gt;=0.5.0)](#find-cloudtrail-events-and-generate-an-iam-policy-050)
 * [Find CloudTrail events and generate an IAM Policy (&lt;0.5.0)](#find-cloudtrail-events-and-generate-an-iam-policy-050-1)
-
 ### Download some logs (including us-east-1 for global aws services)
 ```
 $ trailscraper download --bucket some-bucket \
@@ -62,6 +62,65 @@ $ gzcat some-records.json.gz | trailscraper generate
     ],
     "Version": "2012-10-17"
 } 
+```
+
+### Extend existing policy by guessing matching actions
+
+CloudTrail logs might not always contain all relevant actions. 
+For example, your logs might only contain the `Create` actions after a terraform run when you really want the delete and
+update permissions as well. TrailScraper can try to guess additional statements that might be relevant:  
+
+```
+$ cat minimal-policy.json | trailscraper guess
+{
+    "Statement": [
+        {
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Action": [
+                "s3:DeleteObject",
+                "s3:GetObject",
+                "s3:ListObjects"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "*"
+            ]
+        }
+    ],
+    "Version": "2012-10-17"
+}
+$ cat minimal-policy.json | ./go trailscraper guess --only Get
+{
+    "Statement": [
+        {
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Action": [
+                "s3:GetObject"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "*"
+            ]
+        }
+    ],
+    "Version": "2012-10-17"
+}
 ```
 
 ### Find CloudTrail events and generate an IAM Policy (>=0.5.0)
