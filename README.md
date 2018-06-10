@@ -13,6 +13,12 @@ $ pip install trailscraper
 
 ## Usage
 
+* [Download some logs (including us-east-1 for global aws services)](#download-some-logs-including-us-east-1-for-global-aws-services)
+* [Find CloudTrail events matching a filter (&gt;=0.5.0)](#find-cloudtrail-events-matching-a-filter-050)
+* [Generate Policy from some CloudTrail records (&gt;=0.5.0)](#generate-policy-from-some-cloudtrail-records-050)
+* [Find CloudTrail events and generate an IAM Policy (&gt;=0.5.0)](#find-cloudtrail-events-and-generate-an-iam-policy-050)
+* [Find CloudTrail events and generate an IAM Policy (&lt;0.5.0)](#find-cloudtrail-events-and-generate-an-iam-policy-050-1)
+
 ### Download some logs (including us-east-1 for global aws services)
 ```
 $ trailscraper download --bucket some-bucket \
