@@ -68,17 +68,3 @@ def test_find_matching_actions_without_filtering(test_input, expected):
 ])
 def test_find_matching_actions_with_filtering(test_input, expected, allowed_prefixes):
     assert test_input.matching_actions(allowed_prefixes=allowed_prefixes) == expected
-
-    # TODO:
-    # * Encrypt/Decrypt/GenerateDataKey?
-    # * ecr:BatchDeleteImage, ecr:BatchGetImage
-    # * deregister
-    # * modify
-    # * remove
-    # apigateway:DELETE
-    # apigateway:GET
-    # apigateway:HEAD
-    # apigateway:OPTIONS
-    # apigateway:PATCH
-    # apigateway:POST
-    # apigateway:PUT
