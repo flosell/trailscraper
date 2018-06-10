@@ -43,6 +43,7 @@ class Action(BaseElement):
         "Update",
         "Detach",
         "Attach",
+        "List",
     ]
 
     def __init__(self, prefix, action):

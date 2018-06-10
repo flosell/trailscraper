@@ -10,6 +10,7 @@ from trailscraper.iam import Action
     (Action('autoscaling', 'UpdateAutoScalingGroup'), "AutoScalingGroup"),
     (Action('ec2', 'DetachVolume'), "Volume"),
     (Action('ec2', 'AttachVolume'), "Volume"),
+    (Action('ecr', 'ListImages'), "Image"),
 ])
 def test_create_base_action(test_input, expected):
     assert test_input._base_action() == expected
@@ -45,12 +46,16 @@ def test_create_base_action(test_input, expected):
         Action('ec2', 'AttachVolume'),
         Action('ec2', 'DescribeVolumes'),
     ]),
+    (Action('ecr', 'ListImages'), [
+        # Is this the best result? Aren't we usually just interested in Attach-Detach?
+        Action('ecr', 'DescribeImages'),
+
+    ]),
 ])
 def test_find_create_action(test_input, expected):
     assert test_input.matching_actions() == expected
 
 
     # TODO:
-    # * list
     # * Encrypt/Decrypt/GenerateDataKey?
     # * Put
