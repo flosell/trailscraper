@@ -13,11 +13,28 @@ $ pip install trailscraper
 
 ## Usage
 
+* [Get CloudTrail events matching a filter from CloudTrail API](#get-cloudtrail-events-matching-a-filter-from-cloudtrail-api)
 * [Download some logs](#download-some-logs)
-* [Find CloudTrail events matching a filter](#find-cloudtrail-events-matching-a-filter)
+* [Find CloudTrail events matching a filter in downloaded logs](#find-cloudtrail-events-matching-a-filter-in-downloaded-logs)
 * [Generate Policy from some CloudTrail records](#generate-policy-from-some-cloudtrail-records)
 * [Extend existing policy by guessing matching actions](#extend-existing-policy-by-guessing-matching-actions)
 * [Find CloudTrail events and generate an IAM Policy](#find-cloudtrail-events-and-generate-an-iam-policy)
+
+### Get CloudTrail events matching a filter from CloudTrail API 
+
+```
+$ trailscraper select --use-cloudtrail-api \ 
+                      --filter-assumed-role-arn some-arn \ 
+                      --from 'one hour ago' \ 
+                      --to 'now'
+{
+  "Records": [
+    {
+      "eventTime": "2017-12-11T15:01:51Z",
+      "eventSource": "autoscaling.amazonaws.com",
+      "eventName": "DescribeLaunchConfigurations",
+...
+```
 
 ### Download some logs
 
@@ -31,7 +48,7 @@ $ trailscraper download --bucket some-bucket \
 ```
 _Note: Include us-east-1 to download logs for global services. See [below](#why-is-trailscraper-missing-some-events) for details_
 
-### Find CloudTrail events matching a filter
+### Find CloudTrail events matching a filter in downloaded logs
 
 ```
 $ trailscraper select --filter-assumed-role-arn some-arn \ 
