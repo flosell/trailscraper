@@ -3,6 +3,6 @@ pylint==2.0.0
 pip==10.0.1
 pytest==3.6.3
 pytest-runner==4.2
-cryptography==2.1.4
+cryptography==2.2.2
 setuptools==38.5.1
 astroid==1.6.1 # this is a dependency of pylint and needed pinning after we introduced tox (related to https://github.com/PyCQA/pylint/issues/1609)
