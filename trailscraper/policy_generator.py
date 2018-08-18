@@ -1,6 +1,6 @@
 """Functions responsible for generating a policy from a set of CloudTrail Records"""
 
-import toolz as toolz
+import toolz
 from toolz import pipe
 from toolz.curried import filter as filterz
 from toolz.curried import map as mapz

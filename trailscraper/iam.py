@@ -12,7 +12,7 @@ from toolz.curried import map as mapz
 BASE_ACTION_PREFIXES = ["Describe", "Create", "Delete", "Update", "Detach", "Attach", "List", "Put", "Get", ]
 
 
-class BaseElement(object):
+class BaseElement:
     """Base Class for all IAM Policy classes"""
 
     def json_repr(self):
@@ -110,7 +110,7 @@ class Statement(BaseElement):
     def __lt__(self, other):
         if self.Effect != other.Effect:
             return self.Effect < other.Effect
-        elif self.Action != other.Action:
+        if self.Action != other.Action:
             # pylint: disable=W0212
             return self.__action_list_strings() < other.__action_list_strings()
 
@@ -156,7 +156,7 @@ def _parse_statement(statement):
 
 
 def _parse_statements(json_data):
-    # TODO: jsonData could also be dict, aka one statement; similar things happen in the rest of the policy # pylint: disable=fixme
+    # TODO: jsonData could also be dict, aka one statement; similar things happen in the rest of the policy pylint: disable=fixme
     # https://github.com/flosell/iam-policy-json-to-terraform/blob/fafc231/converter/decode.go#L12-L22
     return [_parse_statement(statement) for statement in json_data]
 
@@ -174,7 +174,7 @@ def parse_policy_document(stream):
 def all_known_iam_permissions():
     "Return a list of all known IAM actions"
     with open(os.path.join(os.path.dirname(__file__), 'known-iam-actions.txt')) as iam_file:
-        return set([line.rstrip('\n') for line in iam_file.readlines()])
+        return {line.rstrip('\n') for line in iam_file.readlines()}
 
 
 def known_iam_actions(prefix):

@@ -22,7 +22,8 @@ ALL_RECORDS_FILTERED = "No records matching your criteria found! Did you use the
                        "Did you download the right logfiles? "\
                        "It might take about 15 minutes for events to turn up in CloudTrail logs."
 
-class Record(object):
+
+class Record:
     """Represents a CloudTrail record"""
 
     # pylint: disable=too-many-arguments
@@ -171,7 +172,7 @@ class Record(object):
         )
 
 
-class LogFile(object):
+class LogFile:
     """Represents a single CloudTrail Log File"""
 
     def __init__(self, path):

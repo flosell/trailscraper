@@ -3,8 +3,8 @@ import datetime
 import logging
 import os
 
-import boto3 as boto3
-import pytz as pytz
+import boto3
+import pytz
 
 
 def _s3_key_prefix(prefix, date, account_id, region):
