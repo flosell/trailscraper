@@ -18,8 +18,8 @@ setup_requirements = [
 test_requirements = [
     'pytest==3.2.5',
     'pytest-catchlog==1.2.2',
-    'freezegun==0.3.9',
-    'moto==1.1.24',
+    'freezegun==0.3.10',
+    'moto==1.3.4',
     'backports.tempfile==1.0',
 ]
 

@@ -5,7 +5,8 @@ SCRIPT_DIR=$(cd $(dirname $0) ; pwd -P)
 VENV_DIR="${SCRIPT_DIR}/venvs/trailscraper-venv${VENV_POSTFIX}"
 VERSIONS="3.4
 3.5
-3.6"
+3.6
+3.7"
 
 activate_venv() {
     source "${VENV_DIR}/bin/activate"

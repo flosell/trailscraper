@@ -6,7 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 ## 0.6.0
 
-### Changed
+### Added
+
+* Support for Python 3.7
+
+### Removed
 
 * **Removed official support for Python 2.7**. TrailScraper might still run but we no longer actively test for it
 
