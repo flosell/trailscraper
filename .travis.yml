@@ -3,7 +3,7 @@ python:
   - 3.4
   - 3.5
   - 3.6
-  - 3.7
+  - 3.7-dev
 install: ./go setup
 script: ./go check && ./go test
 addons:
