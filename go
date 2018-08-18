@@ -3,8 +3,7 @@ set -e
 
 SCRIPT_DIR=$(cd $(dirname $0) ; pwd -P)
 VENV_DIR="${SCRIPT_DIR}/venvs/trailscraper-venv${VENV_POSTFIX}"
-VERSIONS="2.7
-3.4
+VERSIONS="3.4
 3.5
 3.6"
 
@@ -45,7 +44,7 @@ goal_regenerate_iam_data() {
 goal_unknown-actions() {
     activate_venv
 
-    python "${SCRIPT_DIR}/tests/list_unknown_actions.py" > unknown_actions.txt
+    python3 "${SCRIPT_DIR}/tests/list_unknown_actions.py" > unknown_actions.txt
 }
 
 goal_in-version() {
@@ -73,14 +72,12 @@ goal_in-all-versions() {
 }
 
 create_venv() {
-    python --version
-    pip --version
-    which python
-
-    PYTHON_BINARY_NAME="python"
+    python3 --version
+    pip3 --version
+    which python3
 
     if which virtualenv > /dev/null; then
-        virtualenv -p ${PYTHON_BINARY_NAME} "${VENV_DIR}"
+        virtualenv -p python3 "${VENV_DIR}"
     else
         pyvenv "${VENV_DIR}"
     fi
@@ -90,7 +87,7 @@ create_venv() {
 goal_test() {
     pushd "${SCRIPT_DIR}" > /dev/null
       activate_venv
-      python setup.py test
+      python3 setup.py test
     popd > /dev/null
 }
 
@@ -122,8 +119,8 @@ goal_setup() {
 
     pushd "${SCRIPT_DIR}" > /dev/null
       activate_venv
-      pip install -r requirements-dev.txt
-      python setup.py develop
+      pip3 install -r requirements-dev.txt
+      python3 setup.py develop
     popd > /dev/null
 }
 
@@ -197,7 +194,7 @@ goal_release() {
 
     goal_generate-rst
 
-    python setup.py sdist bdist_wheel upload --sign --identity 'florian.sellmayr@gmail.com'
+    python3 setup.py sdist bdist_wheel upload --sign --identity 'florian.sellmayr@gmail.com'
 
     goal_tag_version
     goal_create_github_release
