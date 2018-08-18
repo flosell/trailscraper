@@ -7,8 +7,21 @@ A command-line tool to get valuable information out of AWS CloudTrail and a gene
 
 ## Installation
 
+### Installation using pip
+
+Requirements:
+
+* Python >= 3.4
+* pip
+
 ```bash
 $ pip install trailscraper
+```
+
+### Run directly using docker
+
+```bash
+$ docker run --rm --env-file <(env | grep AWS_) -v $HOME/.aws:/root/.aws flosell/trailscraper:latest
 ```
 
 ## Usage
