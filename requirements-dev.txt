@@ -4,4 +4,4 @@ pip==18.0
 pytest==3.7.3
 pytest-runner==4.2
 cryptography==2.3.1
-setuptools==40.1.0
+setuptools==40.2.0
