@@ -4,6 +4,8 @@ python:
   - 3.5
   - 3.6
   - 3.7-dev
+env:
+  - BOTO_CONFIG=/dev/null # make build not fail on travisci when working with boto and moto... https://github.com/spulec/moto/issues/1771
 install: ./go setup
 script: ./go check && ./go test
 addons:
