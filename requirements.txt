@@ -3,5 +3,5 @@ click==7.0
 toolz==0.9.0
 dateparser==0.6.0 # pyup: != 0.7.0 # disable 0.7.0 since it has a bug I don't want: https://github.com/scrapinghub/dateparser/issues/383
 pytz==2018.5
-python-dateutil==2.6.1
-ruamel.yaml==0.15.58 # pyup: != 0.15.59 # exclude since this has a strange print statement https://bitbucket.org/ruamel/yaml/commits/ed53aca288aadd5e846a7995064b6b1ec10a2948#Lconstructor.pyT421
+python-dateutil==2.7.3
+ruamel.yaml==0.15.74
