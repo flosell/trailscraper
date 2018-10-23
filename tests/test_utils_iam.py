@@ -13,7 +13,7 @@ def all_aws_api_methods():
             for action in data['operations']:
                 result.append(data['metadata']['endpointPrefix'] + ":" + data['operations'][action]['name'])
         else:
-            logging.warn('problem with %s', line.strip())
+            logging.warning('problem with %s', line.strip())
 
     return set(result)
 
