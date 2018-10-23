@@ -12,15 +12,15 @@ requirements = read_file('requirements.txt')
 
 
 setup_requirements = [
-    'pytest-runner==3.0',
+    'pytest-runner',
 ]
 
 test_requirements = [
-    'pytest==3.2.5',
-    'pytest-catchlog==1.2.2',
-    'freezegun==0.3.10',
-    'moto==1.3.4',
-    'backports.tempfile==1.0',
+    'pytest',
+    'pytest-catchlog',
+    'freezegun',
+    'moto',
+    'backports.tempfile',
 ]
 
 
