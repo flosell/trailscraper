@@ -1,5 +1,6 @@
 from setuptools import setup, find_packages
 
+
 def read_file(filename):
     try:
         with open(filename) as readme_file:
@@ -7,20 +8,7 @@ def read_file(filename):
     except:
         return ''
 
-
 requirements = read_file('requirements.txt')
-
-
-setup_requirements = [
-    'pytest-runner',
-]
-
-test_requirements = [
-    'pytest',
-    'freezegun',
-    'moto',
-]
-
 
 readme = read_file('README.rst')
 changelog = read_file('CHANGELOG.rst')
@@ -41,8 +29,6 @@ setup(
     },
     install_requires=requirements,
     test_suite='tests',
-    tests_require=test_requirements,
-    setup_requires=setup_requirements,
     keywords="aws cloud iam cloudtrail trailscraper",
     classifiers=[
         'Development Status :: 3 - Alpha',
