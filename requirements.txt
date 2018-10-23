@@ -1,4 +1,4 @@
-boto3==1.7.80
+boto3==1.7.84 # pyup: < 1.8 # can't be more recent because moto doesn't work with newer botos: https://github.com/spulec/moto/issues/1793
 click==7.0
 toolz==0.9.0
 dateparser==0.6.0 # pyup: != 0.7.0 # disable 0.7.0 since it has a bug I don't want: https://github.com/scrapinghub/dateparser/issues/383
