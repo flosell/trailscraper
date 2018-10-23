@@ -17,10 +17,8 @@ setup_requirements = [
 
 test_requirements = [
     'pytest',
-    'pytest-catchlog',
     'freezegun',
     'moto',
-    'backports.tempfile',
 ]
 
 
