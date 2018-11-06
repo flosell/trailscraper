@@ -86,6 +86,11 @@ create_venv() {
 }
 
 goal_test() {
+    # make build not fail on travisci when working with boto and moto... https://github.com/spulec/moto/issues/1771
+    export BOTO_CONFIG=/dev/null
+    export AWS_SECRET_ACCESS_KEY=foobar_secret
+    export AWS_ACCESS_KEY_ID=foobar_key
+
     pushd "${SCRIPT_DIR}" > /dev/null
       activate_venv
       python3 setup.py test
