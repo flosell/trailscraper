@@ -1,9 +1,10 @@
+dist: xenial # for python 3.7
 language: python
 python:
   - 3.4
   - 3.5
   - 3.6
-  - 3.7-dev
+  - 3.7
 install: ./go setup
 script: ./go check && ./go test
 addons:
