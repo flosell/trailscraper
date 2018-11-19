@@ -4,6 +4,6 @@ pip==18.1
 pytest==4.0.0
 pytest-runner==4.2
 cryptography==2.4.1
-setuptools==40.5.0
+setuptools==40.6.2
 freezegun==0.3.11
 moto==1.3.7
