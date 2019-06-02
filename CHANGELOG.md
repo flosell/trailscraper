@@ -4,7 +4,7 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
-## 0.6.0
+## 0.6.0 [unreleased]
 
 ### Added
 
@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 ### Removed
 
-* **Removed official support for Python 2.7**. TrailScraper might still run but we no longer actively test for it
+* **Removed official support for Python 2.7 and 3.4**. TrailScraper might still run but we no longer actively test for it
 
 ## 0.5.1
 

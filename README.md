@@ -12,7 +12,7 @@ A command-line tool to get valuable information out of AWS CloudTrail and a gene
 
 Requirements:
 
-* Python >= 3.4
+* Python >= 3.5
 * pip
 
 ```bash
