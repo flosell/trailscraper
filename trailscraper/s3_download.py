@@ -22,8 +22,9 @@ def _s3_key_prefixes(prefix, account_ids, regions, from_date, to_date):
             for region in regions]
 
 
-def _s3_download_recursive(bucket, prefix, target_dir):
-    client = boto3.client('s3')
+def _s3_download_recursive(bucket, prefix, target_dir, profile):
+    session = boto3.session.Session(profile_name=profile)
+    client = session.client('s3')
 
     def _download_file(object_info):
         key = object_info.get('Key')
@@ -53,8 +54,8 @@ def _s3_download_recursive(bucket, prefix, target_dir):
 
 
 # pylint: disable=too-many-arguments
-def download_cloudtrail_logs(target_dir, bucket, cloudtrail_prefix, account_ids, regions, from_date, to_date):
+def download_cloudtrail_logs(target_dir, bucket, cloudtrail_prefix, account_ids, regions, from_date, to_date, profile):
     """Downloads cloudtrail logs matching the given arguments to the target dir"""
     for prefix in _s3_key_prefixes(cloudtrail_prefix, account_ids, regions, from_date, to_date):
         logging.debug("Downloading logs for %s", prefix)
-        _s3_download_recursive(bucket, prefix, target_dir)
+        _s3_download_recursive(bucket, prefix, target_dir, profile)

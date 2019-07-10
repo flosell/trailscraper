@@ -44,15 +44,16 @@ def root_group(verbose):
               help='End date, e.g. "2017-01-01" or "now". Defaults to "now".')
 @click.option('--wait', default=False, is_flag=True,
               help='Wait until events after the specified timeframe are found.')
+@click.option('--profile', default="default", help='Profile name')
 # pylint: disable=too-many-arguments
-def download(bucket, prefix, account_id, region, log_dir, from_s, to_s, wait):
+def download(bucket, prefix, account_id, region, log_dir, from_s, to_s, wait, profile):
     """Downloads CloudTrail Logs from S3."""
     log_dir = os.path.expanduser(log_dir)
 
     from_date = time_utils.parse_human_readable_time(from_s)
     to_date = time_utils.parse_human_readable_time(to_s)
 
-    download_cloudtrail_logs(log_dir, bucket, prefix, account_id, region, from_date, to_date)
+    download_cloudtrail_logs(log_dir, bucket, prefix, account_id, region, from_date, to_date, profile)
 
     if wait:
         last_timestamp = last_event_timestamp_in_dir(log_dir)
