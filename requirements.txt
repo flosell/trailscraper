@@ -4,4 +4,4 @@ toolz==0.10.0
 dateparser==0.6.0 # pyup: < 0.7.0 # disable 0.7.0 upwards since it has a bug I don't want: https://github.com/scrapinghub/dateparser/issues/383
 pytz==2019.2
 python-dateutil==2.8.0
-ruamel.yaml==0.16.0
+ruamel.yaml==0.16.5
