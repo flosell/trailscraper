@@ -1,5 +1,5 @@
 boto3==1.13.0
-click==7.1.1
+click==7.1.2
 toolz==0.10.0
 dateparser==0.6.0 # pyup: < 0.7.0 # disable 0.7.0 upwards since it has a bug I don't want: https://github.com/scrapinghub/dateparser/issues/383
 pytz==2019.3
