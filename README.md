@@ -8,6 +8,12 @@ A command-line tool to get valuable information out of AWS CloudTrail and a gene
 
 ## Installation
 
+### OSX
+
+```bash
+$ brew install trailscraper
+```
+
 ### Installation using pip
 
 Requirements:
