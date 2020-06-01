@@ -1,4 +1,4 @@
-bumpversion==0.5.3
+bumpversion==0.6.0
 pylint==2.5.0
 pip==20.1
 pytest==5.4.1
