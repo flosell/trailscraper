@@ -72,16 +72,16 @@ goal_in-all-versions() {
 }
 
 create_venv() {
+    venv_dir="$1"
     python3 --version
     pip3 --version
     which python3
 
     if which virtualenv > /dev/null; then
-        virtualenv -p python3 "${VENV_DIR}"
+        virtualenv -p python3 "${venv_dir}"
     else
-        pyvenv "${VENV_DIR}"
+        pyvenv "${venv_dir}"
     fi
-
 }
 
 goal_test() {
@@ -147,7 +147,7 @@ goal_generate-rst() {
 
 goal_setup() {
     if [ ! -d "${VENV_DIR}" ]; then
-        create_venv
+        create_venv "${VENV_DIR}"
     fi
 
     pushd "${SCRIPT_DIR}" > /dev/null
@@ -221,6 +221,20 @@ goal_bump_version() {
     bumpversion ${part}
 }
 
+goal_show-new-homebrew-resources() {
+    local version="$1"
+    local venv_dir=$(mktemp -d)
+    local homebrew_dir="$(brew --repository homebrew/core)/Formula" # unused, change things there
+
+    create_venv "${venv_dir}"
+    source "${venv_dir}/bin/activate"
+    pip install "trailscraper==${version}" homebrew-pypi-poet
+
+    echo "=================="
+    poet --formula trailscraper | grep 'resource "' -A 4 | grep -v -- "--"
+    echo "=================="
+}
+
 goal_release() {
     goal_test
     goal_check
@@ -233,6 +247,10 @@ goal_release() {
     goal_create_github_release
     goal_bump_version
     git push
+
+    echo
+    echo
+    echo "DON'T FORGET TO UPDATE HOMEBREW - call ./go show-new-homebrew-resources to display the new resources and go from there"
 }
 
 goal_push() {
