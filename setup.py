@@ -15,7 +15,7 @@ changelog = read_file('CHANGELOG.rst')
 
 setup(
     name='trailscraper',
-    version='0.5.2',
+    version='0.5.3',
     description='A command-line tool to get valuable information out of AWS CloudTrail',
     long_description=readme + '\n\n' + changelog,
     url='http://github.com/flosell/trailscraper',
