@@ -11,3 +11,7 @@ addons:
   apt:
     packages:
     - pandoc
+jobs:
+  include:
+    - stage: check installation still works
+      script: ./go test-setuptools
