@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 * Support for Python 3.7
 * Support for org-level trails (#101)
 
+### Fixed
+
+* `trailscraper guess` was not working when installed through homebrew or pip (#110)
+
 ### Removed
 
 * **Removed official support for Python 2.7 and 3.4**. TrailScraper might still run but we no longer actively test for it

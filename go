@@ -96,6 +96,31 @@ goal_test() {
     popd > /dev/null
 }
 
+goal_test-setuptools() {
+    goal_clean
+    local python_version=$(echo "${VERSIONS}" | sort | tail -n 1)
+
+    pushd "${SCRIPT_DIR}" > /dev/null
+        docker run -i -v $(pwd):/app python:${python_version} bash <<-EOF
+cd /app
+python setup.py install
+
+echo '{
+   "Version":"2012-10-17",
+   "Statement":[
+      {
+         "Effect":"Allow",
+         "Action":[
+            "s3:GetObject"
+         ],
+         "Resource":"arn:aws:s3:::my_corporate_bucket/home/${aws:userid}/*"
+      }
+   ]
+}' | trailscraper guess
+EOF
+    popd > /dev/null
+}
+
 goal_check() {
     pushd "${SCRIPT_DIR}" > /dev/null
       activate_venv
@@ -220,6 +245,7 @@ else
 goal:
     setup               -- set up development environment
     test                -- run all tests
+    test-setuptools     -- run a smoke-test after installing in a clean environment
     check               -- run all style checks
 
     trailscraper        -- call the current development state

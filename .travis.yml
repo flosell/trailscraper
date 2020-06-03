@@ -6,7 +6,7 @@ python:
   - 3.7
   - 3.8
 install: ./go setup
-script: ./go check && ./go test
+script: ./go check && ./go test && ./go test-setuptools
 addons:
   apt:
     packages:
