@@ -98,7 +98,10 @@ goal_test() {
 
 goal_test-setuptools() {
     goal_clean
-    local python_version=$(echo "${VERSIONS}" | sort | tail -n 1)
+    local last_python_version=$(echo "${VERSIONS}" | sort | tail -n 1)
+    local python_version="${TRAVIS_PYTHON_VERSION:-${last_python_version}}"
+
+    echo "Running Python ${python_version} in clean docker container..."
 
     pushd "${SCRIPT_DIR}" > /dev/null
         docker run -i -v $(pwd):/app python:${python_version} bash <<-EOF
