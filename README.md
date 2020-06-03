@@ -35,6 +35,7 @@ $ docker run --rm --env-file <(env | grep AWS_) -v $HOME/.aws:/root/.aws flosell
 
 * [Get CloudTrail events matching a filter from CloudTrail API](#get-cloudtrail-events-matching-a-filter-from-cloudtrail-api)
 * [Download some logs](#download-some-logs)
+* [Download some logs in organisational trails](#download-some-logs-in-organisational-trails)
 * [Find CloudTrail events matching a filter in downloaded logs](#find-cloudtrail-events-matching-a-filter-in-downloaded-logs)
 * [Generate Policy from some CloudTrail records](#generate-policy-from-some-cloudtrail-records)
 * [Extend existing policy by guessing matching actions](#extend-existing-policy-by-guessing-matching-actions)
