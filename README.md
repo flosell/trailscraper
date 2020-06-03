@@ -68,6 +68,17 @@ $ trailscraper download --bucket some-bucket \
 ```
 _Note: Include us-east-1 to download logs for global services. See [below](#why-is-trailscraper-missing-some-events) for details_
 
+### Download some logs in organisational trails
+
+```
+$ trailscraper download --bucket some-bucket \
+                        --account-id some-account-id \
+                        --region us-east-1 \
+                        --org-id o-someorgid \
+                        --from 'two days ago' \
+                        --to 'now'
+```
+
 ### Find CloudTrail events matching a filter in downloaded logs
 
 ```
