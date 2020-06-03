@@ -32,6 +32,8 @@ def root_group(verbose):
               help='The S3 bucket that contains cloud-trail logs')
 @click.option('--prefix', default="",
               help='Prefix in the S3 bucket (including trailing slash)')
+@click.option('--org-id', multiple=True, default=[],
+              help='ID of the organisation we want to look at. Defaults to empty for non-organisational trails')
 @click.option('--account-id', multiple=True, required=True,
               help='ID of the account we want to look at')
 @click.option('--region', multiple=True, required=True,
@@ -45,14 +47,14 @@ def root_group(verbose):
 @click.option('--wait', default=False, is_flag=True,
               help='Wait until events after the specified timeframe are found.')
 # pylint: disable=too-many-arguments
-def download(bucket, prefix, account_id, region, log_dir, from_s, to_s, wait):
+def download(bucket, prefix, org_id, account_id, region, log_dir, from_s, to_s, wait):
     """Downloads CloudTrail Logs from S3."""
     log_dir = os.path.expanduser(log_dir)
 
     from_date = time_utils.parse_human_readable_time(from_s)
     to_date = time_utils.parse_human_readable_time(to_s)
 
-    download_cloudtrail_logs(log_dir, bucket, prefix, account_id, region, from_date, to_date)
+    download_cloudtrail_logs(log_dir, bucket, prefix, org_id, account_id, region, from_date, to_date)
 
     if wait:
         last_timestamp = last_event_timestamp_in_dir(log_dir)
@@ -63,7 +65,7 @@ def download(bucket, prefix, account_id, region, log_dir, from_s, to_s, wait):
 
             time.sleep(60*1)
 
-            download_cloudtrail_logs(log_dir, bucket, prefix, account_id, region, from_date, to_date)
+            download_cloudtrail_logs(log_dir, bucket, prefix, org_id, account_id, region, from_date, to_date)
             last_timestamp = last_event_timestamp_in_dir(log_dir)
 
 

@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 ### Added
 
 * Support for Python 3.7
+* Support for org-level trails (#101)
 
 ### Removed
 

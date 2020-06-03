@@ -34,6 +34,7 @@ def test_download_log_files_and_skip_existing_files():
             cloudtrail_prefix="some-prefix/",
             from_date=datetime.datetime(2017, 1, 1, tzinfo=pytz.utc),
             to_date=datetime.datetime(2017, 1, 1, tzinfo=pytz.utc),
+            org_ids=[],
             account_ids=["000"],
             regions=["some-region-1"])
 
