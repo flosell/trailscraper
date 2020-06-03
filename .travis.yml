@@ -15,3 +15,4 @@ jobs:
   include:
     - stage: check installation still works
       script: ./go test-setuptools
+      install: skip # no need for venv and dev dependencies here
