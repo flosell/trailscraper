@@ -261,6 +261,16 @@ goal_bump-homebrew-release() {
 
 goal_release() {
     VERSION=$(chag latest)
+
+    echo "Version to release is ${VERSION}."
+    echo
+    echo "A few things to check:"
+    echo "* Is this really the version you want to release? Have there been major changes that require a different version?"
+    echo "* Are you sure that CHANGELOG.md, setup.cfg and setup.py all show this version?"
+    echo
+    echo "Hit ENTER if you are ok and want to continue"
+    read
+
     goal_test
     goal_check
 
