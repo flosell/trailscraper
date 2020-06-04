@@ -221,21 +221,46 @@ goal_bump_version() {
     bumpversion ${part}
 }
 
-goal_show-new-homebrew-resources() {
+goal_bump-homebrew-release() {
     local version="$1"
     local venv_dir=$(mktemp -d)
-    local homebrew_dir="$(brew --repository homebrew/core)/Formula" # unused, change things there
-
+    local formula_dir="$(brew --repository homebrew/core)/Formula"
+    local formula_file="${formula_dir}/trailscraper.rb"
+    local branch_name=trailscraper-0.6.1-$(date +%s)
     create_venv "${venv_dir}"
     source "${venv_dir}/bin/activate"
     pip install "trailscraper==${version}" homebrew-pypi-poet
 
-    echo "=================="
-    poet --formula trailscraper | grep 'resource "' -A 4 | grep -v -- "--"
-    echo "=================="
+    export release_url="https://github.com/flosell/trailscraper/archive/${version}.tar.gz"
+    export release_sha=$(curl -sSLf "${release_url}" | openssl sha256)
+
+    export resources=$(poet --formula trailscraper | grep 'resource "' -A 4 | grep -v -- "--")
+
+    export old_bottles=$(sed -n '/bottle/,/end/p'  ${formula_file})
+    export version="${version}" # make it available for envsubst
+
+    pushd ${formula_dir}
+    git checkout master
+    git pull --rebase
+    git checkout -b ${branch_name}
+    popd
+
+    envsubst < ${SCRIPT_DIR}/homebrew-formula.rb.tpl > ${formula_file}
+
+    pushd ${formula_dir}
+    git add trailscraper.rb
+    git commit -m "trailscraper ${version}"
+    git push fork ${branch_name}
+    hub pull-request --message "$(envsubst < ${SCRIPT_DIR}/pr-message.txt.tpl)" \
+                     --browse
+
+    git checkout master
+    popd
+
 }
 
 goal_release() {
+    VERSION=$(chag latest)
     goal_test
     goal_check
 
@@ -248,9 +273,7 @@ goal_release() {
     goal_bump_version
     git push
 
-    echo
-    echo
-    echo "DON'T FORGET TO UPDATE HOMEBREW - call ./go show-new-homebrew-resources to display the new resources and go from there"
+    goal_bump-homebrew-release ${VERSION}
 }
 
 goal_push() {
