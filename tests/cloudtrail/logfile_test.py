@@ -13,6 +13,13 @@ def test_can_parse_logfile_timestamp():
     assert LogFile(path).timestamp() == datetime.datetime(2017,12,11,15,5, tzinfo=pytz.utc)
 
 
+def test_can_parse_logfile_timestamp_with_zeroes():
+    path = "/logs/AWSLogs/111111111111/CloudTrail/eu-central-1/2020/06/03/" \
+           "111111111111_CloudTrail_eu-central-1_20200603T0305Z_A6kvhMoVeCsc7v8U.json.gz"
+
+    assert LogFile(path).timestamp() == datetime.datetime(2020,6,3,3,5, tzinfo=pytz.utc)
+
+
 def test_sees_json_gz_as_valid_filenames():
     path = "/logs/AWSLogs/111111111111/CloudTrail/eu-central-1/2017/12/11/" \
            "111111111111_CloudTrail_eu-central-1_20171211T1505Z_A6kvhMoVeCsc7v8U.json.gz"

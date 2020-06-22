@@ -4,6 +4,12 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## 0.6.2
+
+### Changed
+
+* Minor performance tweaks to `trailscraper select`
+
 ## 0.6.1
 
 (same as 0.6.1, just fixing inconsistent release)

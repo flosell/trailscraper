@@ -180,9 +180,11 @@ class LogFile:
 
     def timestamp(self):
         """Returns the timestamp the log file was delivered"""
-
-        timestamp_part = self.filename().split('_')[3]
-        return datetime.datetime.strptime(timestamp_part, "%Y%m%dT%H%MZ").replace(tzinfo=pytz.utc)
+        dstr = self.filename().split('_')[3]
+        # using manual substring instead of strptime for performance reasons
+        # inspired by https://stackoverflow.com/a/14166888
+        return datetime.datetime(*map(int, [dstr[:4], dstr[4:6], dstr[6:8], dstr[9:11], dstr[11:13]])) \
+            .replace(tzinfo=pytz.utc)
 
     def filename(self):
         """Name of the logfile (without path)"""
