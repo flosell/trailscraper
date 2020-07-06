@@ -3,5 +3,4 @@ click==7.1.2
 toolz==0.10.0
 dateparser==0.7.6
 pytz==2020.1
-python-dateutil==2.7.0 # pyup: ignore # don't touch this one as newer versions don't work in docker builds for some weird reason
 ruamel.yaml==0.16.10
