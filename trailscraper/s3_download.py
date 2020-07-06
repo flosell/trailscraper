@@ -56,22 +56,21 @@ def _s3_download_recursive(bucket, prefixes, target_dir):
                 return True
         return False
 
-    def _download_dir_again(current_prefix):
+    def _download_dir(current_prefix):
         logging.debug("Listing %s", current_prefix)
         paginator = client.get_paginator('list_objects')
         for result in paginator.paginate(Bucket=bucket, Prefix=current_prefix, Delimiter="/"):
             if result.get('CommonPrefixes') is not None:
                 for prefix_result in result.get('CommonPrefixes'):
                     if _starts_with_prefix(prefix_result["Prefix"]):
-                        _download_dir_again(prefix_result["Prefix"])
+                        _download_dir(prefix_result["Prefix"])
 
             if result.get('Contents') is not None:
                 for content in result.get('Contents'):
                     if current_prefix in prefixes:
                         _download_file(content)
 
-    # for prefix in prefixes:
-    _download_dir_again("")
+    _download_dir("")
 
 
 # pylint: disable=too-many-arguments
