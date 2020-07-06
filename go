@@ -298,7 +298,7 @@ else
   echo "usage: $0 <goal>
 goal:
     setup               -- set up development environment
-    test                -- run all tests
+    test                -- run all functional tests
     test-setuptools     -- run a smoke-test after installing in a clean environment
     check               -- run all style checks
 
