@@ -51,6 +51,7 @@ def _s3_download_recursive(bucket, prefixes, target_dir):
 
     def _starts_with_prefix(potential_prefix):
         for prefix in prefixes:
+            # potential_prefix always has a trailing slash so this match is good enough:
             if prefix.startswith(potential_prefix):
                 return True
         return False
