@@ -49,12 +49,6 @@ def _s3_download_recursive(bucket, prefixes, target_dir):
         else:
             logging.info("Skipping %s/%s, already exists.", bucket, key)
 
-    def _is_in_prefixes(current_prefix, prefixes):
-        for prefix in prefixes:
-            if current_prefix == prefix:
-                return True
-        return False
-
     def _starts_with_prefix(potential_prefix):
         for prefix in prefixes:
             if prefix.startswith(potential_prefix):
@@ -72,7 +66,7 @@ def _s3_download_recursive(bucket, prefixes, target_dir):
 
             if result.get('Contents') is not None:
                 for content in result.get('Contents'):
-                    if _is_in_prefixes(current_prefix, prefixes):
+                    if current_prefix in prefixes:
                         _download_file(content)
 
     # for prefix in prefixes:
