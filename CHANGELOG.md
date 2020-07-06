@@ -13,7 +13,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 ### Changed
 
 * Performance tweaks
-  * Major performance improvements in `trailscraper download` for large date ranges with little actual data
+  * `trailscraper download` uses smarter directory listing to improve performance with large date ranges and little new data
+  * `trailscraper download` now downloads files in parallel
   * Minor performance improvements in `trailscraper select`
 
 ## 0.6.1
