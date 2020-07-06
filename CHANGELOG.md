@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 ## 0.6.2
 
+### Fixed
+
+* Fixed Docker images that threw a `ModuleNotFoundError`
+
 ### Changed
 
 * Performance tweaks
