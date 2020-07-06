@@ -92,7 +92,8 @@ def _s3_download_recursive(bucket, prefixes, target_dir, parallelism):
 
 
 # pylint: disable=too-many-arguments
-def download_cloudtrail_logs(target_dir, bucket, cloudtrail_prefix, org_ids, account_ids, regions, from_date, to_date, parallelism):
+def download_cloudtrail_logs(target_dir, bucket, cloudtrail_prefix, org_ids,
+                             account_ids, regions, from_date, to_date, parallelism):
     """Downloads cloudtrail logs matching the given arguments to the target dir"""
     prefixes = _s3_key_prefixes(cloudtrail_prefix, org_ids, account_ids, regions, from_date, to_date)
     _s3_download_recursive(bucket, prefixes, target_dir, parallelism)

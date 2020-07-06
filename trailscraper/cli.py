@@ -67,7 +67,8 @@ def download(bucket, prefix, org_id, account_id, region, log_dir, from_s, to_s, 
 
             time.sleep(60*1)
 
-            download_cloudtrail_logs(log_dir, bucket, prefix, org_id, account_id, region, from_date, to_date, parallelism)
+            download_cloudtrail_logs(log_dir, bucket, prefix, org_id,
+                                     account_id, region, from_date, to_date, parallelism)
             last_timestamp = last_event_timestamp_in_dir(log_dir)
 
 
