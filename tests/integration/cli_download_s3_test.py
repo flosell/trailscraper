@@ -28,19 +28,10 @@ def test_download_log_files_and_skip_existing_files():
 
         given_a_file(dirpath, TEST_LOG_KEY_EXISTING, "some-content-already-existing")
 
-        download_cloudtrail_logs(
-            target_dir=dirpath,
-            bucket="some-bucket",
-            cloudtrail_prefix="some-prefix/",
-            from_date=datetime.datetime(2017, 1, 1, tzinfo=pytz.utc),
-            to_date=datetime.datetime(2017, 1, 1, tzinfo=pytz.utc),
-            org_ids=[],
-            account_ids=["000"],
-            regions=["some-region-1"])
-
         runner = CliRunner()
         result = runner.invoke(cli.root_group, args=[
             "download",
+            "--log-dir", dirpath,
             "--bucket", "some-bucket",
             "--region", "some-region-1",
             "--account-id", "000",
