@@ -8,7 +8,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 ### Changed
 
-* Minor performance tweaks to `trailscraper select`
+* Performance tweaks
+  * Major performance improvements in `trailscraper download` for large date ranges with little actual data
+  * Minor performance improvements in `trailscraper select`
 
 ## 0.6.1
 

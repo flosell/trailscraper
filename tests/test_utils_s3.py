@@ -7,6 +7,12 @@ def file_content(dirpath, key):
     with open(dirpath + os.sep + key) as f:
         return f.read()
 
+
+def file_does_not_exist(dirpath, key):
+    target = dirpath + os.sep + key
+    return not os.path.exists(target)
+
+
 def given_a_bucket(bucket_name):
     s3 = boto3.resource('s3', region_name='us-east-1')
     s3.create_bucket(Bucket=bucket_name)

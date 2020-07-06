@@ -8,11 +8,11 @@ import pytz
 
 
 def _s3_key_prefix(prefix, date, account_id, region):
-    return "{}AWSLogs/{}/CloudTrail/{}/{}/{:02d}/{:02d}" \
+    return "{}AWSLogs/{}/CloudTrail/{}/{}/{:02d}/{:02d}/" \
         .format(prefix, account_id, region, date.year, date.month, date.day)
 
 def _s3_key_prefix_for_org_trails(prefix, date, org_id, account_id, region):
-    return "{}AWSLogs/{}/{}/CloudTrail/{}/{}/{:02d}/{:02d}" \
+    return "{}AWSLogs/{}/{}/CloudTrail/{}/{}/{:02d}/{:02d}/" \
         .format(prefix, org_id, account_id, region, date.year, date.month, date.day)
 
 
@@ -34,7 +34,7 @@ def _s3_key_prefixes(prefix, org_ids, account_ids, regions, from_date, to_date):
             for region in regions]
 
 
-def _s3_download_recursive(bucket, prefix, target_dir):
+def _s3_download_recursive(bucket, prefixes, target_dir):
     client = boto3.client('s3')
 
     def _download_file(object_info):
@@ -49,24 +49,38 @@ def _s3_download_recursive(bucket, prefix, target_dir):
         else:
             logging.info("Skipping %s/%s, already exists.", bucket, key)
 
+    def _is_in_prefixes(current_prefix, prefixes):
+        for prefix in prefixes:
+            if current_prefix == prefix:
+                return True
+        return False
 
-    def _download_dir(dist):
+    def _starts_with_prefix(potential_prefix):
+        for prefix in prefixes:
+            if prefix.startswith(potential_prefix):
+                return True
+        return False
+
+    def _download_dir_again(current_prefix):
+        logging.debug("Listing %s", current_prefix)
         paginator = client.get_paginator('list_objects')
-        for result in paginator.paginate(Bucket=bucket, Prefix=dist):
+        for result in paginator.paginate(Bucket=bucket, Prefix=current_prefix, Delimiter="/"):
             if result.get('CommonPrefixes') is not None:
-                for subdir in result.get('CommonPrefixes'):
-                    _download_dir(subdir.get('Prefix'))
+                for prefix_result in result.get('CommonPrefixes'):
+                    if _starts_with_prefix(prefix_result["Prefix"]):
+                        _download_dir_again(prefix_result["Prefix"])
 
             if result.get('Contents') is not None:
                 for content in result.get('Contents'):
-                    _download_file(content)
+                    if _is_in_prefixes(current_prefix, prefixes):
+                        _download_file(content)
 
-    _download_dir(prefix)
+    # for prefix in prefixes:
+    _download_dir_again("")
 
 
 # pylint: disable=too-many-arguments
 def download_cloudtrail_logs(target_dir, bucket, cloudtrail_prefix, org_ids, account_ids, regions, from_date, to_date):
     """Downloads cloudtrail logs matching the given arguments to the target dir"""
-    for prefix in _s3_key_prefixes(cloudtrail_prefix, org_ids, account_ids, regions, from_date, to_date):
-        logging.debug("Downloading logs for %s", prefix)
-        _s3_download_recursive(bucket, prefix, target_dir)
+    prefixes = _s3_key_prefixes(cloudtrail_prefix, org_ids, account_ids, regions, from_date, to_date)
+    _s3_download_recursive(bucket, prefixes, target_dir)

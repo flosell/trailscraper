@@ -32,7 +32,7 @@ def test_download_log_files_and_skip_existing_files():
             bucket="some-bucket",
             cloudtrail_prefix="some-prefix/",
             from_date=datetime.datetime(2017, 1, 1, tzinfo=pytz.utc),
-            to_date=datetime.datetime(2017, 1, 1, tzinfo=pytz.utc),
+            to_date=datetime.datetime(2018, 1, 1, tzinfo=pytz.utc),
             account_ids=["000"],
             org_ids=[],
             regions=["some-region-1"])
