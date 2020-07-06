@@ -16,3 +16,6 @@ jobs:
     - stage: check installation still works
       script: ./go test-setuptools
       install: skip # no need for venv and dev dependencies here
+    - stage: check docker build still works
+      script: ./go test-docker-build
+      install: skip # no need for venv and dev dependencies here

@@ -124,6 +124,13 @@ EOF
     popd > /dev/null
 }
 
+goal_test-docker-build() {
+    goal_clean
+    cd ${SCRIPT_DIR}
+    docker build -t trailscraper-docker-test .
+    docker run --rm trailscraper-docker-test --version
+}
+
 goal_check() {
     pushd "${SCRIPT_DIR}" > /dev/null
       activate_venv
@@ -300,6 +307,7 @@ goal:
     setup               -- set up development environment
     test                -- run all functional tests
     test-setuptools     -- run a smoke-test after installing in a clean environment
+    test-docker-build   -- run a smoke-test after building a clean docker container
     check               -- run all style checks
 
     trailscraper        -- call the current development state
