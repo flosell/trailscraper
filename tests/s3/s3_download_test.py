@@ -35,7 +35,9 @@ def test_download_log_files_and_skip_existing_files():
             to_date=datetime.datetime(2018, 1, 1, tzinfo=pytz.utc),
             account_ids=["000"],
             org_ids=[],
-            regions=["some-region-1"])
+            regions=["some-region-1"],
+            parallelism=10,
+        )
 
         assert file_content(dirpath, TEST_LOG_KEY) == "some-file-content"
         assert file_content(dirpath, TEST_LOG_KEY_EXISTING) == "some-content-already-existing"

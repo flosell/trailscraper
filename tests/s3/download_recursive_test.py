@@ -17,7 +17,7 @@ def test_download_a_single_file_from_prefix():
     given_an_object("some-bucket", "foo/bar.log", "bar")
 
     with tempfile.TemporaryDirectory() as dirpath:
-        _s3_download_recursive("some-bucket", ["foo/"], dirpath)
+        _s3_download_recursive("some-bucket", ["foo/"], dirpath, 10)
 
         assert file_content(dirpath, "foo/bar.log") == "bar"
 
@@ -30,7 +30,7 @@ def test_download_multiple_files_but_only_the_exact_prefix_given():
     given_an_object("some-bucket", "foo/bar/baz.log", "foo/bar/baz")
 
     with tempfile.TemporaryDirectory() as dirpath:
-        _s3_download_recursive("some-bucket", ["foo/"], dirpath)
+        _s3_download_recursive("some-bucket", ["foo/"], dirpath, 10)
 
         assert file_content(dirpath, "foo/bar.log") == "foo/bar"
         assert file_content(dirpath, "foo/baz.log") == "foo/baz"
@@ -53,7 +53,7 @@ def test_download_files_from_multiple_prefixes():
             "foo/2017/01/02/",
             "foo/2017/01/03/",
         ]
-        _s3_download_recursive("some-bucket", prefixes_to_download, dirpath)
+        _s3_download_recursive("some-bucket", prefixes_to_download, dirpath, 10)
 
         assert file_content(dirpath, "foo/2017/01/01/foo") == "foo"
         assert file_content(dirpath, "foo/2017/01/02/bar") == "bar"

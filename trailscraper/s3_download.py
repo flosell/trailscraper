@@ -38,7 +38,7 @@ def _s3_key_prefixes(prefix, org_ids, account_ids, regions, from_date, to_date):
             for region in regions]
 
 
-def _s3_download_recursive(bucket, prefixes, target_dir):
+def _s3_download_recursive(bucket, prefixes, target_dir, parallelism):
     thread_local = threading.local()
     def get_s3_client():
         if not hasattr(thread_local, "s3_client"):
@@ -86,13 +86,13 @@ def _s3_download_recursive(bucket, prefixes, target_dir):
 
     files_to_download = _list_files_to_download("")
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=parallelism) as executor:
         results = executor.map(_download_file, files_to_download)
         consume(results) # Ensure we raise exceptions
 
 
 # pylint: disable=too-many-arguments
-def download_cloudtrail_logs(target_dir, bucket, cloudtrail_prefix, org_ids, account_ids, regions, from_date, to_date):
+def download_cloudtrail_logs(target_dir, bucket, cloudtrail_prefix, org_ids, account_ids, regions, from_date, to_date, parallelism):
     """Downloads cloudtrail logs matching the given arguments to the target dir"""
     prefixes = _s3_key_prefixes(cloudtrail_prefix, org_ids, account_ids, regions, from_date, to_date)
-    _s3_download_recursive(bucket, prefixes, target_dir)
+    _s3_download_recursive(bucket, prefixes, target_dir, parallelism)
