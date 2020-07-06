@@ -13,9 +13,9 @@ addons:
     - pandoc
 jobs:
   include:
-    - stage: check installation still works
+    - stage: check release-readiness
       script: ./go test-setuptools
       install: skip # no need for venv and dev dependencies here
-    - stage: check docker build still works
+    - stage: check release-readiness
       script: ./go test-docker-build
       install: skip # no need for venv and dev dependencies here
