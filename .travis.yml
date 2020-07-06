@@ -14,8 +14,10 @@ addons:
 jobs:
   include:
     - stage: check release-readiness
+      name: test setuptools
       script: ./go test-setuptools
       install: skip # no need for venv and dev dependencies here
     - stage: check release-readiness
+      name: test docker build
       script: ./go test-docker-build
       install: skip # no need for venv and dev dependencies here
