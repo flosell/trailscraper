@@ -4,7 +4,7 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
-## 0.6.3
+## 0.6.4
 
 ### Fixed
 
@@ -17,9 +17,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
   * `trailscraper download` now downloads files in parallel
   * Minor performance improvements in `trailscraper select`
 
-## 0.6.2
+## 0.6.2 and 0.6.3
 
-(skipped because of broken, partial release)
+(skipeed because of continuing release-script issues)
 
 ## 0.6.1
 
