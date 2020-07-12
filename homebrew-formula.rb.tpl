@@ -5,6 +5,7 @@ class Trailscraper < Formula
   homepage "https://github.com/flosell/trailscraper"
   url "${release_url}"
   sha256 "${release_sha}"
+  license "Apache-2.0"
 
 ${old_bottles}
 
