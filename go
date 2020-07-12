@@ -233,7 +233,7 @@ goal_bump-homebrew-release() {
     local venv_dir=$(mktemp -d)
     local formula_dir="$(brew --repository homebrew/core)/Formula"
     local formula_file="${formula_dir}/trailscraper.rb"
-    local branch_name=trailscraper-0.6.1-$(date +%s)
+    local branch_name=trailscraper-${version}-$(date +%s)
     create_venv "${venv_dir}"
     source "${venv_dir}/bin/activate"
     pip install "trailscraper==${version}" homebrew-pypi-poet
