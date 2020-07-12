@@ -275,7 +275,7 @@ goal_release() {
     echo "* Is this really the version you want to release? Have there been major changes that require a different version?"
     echo "* Are you sure that CHANGELOG.md, setup.cfg, setup.py and __init__.py all show this version?"
     echo
-    (cd ${SCRIPT_DIR} && grep '0.6.3' setup.cfg \
+    (cd ${SCRIPT_DIR} && grep ${VERSION} setup.cfg \
                                       setup.py \
                                       CHANGELOG.md \
                                       trailscraper/__init__.py | sed 's/^/  /')
