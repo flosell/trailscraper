@@ -8,11 +8,12 @@ import click
 
 import trailscraper
 from trailscraper import time_utils, policy_generator
-from trailscraper.cloudtrail import load_from_dir, last_event_timestamp_in_dir, filter_records, \
+from trailscraper.cloudtrail import filter_records, \
     parse_records
 from trailscraper.guess import guess_statements
 from trailscraper.iam import parse_policy_document
 from trailscraper.record_sources.cloudtrail_api_record_source import CloudTrailAPIRecordSource
+from trailscraper.record_sources.local_directory_record_source import LocalDirectoryRecordSource
 from trailscraper.s3_download import download_cloudtrail_logs
 
 
@@ -60,17 +61,17 @@ def download(bucket, prefix, org_id, account_id, region, log_dir, from_s, to_s, 
     download_cloudtrail_logs(log_dir, bucket, prefix, org_id, account_id, region, from_date, to_date, parallelism)
 
     if wait:
-        last_timestamp = last_event_timestamp_in_dir(log_dir)
+        last_timestamp = LocalDirectoryRecordSource(log_dir).last_event_timestamp_in_dir()
         while last_timestamp <= to_date:
-            click.echo("CloudTrail logs haven't caught up to "+str(to_date)+" yet. "+
-                       "Most recent timestamp: "+str(last_timestamp.astimezone(to_date.tzinfo))+". "+
+            click.echo("CloudTrail logs haven't caught up to " + str(to_date) + " yet. " +
+                       "Most recent timestamp: " + str(last_timestamp.astimezone(to_date.tzinfo)) + ". " +
                        "Trying again in 60sec.")
 
-            time.sleep(60*1)
+            time.sleep(60 * 1)
 
             download_cloudtrail_logs(log_dir, bucket, prefix, org_id,
                                      account_id, region, from_date, to_date, parallelism)
-            last_timestamp = last_event_timestamp_in_dir(log_dir)
+            last_timestamp = LocalDirectoryRecordSource(log_dir).last_event_timestamp_in_dir()
 
 
 @click.command("select")
@@ -91,9 +92,9 @@ def select(log_dir, filter_assumed_role_arn, use_cloudtrail_api, from_s, to_s):
     to_date = time_utils.parse_human_readable_time(to_s)
 
     if use_cloudtrail_api:
-        records = CloudTrailAPIRecordSource().load_from_api(from_date,to_date)
+        records = CloudTrailAPIRecordSource().load_from_api(from_date, to_date)
     else:
-        records = load_from_dir(log_dir, from_date, to_date)
+        records = LocalDirectoryRecordSource(log_dir).load_from_dir(from_date, to_date)
 
     filtered_records = filter_records(records, filter_assumed_role_arn, from_date, to_date)
 
@@ -132,7 +133,7 @@ def guess(only):
 def last_event_timestamp(log_dir):
     """Print the most recent cloudtrail event timestamp"""
     log_dir = os.path.expanduser(log_dir)
-    click.echo(last_event_timestamp_in_dir(log_dir))
+    click.echo(LocalDirectoryRecordSource(log_dir).last_event_timestamp_in_dir())
 
 
 root_group.add_command(download)
