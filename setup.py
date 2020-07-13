@@ -22,7 +22,7 @@ setup(
     author='Florian Sellmayr',
     author_email='florian.sellmayr@gmail.com',
     license='Apache License 2.0',
-    packages=find_packages(include=['trailscraper']),
+    packages=find_packages(include=['trailscraper','trailscraper.*']),
     package_data={
         "": ["known-iam-actions.txt"],
     },
