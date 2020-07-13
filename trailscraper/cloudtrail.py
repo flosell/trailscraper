@@ -6,7 +6,6 @@ import logging
 import os
 import re
 
-import boto3
 import pytz
 from toolz import pipe
 from toolz.curried import filter as filterz
@@ -286,23 +285,6 @@ def last_event_timestamp_in_dir(log_dir):
                             lastz)
 
     return most_recent_file.event_time
-
-
-def load_from_api(from_date, to_date):
-    """Loads the last 10 hours of cloudtrail events from the API"""
-    client = boto3.client('cloudtrail')
-    paginator = client.get_paginator('lookup_events')
-    response_iterator = paginator.paginate(
-        StartTime=from_date,
-        EndTime=to_date,
-    )
-    records = []
-    for response in response_iterator:
-        for event in response['Events']:
-            records.append(_parse_record(json.loads(event['CloudTrailEvent'])))
-
-    return records
-
 
 def _by_timeframe(from_date, to_date):
     return lambda record: record.event_time is None or \

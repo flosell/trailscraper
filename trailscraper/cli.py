@@ -8,10 +8,11 @@ import click
 
 import trailscraper
 from trailscraper import time_utils, policy_generator
-from trailscraper.cloudtrail import load_from_dir, load_from_api, last_event_timestamp_in_dir, filter_records, \
+from trailscraper.cloudtrail import load_from_dir, last_event_timestamp_in_dir, filter_records, \
     parse_records
 from trailscraper.guess import guess_statements
 from trailscraper.iam import parse_policy_document
+from trailscraper.record_sources.cloudtrail_api_record_source import CloudTrailAPIRecordSource
 from trailscraper.s3_download import download_cloudtrail_logs
 
 
@@ -90,7 +91,7 @@ def select(log_dir, filter_assumed_role_arn, use_cloudtrail_api, from_s, to_s):
     to_date = time_utils.parse_human_readable_time(to_s)
 
     if use_cloudtrail_api:
-        records = load_from_api(from_date, to_date)
+        records = CloudTrailAPIRecordSource().load_from_api(from_date,to_date)
     else:
         records = load_from_dir(log_dir, from_date, to_date)
 
