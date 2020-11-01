@@ -3,9 +3,10 @@ set -e
 
 SCRIPT_DIR=$(cd $(dirname $0) ; pwd -P)
 VENV_DIR="${SCRIPT_DIR}/venvs/trailscraper-venv${VENV_POSTFIX}"
-VERSIONS="3.5
-3.6
-3.7"
+VERSIONS="3.6
+3.7
+3.8
+3.9"
 
 activate_venv() {
     source "${VENV_DIR}/bin/activate"
@@ -78,6 +79,10 @@ create_venv() {
     which python3
 
     if which virtualenv > /dev/null; then
+        virtualenv -p python3 "${venv_dir}"
+    elif [ ! -z "${VENV_POSTFIX}" ] &&  [[ "$(python3 --version)" =~ Python\ 3\.9\.[0-9]+ ]]; then
+        echo "Looks like we are running inside ./go in-version with Python 3.9 and need to install virtualenv first"
+        pip3 install virtualenv
         virtualenv -p python3 "${venv_dir}"
     else
         pyvenv "${venv_dir}"

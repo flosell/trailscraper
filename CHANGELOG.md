@@ -4,6 +4,16 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## 0.7.0
+
+### Added 
+
+* Support for Python 3.9
+
+### Removed
+
+* **Removed official support for Python 3.5**. TrailScraper might still run but we no longer actively test for it
+
 ## 0.6.4
 
 ### Fixed
