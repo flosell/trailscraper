@@ -1,4 +1,4 @@
-boto3==1.14.52
+boto3==1.16.9
 click==7.1.2
 toolz==0.10.0
 dateparser==1.0.0
