@@ -14,6 +14,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 * **Removed official support for Python 3.5**. TrailScraper might still run but we no longer actively test for it
 
+### Changed
+
+* Moving from DockerHub to GitHub Container registry for Docker images (since DockerHub is dropping support for autobuilds and restricting it in other ways)
+
 ## 0.6.4
 
 ### Fixed
