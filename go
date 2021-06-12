@@ -243,7 +243,7 @@ goal_bump-homebrew-release() {
     source "${venv_dir}/bin/activate"
     pip install "trailscraper==${version}" homebrew-pypi-poet
 
-    export release_url="https://github.com/flosell/trailscraper/archive/${version}.tar.gz"
+    export release_url="$(curl -sS https://pypi.org/simple/trailscraper/ | grep -o "https://.*/trailscraper-${version}.tar.gz")"
     export release_sha=$(curl -sSLf "${release_url}" | openssl sha256)
 
     export resources=$(poet --formula trailscraper | grep 'resource "' -A 4 | grep -v -- "--")
