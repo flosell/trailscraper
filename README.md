@@ -1,7 +1,6 @@
 # TrailScraper
 
 [![PyPi Release](https://img.shields.io/pypi/v/trailscraper.svg)](https://pypi.python.org/pypi/trailscraper)
-[![Docker Hub Build Status](https://img.shields.io/docker/build/flosell/trailscraper.svg)](https://hub.docker.com/r/flosell/trailscraper/)
 [![Build Status](https://travis-ci.com/flosell/trailscraper.svg?branch=master)](https://travis-ci.com/flosell/trailscraper)
 
 A command-line tool to get valuable information out of AWS CloudTrail and a general purpose toolbox for working with IAM policies
@@ -28,8 +27,10 @@ $ pip install trailscraper
 ### Run directly using docker
 
 ```bash
-$ docker run --rm --env-file <(env | grep AWS_) -v $HOME/.aws:/root/.aws flosell/trailscraper:latest
+$ docker run --rm --env-file <(env | grep AWS_) -v $HOME/.aws:/root/.aws ghcr.io/flosell/trailscraper:latest
 ```
+
+Current Versions starting from 0.7.0 are found on GitHub Container Registry (`ghcr.io`), older versions on [DockerHub](https://hub.docker.com/r/flosell/trailscraper/)
 
 ## Usage
 
