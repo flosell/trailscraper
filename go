@@ -264,7 +264,8 @@ goal_bump-homebrew-release() {
     git commit -m "trailscraper ${version}"
     git push fork ${branch_name}
     hub pull-request --message "$(envsubst < ${SCRIPT_DIR}/pr-message.txt.tpl)" \
-                     --browse
+                     --browse \
+                     --draft
 
     git checkout master
     popd
