@@ -271,7 +271,28 @@ goal_bump-homebrew-release() {
 
 }
 
+goal_create_github_container_registry_release() {
+  local version="$1"
+  echo $GITHUB_TOKEN | docker login ghcr.io -u flosell --password-stdin
+
+  pushd "${SCRIPT_DIR}" > /dev/null
+
+  docker build -t ghcr.io/flosell/trailscraper:latest \
+               -t ghcr.io/flosell/trailscraper:${version} \
+               .
+
+  docker push ghcr.io/flosell/trailscraper:latest
+  docker push ghcr.io/flosell/trailscraper:${version}
+
+  popd > /dev/null
+}
+
 goal_release() {
+    if [ -z "${GITHUB_TOKEN}" ]; then
+      echo "needs GITHUB_TOKEN"
+      exit 1
+    fi
+
     VERSION=$(chag latest)
 
     echo "Version to release is ${VERSION}."
@@ -297,6 +318,8 @@ goal_release() {
 
     goal_tag_version
     goal_create_github_release
+    goal_create_github_container_registry_release ${VERSION}
+
     goal_bump_version
     git push
 
