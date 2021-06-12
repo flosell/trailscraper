@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 ### Changed
 
 * Moving from DockerHub to GitHub Container registry for Docker images (since DockerHub is dropping support for autobuilds and restricting it in other ways)
+* Updated supporting dependencies
 
 ## 0.6.4
 
