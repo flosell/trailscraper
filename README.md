@@ -1,7 +1,7 @@
 # TrailScraper
 
 [![PyPi Release](https://img.shields.io/pypi/v/trailscraper.svg)](https://pypi.python.org/pypi/trailscraper)
-[![Build Status](https://travis-ci.com/flosell/trailscraper.svg?branch=master)](https://travis-ci.com/flosell/trailscraper)
+[![Build Status](https://github.com/flosell/trailscraper/actions/workflows/check.yml/badge.svg)](https://github.com/flosell/trailscraper/actions/workflows/check.yml)
 
 A command-line tool to get valuable information out of AWS CloudTrail and a general purpose toolbox for working with IAM policies
 
