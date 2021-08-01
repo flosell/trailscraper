@@ -1,6 +1,9 @@
 name: trailscraper standard checks pipeline
 
-on: [push]
+on:
+  push:
+  schedule:
+    - cron: '0 0 1 * *'
 
 jobs:
   check-and-test:
