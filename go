@@ -78,15 +78,7 @@ create_venv() {
     pip3 --version
     which python3
 
-    if which virtualenv > /dev/null; then
-        virtualenv -p python3 "${venv_dir}"
-    elif [ ! -z "${VENV_POSTFIX}" ] &&  [[ "$(python3 --version)" =~ Python\ 3\.9\.[0-9]+ ]]; then
-        echo "Looks like we are running inside ./go in-version with Python 3.9 and need to install virtualenv first"
-        pip3 install virtualenv
-        virtualenv -p python3 "${venv_dir}"
-    else
-        pyvenv "${venv_dir}"
-    fi
+    python3 -m venv "${venv_dir}"
 }
 
 goal_test() {
