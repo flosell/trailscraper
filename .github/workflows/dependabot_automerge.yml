@@ -12,12 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'dependabot[bot]' }}
     steps:
-      - name: print debug info
-        run: echo "$INFO"
-        env:
-          INFO: ${{toJSON(github.event)}}
       - name: auto-merge dependabot pull request
-        run: gh pr merge --repo ${GITHUB_REPOSITORY} --auto --merge "$PR_URL"
+        run: gh pr merge --repo ${GITHUB_REPOSITORY} --auto --merge "${PR_BRANCH}"
         env:
-          PR_URL: ${{github.event.pull_request.html_url}}
+          PR_BRANCH: ${{ github.event.workflow_run.head_branch }}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
