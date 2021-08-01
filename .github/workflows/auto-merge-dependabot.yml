@@ -5,7 +5,7 @@ on:
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    if: github.base_ref != '' # pull requests only
+    if: github.base_ref != null # pull requests only
     #    if: github.actor == 'dependabot[bot]'
     steps:
       -  name: "Say hello"
