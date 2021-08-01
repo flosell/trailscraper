@@ -5,8 +5,8 @@ on:
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    if: github.base_ref != null # pull requests only
-    #    if: github.actor == 'dependabot[bot]'
+#    if: github.base_ref != null # pull requests only
+    if: github.actor == 'dependabot[bot]'
     steps:
       -  name: "Say hello"
          run: echo "Actor $ACTOR, event $EVENT"
