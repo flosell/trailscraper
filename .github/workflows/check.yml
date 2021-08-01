@@ -1,0 +1,36 @@
+name: trailscraper standard checks pipeline
+
+on: [push]
+
+jobs:
+  check-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: ./go setup
+      - name: Check Code Style
+        run: ./go check
+      - name: Run Tests
+        run: ./go test
+  release-readiness-setuptools:
+    runs-on: ubuntu-latest
+    needs: check-and-test
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test setuptools
+        run: ./go test-setuptools
+  release-readiness-docker-build:
+    runs-on: ubuntu-latest
+    needs: check-and-test
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test docker build
+        run: ./go test-docker-build

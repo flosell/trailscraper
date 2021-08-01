@@ -3,14 +3,14 @@
 name: Dependabot Automerge
 on:
   workflow_run:
-    workflows: ["Dependabot PR Check"]
+    workflows: ["trailscraper standard checks pipeline"]
     types:
       - completed
 
 jobs:
-  do-stuff:
+  auto-merge-dependabot-pr:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'dependabot[bot]' }}
     steps:
       - name: "Say hello"
         run: echo "Actor $ACTOR"
