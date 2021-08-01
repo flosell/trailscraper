@@ -1,0 +1,18 @@
+### .github/workflows/dependabot_automerge.yml
+### This workflow has access to secrets and a read-write token
+name: Dependabot Automerge
+on:
+  workflow_run:
+    workflows: ["Dependabot PR Check"]
+    types:
+      - completed
+
+jobs:
+  do-stuff:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: "Say hello"
+        run: echo "Actor $ACTOR"
+        env:
+          ACTOR: ${{github.actor}}
