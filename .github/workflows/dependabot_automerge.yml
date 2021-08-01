@@ -1,0 +1,19 @@
+### .github/workflows/dependabot_automerge.yml
+### This workflow has access to secrets and a read-write token
+name: Dependabot Automerge
+on:
+  workflow_run:
+    workflows: ["trailscraper standard checks pipeline"]
+    types:
+      - completed
+
+jobs:
+  auto-merge-dependabot-pr:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'dependabot[bot]' }}
+    steps:
+      - name: auto-merge dependabot pull request
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
