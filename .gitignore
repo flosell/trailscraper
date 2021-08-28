@@ -12,3 +12,4 @@ build
 venvs
 .pytest_cache
 tests/iam-actions-from-*
+*.iml
