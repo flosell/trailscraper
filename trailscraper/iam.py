@@ -173,7 +173,7 @@ def parse_policy_document(stream):
 
 def all_known_iam_permissions():
     "Return a list of all known IAM actions"
-    with open(os.path.join(os.path.dirname(__file__), 'known-iam-actions.txt')) as iam_file:
+    with open(os.path.join(os.path.dirname(__file__), 'known-iam-actions.txt'), encoding="UTF-8") as iam_file:
         return {line.rstrip('\n') for line in iam_file.readlines()}
 
 

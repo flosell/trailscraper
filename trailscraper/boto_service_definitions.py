@@ -31,6 +31,6 @@ def service_definition_file(servicename):
 
 def operation_definition(servicename, operationname):
     """Returns the operation definition for a specific service and operation"""
-    with open(service_definition_file(servicename)) as definition_file:
+    with open(service_definition_file(servicename), encoding="UTF-8") as definition_file:
         service_definition = json.loads(definition_file.read())
         return service_definition['operations'][operationname]
