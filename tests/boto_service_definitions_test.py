@@ -22,11 +22,12 @@ def test_should_find_operation_definitions():
         "input": {"shape": "UpdateApiKeyRequest"},
         "output": {"shape": "ApiKey"},
         "errors": [
-            {"shape": "UnauthorizedException"},
-            {"shape": "NotFoundException"},
             {"shape": "BadRequestException"},
-            {"shape": "TooManyRequestsException"},
-            {"shape": "ConflictException"}
+            {"shape": "ConflictException"},
+            {"shape": "LimitExceededException"},
+            {"shape": "NotFoundException"},
+            {"shape": "UnauthorizedException"},
+            {"shape": "TooManyRequestsException"}
         ],
         "documentation": "<p>Changes information about an <a>ApiKey</a> resource.</p>"
     }
