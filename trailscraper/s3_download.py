@@ -12,12 +12,10 @@ from trailscraper.collection_utils import consume
 
 
 def _s3_key_prefix(prefix, date, account_id, region):
-    return "{}AWSLogs/{}/CloudTrail/{}/{}/{:02d}/{:02d}/" \
-        .format(prefix, account_id, region, date.year, date.month, date.day)
+    return f"{prefix}AWSLogs/{account_id}/CloudTrail/{region}/{date.year}/{date.month:02d}/{date.day:02d}/"
 
 def _s3_key_prefix_for_org_trails(prefix, date, org_id, account_id, region):
-    return "{}AWSLogs/{}/{}/CloudTrail/{}/{}/{:02d}/{:02d}/" \
-        .format(prefix, org_id, account_id, region, date.year, date.month, date.day)
+    return f"{prefix}AWSLogs/{org_id}/{account_id}/CloudTrail/{region}/{date.year}/{date.month:02d}/{date.day:02d}/"
 
 
 # pylint: disable=too-many-arguments

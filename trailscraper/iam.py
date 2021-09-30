@@ -90,8 +90,7 @@ class Statement(BaseElement):
     def merge(self, other):
         """Merge two statements into one."""
         if self.Effect != other.Effect:
-            raise ValueError("Trying to combine two statements with differing effects: {} {}".format(self.Effect,
-                                                                                                     other.Effect))
+            raise ValueError(f"Trying to combine two statements with differing effects: {self.Effect} {other.Effect}")
 
         effect = self.Effect
 

@@ -32,8 +32,8 @@ class Record:
         self.assumed_role_arn = assumed_role_arn
 
     def __repr__(self):
-        return "Record(event_source={} event_name={} event_time={} resource_arns={})" \
-            .format(self.event_source, self.event_name, self.event_time, self.resource_arns)
+        return f"Record(event_source={self.event_source} event_name={self.event_name} " \
+               f"event_time={self.event_time} resource_arns={self.resource_arns})"
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -149,7 +149,7 @@ class Record:
         return Statement(
             Effect="Allow",
             Action=[Action("apigateway", http_method)],
-            Resource=["arn:aws:apigateway:{}::{}".format(region, resource_path)]
+            Resource=[f"arn:aws:apigateway:{region}::{resource_path}"]
         )
 
     def to_statement(self):
