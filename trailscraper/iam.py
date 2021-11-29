@@ -11,7 +11,7 @@ from toolz.curried import map as mapz
 
 BASE_ACTION_PREFIXES = ["Describe", "Create", "Delete", "Update", "Detach", "Attach", "List", "Put", "Get", ]
 
-
+# pylint: disable=invalid-name
 class BaseElement:
     """Base Class for all IAM Policy classes"""
 
