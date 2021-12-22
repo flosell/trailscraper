@@ -4,6 +4,12 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## 0.8.0
+
+### Removed
+
+* **Removed official support for EOL Python 3.6**. TrailScraper might still run but we no longer actively test for it. 
+
 ## 0.7.0
 
 ### Added 
