@@ -4,5 +4,5 @@ pip==22.0.3
 pytest==7.0.1
 pytest-runner==6.0.0
 setuptools==60.9.3
-freezegun==1.1.0
+freezegun==1.2.0
 moto==3.0.6
