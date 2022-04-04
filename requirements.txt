@@ -1,5 +1,5 @@
 boto3==1.21.32
-click==8.0.4
+click==8.1.2
 toolz==0.11.2
 dateparser==1.1.1
 pytz==2022.1
