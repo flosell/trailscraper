@@ -29,5 +29,5 @@ def test_should_find_operation_definitions():
             {"shape": "UnauthorizedException"},
             {"shape": "TooManyRequestsException"}
         ],
-        "documentation": "<p>Changes information about an <a>ApiKey</a> resource.</p>"
+        "documentation": "<p>Changes information about an ApiKey resource.</p>"
     }
