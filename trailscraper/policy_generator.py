@@ -12,7 +12,8 @@ from trailscraper.iam import PolicyDocument, Statement
 
 def _combine_statements_by(key):
     def _result(statements):
-        key_function = lambda statement: tuple(key(statement))
+        def key_function(statement):
+            return tuple(key(statement))
         return list(toolz.reduceby(key_function, Statement.merge, statements).values())
 
     return _result

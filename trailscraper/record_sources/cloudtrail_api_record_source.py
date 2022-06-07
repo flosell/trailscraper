@@ -11,7 +11,6 @@ class CloudTrailAPIRecordSource():
     def __init__(self):
         self._client = boto3.client('cloudtrail')
 
-    # pylint: disable=no-self-use
     def load_from_api(self, from_date, to_date):
         """Loads the last 10 hours of cloudtrail events from the API"""
         client = boto3.client('cloudtrail')
