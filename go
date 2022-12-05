@@ -306,7 +306,8 @@ goal_release() {
 
     goal_generate-rst
 
-    python3 setup.py sdist bdist_wheel upload --sign --identity 'florian.sellmayr@gmail.com'
+    python3 setup.py sdist bdist_wheel
+    twine upload --sign --identity 'florian.sellmayr@gmail.com' dist/*
 
     goal_tag_version
     goal_create_github_release
