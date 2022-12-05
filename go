@@ -282,10 +282,8 @@ goal_create_github_container_registry_release() {
 }
 
 goal_release() {
-    if [ -z "${GITHUB_TOKEN}" ]; then
-      echo "needs GITHUB_TOKEN"
-      exit 1
-    fi
+    GITHUB_TOKEN="$(gh auth token)"
+    export HOMEBREW_GITHUB_API_TOKEN="${GITHUB_TOKEN}"
 
     VERSION=$(chag latest)
 
