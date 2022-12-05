@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 ### Added
 
 * Support for Python 3.10
+* Support for Python 3.11
 
 ### Removed
 
