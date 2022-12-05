@@ -6,7 +6,6 @@ class Trailscraper < Formula
   url "${release_url}"
   sha256 "${release_sha}"
   license "Apache-2.0"
-  revision 1
   head "https://github.com/flosell/trailscraper.git"
 
 ${old_bottles}
