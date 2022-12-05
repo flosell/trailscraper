@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 ## 0.8.0
 
+### Added
+
+* Support for Python 3.10
+
 ### Removed
 
 * **Removed official support for EOL Python 3.6**. TrailScraper might still run but we no longer actively test for it. 
