@@ -4,6 +4,12 @@ This changelog contains a loose collection of changes in every release including
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## 0.8.1
+
+### Changed
+
+* Updated supporting dependencies
+
 ## 0.8.0
 
 ### Added
