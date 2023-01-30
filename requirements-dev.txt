@@ -5,6 +5,6 @@ pytest==7.2.1
 pytest-runner==6.0.0
 setuptools==66.1.1
 freezegun==1.2.2
-moto==4.1.0
+moto==4.1.1
 wheel==0.38.4
 twine==4.0.2
