@@ -1,3 +1,4 @@
+import gzip
 import json
 import logging
 
@@ -8,12 +9,13 @@ def all_aws_api_methods():
     result = []
 
     for line in boto_service_definition_files():
-        data = json.load(open(line.strip()))
-        if 'operations' in data:
-            for action in data['operations']:
-                result.append(data['metadata']['endpointPrefix'] + ":" + data['operations'][action]['name'])
-        else:
-            logging.warning('problem with %s', line.strip())
+        with gzip.open(line.strip()) as f:
+            data = json.load(f)
+            if 'operations' in data:
+                for action in data['operations']:
+                    result.append(data['metadata']['endpointPrefix'] + ":" + data['operations'][action]['name'])
+            else:
+                logging.warning('problem with %s', line.strip())
 
     return set(result)
 
