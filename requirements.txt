@@ -3,4 +3,4 @@ click==8.1.7
 toolz==0.12.1
 dateparser==1.2.0
 pytz==2024.1
-ruamel.yaml==0.18.5
+ruamel.yaml==0.18.6
