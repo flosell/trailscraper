@@ -1,6 +1,6 @@
 bumpversion==0.6.0
 pylint==3.2.3
-pip==24.1
+pip==24.1.1
 pytest==8.2.2
 pytest-runner==6.0.1
 setuptools==70.1.0
