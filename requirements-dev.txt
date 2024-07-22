@@ -1,7 +1,7 @@
 bumpversion==0.6.0
 pylint==3.2.5
 pip==24.1.2
-pytest==8.2.2
+pytest==8.3.1
 pytest-runner==6.0.1
 setuptools==71.1.0
 freezegun==1.5.1
