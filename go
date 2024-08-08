@@ -89,7 +89,7 @@ goal_test() {
 
     pushd "${SCRIPT_DIR}" > /dev/null
       activate_venv
-      python3 setup.py test
+      pytest
     popd > /dev/null
 }
 
