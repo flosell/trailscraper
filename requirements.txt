@@ -1,6 +1,6 @@
 boto3==1.35.34
 click==8.1.7
-toolz==0.12.1
+toolz==1.0.0
 dateparser==1.2.0
 pytz==2024.2
 ruamel.yaml==0.18.6
