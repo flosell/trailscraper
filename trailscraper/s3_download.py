@@ -18,7 +18,7 @@ def _s3_key_prefix_for_org_trails(prefix, date, org_id, account_id, region):
     return f"{prefix}AWSLogs/{org_id}/{account_id}/CloudTrail/{region}/{date.year}/{date.month:02d}/{date.day:02d}/"
 
 
-# pylint: disable=too-many-arguments
+# pylint: disable=too-many-positional-arguments
 def _s3_key_prefixes(prefix, org_ids, account_ids, regions, from_date, to_date):
     delta = to_date.astimezone(pytz.utc) - from_date.astimezone(pytz.utc)
 
@@ -89,7 +89,7 @@ def _s3_download_recursive(bucket, prefixes, target_dir, parallelism):
         consume(results) # Ensure we raise exceptions
 
 
-# pylint: disable=too-many-arguments
+# pylint: disable=too-many-positional-arguments
 def download_cloudtrail_logs(target_dir, bucket, cloudtrail_prefix, org_ids,
                              account_ids, regions, from_date, to_date, parallelism):
     """Downloads cloudtrail logs matching the given arguments to the target dir"""
