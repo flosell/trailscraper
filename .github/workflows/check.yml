@@ -16,7 +16,7 @@ jobs:
       matrix:
         python-version: [3.9, "3.10", 3.11, 3.12, 3.13]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
@@ -31,21 +31,21 @@ jobs:
     runs-on: ubuntu-latest
     needs: check-and-test
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Test setuptools
         run: ./go test-setuptools
   release-readiness-docker-build:
     runs-on: ubuntu-latest
     needs: check-and-test
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Test docker build
         run: ./go test-docker-build
   codeql-analyse:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           # We must fetch at least the immediate parents so that if this is
           # a pull request then we can checkout the head.
