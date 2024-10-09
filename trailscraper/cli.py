@@ -50,7 +50,7 @@ def root_group(verbose):
               help='Wait until events after the specified timeframe are found.')
 @click.option('--parallelism', default=10, type=click.INT,
               help='How many files to download in parallel')
-# pylint: disable=too-many-arguments
+# pylint: disable=too-many-positional-arguments
 def download(bucket, prefix, org_id, account_id, region, log_dir, from_s, to_s, wait, parallelism):
     """Downloads CloudTrail Logs from S3."""
     log_dir = os.path.expanduser(log_dir)
