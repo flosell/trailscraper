@@ -21,7 +21,7 @@ ALL_RECORDS_FILTERED = "No records matching your criteria found! Did you use the
 class Record:
     """Represents a CloudTrail record"""
 
-    # pylint: disable=too-many-positional-arguments
+    # pylint: disable=too-many-positional-arguments,too-many-arguments
     def __init__(self, event_source, event_name,
                  resource_arns=None, assumed_role_arn=None, event_time=None, raw_source=None):
         self.event_source = event_source
