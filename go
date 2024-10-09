@@ -3,8 +3,7 @@ set -e
 
 SCRIPT_DIR=$(cd $(dirname $0) ; pwd -P)
 VENV_DIR="${SCRIPT_DIR}/venvs/trailscraper-venv${VENV_POSTFIX}"
-VERSIONS="3.8
-3.9
+VERSIONS="3.9
 3.10
 3.11"
 
