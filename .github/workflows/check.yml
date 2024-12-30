@@ -10,7 +10,7 @@ on:
 
 jobs:
   check-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -28,21 +28,21 @@ jobs:
       - name: Run Tests
         run: ./go test
   release-readiness-setuptools:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: check-and-test
     steps:
       - uses: actions/checkout@v4
       - name: Test setuptools
         run: ./go test-setuptools
   release-readiness-docker-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: check-and-test
     steps:
       - uses: actions/checkout@v4
       - name: Test docker build
         run: ./go test-docker-build
   codeql-analyse:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
