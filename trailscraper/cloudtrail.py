@@ -260,7 +260,7 @@ def filter_records(records,
                    to_date=datetime.datetime.now(tz=pytz.utc)):
     """Filter records so they match the given condition"""
     result = list(pipe(records, filterz(_by_timeframe(from_date, to_date)), filterz(_by_role_arns(arns_to_filter_for))))
-    if not result and records:
+    if not result:
         logging.warning(ALL_RECORDS_FILTERED)
 
     return result
