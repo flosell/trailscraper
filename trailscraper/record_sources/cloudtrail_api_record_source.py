@@ -19,9 +19,6 @@ class CloudTrailAPIRecordSource():
             StartTime=from_date,
             EndTime=to_date,
         )
-        records = []
         for response in response_iterator:
             for event in response['Events']:
-                records.append(_parse_record(json.loads(event['CloudTrailEvent'])))
-
-        return records
+                yield _parse_record(json.loads(event['CloudTrailEvent']))
