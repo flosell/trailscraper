@@ -227,42 +227,11 @@ goal_bump_version() {
 }
 
 goal_bump-homebrew-release() {
-    local version="$1"
-    local venv_dir=$(mktemp -d)
-    local formula_dir="$(brew --repository homebrew/core)/Formula"
-    local formula_file="${formula_dir}/trailscraper.rb"
-    local branch_name=trailscraper-${version}-$(date +%s)
-    create_venv "${venv_dir}"
-    source "${venv_dir}/bin/activate"
-    pip install "trailscraper==${version}" homebrew-pypi-poet
-
-    export release_url="$(curl -sS https://pypi.org/simple/trailscraper/ | grep -o "https://.*/trailscraper-${version}.tar.gz")"
-    export release_sha=$(curl -sSLf "${release_url}" | openssl sha256)
-
-    export resources=$(poet --formula trailscraper | grep 'resource "' -A 4 | grep -v -- "--")
-
-    export old_bottles=$(sed -n '/bottle/,/end/p'  ${formula_file})
-    export version="${version}" # make it available for envsubst
-
-    pushd ${formula_dir}
-    git checkout master
-    git pull --rebase
-    git checkout -b ${branch_name}
-    popd
-
-    envsubst < ${SCRIPT_DIR}/homebrew-formula.rb.tpl > ${formula_file}
-
-    pushd ${formula_dir}
-    git add trailscraper.rb
-    git commit -m "trailscraper ${version}"
-    git push fork ${branch_name}
-    hub pull-request --message "$(envsubst < ${SCRIPT_DIR}/pr-message.txt.tpl)" \
-                     --browse \
-                     --draft
-
-    git checkout master
-    popd
-
+  export HOMEBREW_GITHUB_API_TOKEN="$(gh auth token)" # homebrew often uses a readonly token, set the one already used for release instead
+  local version="$1"
+  brew bump-formula-pr --verbose \
+                       --version "${version}" \
+                       trailscraper
 }
 
 goal_create_github_container_registry_release() {
@@ -327,7 +296,7 @@ goal_release() {
     goal_bump_version
     git push
 
-#    goal_bump-homebrew-release ${VERSION}
+    goal_bump-homebrew-release ${VERSION}
 }
 
 goal_push() {
