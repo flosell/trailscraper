@@ -38,8 +38,7 @@ class LocalDirectoryRecordSource():
         """Loads all CloudTrail Records in a file"""
         for logfile in self._valid_log_files():
             if logfile.contains_events_for_timeframe(from_date, to_date):
-                for item in logfile.records():
-                    yield item
+                yield from logfile.records():
 
     def last_event_timestamp_in_dir(self):
         """Return the timestamp of the most recent event in the given directory"""
