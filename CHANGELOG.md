@@ -5,6 +5,12 @@ This changelog contains a loose collection of changes in every release including
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 
+## 0.9.1
+### Changed
+
+* Updated supporting dependencies
+* Improved RAM usage when filtering by ARN #732 (thanks @anonymous-work-156 for the contribution)
+
 ## 0.9.0
 
 ### Added
