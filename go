@@ -282,10 +282,19 @@ goal_create_github_container_registry_release() {
 }
 
 goal_release() {
-    if [ -z "${GITHUB_TOKEN}" ]; then
-      echo "needs GITHUB_TOKEN"
+    echo "Checking GitHub Login..."
+    gh auth status | grep -E 'Token scopes.*workflow'
+    if [ $? -ne 0 ]; then
+      echo "Please login to GitHub using 'gh auth login' and afterwards, ensure the token has the 'workflow' scope using 'gh auth refresh -s workflow'"
       exit 1
     fi
+    gh auth status | grep -E 'Token scopes.*write:packages'
+    if [ $? -ne 0 ]; then
+      echo "Please login to GitHub using 'gh auth login' and afterwards, ensure the token has the 'workflow' scope using 'gh auth refresh -s workflow'"
+      exit 1
+    fi
+
+    export GITHUB_TOKEN=$(gh auth token)
 
     VERSION=$(chag latest)
 
