@@ -318,7 +318,7 @@ goal_release() {
     goal_bump_version
     git push
 
-    goal_bump-homebrew-release ${VERSION}
+#    goal_bump-homebrew-release ${VERSION}
 }
 
 goal_push() {
