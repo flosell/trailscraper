@@ -1,0 +1,15 @@
+include *.txt
+include *.md
+include LICENSE
+
+graft trailscraper
+
+prune tests
+prune *.egg-info
+
+exclude *.yml
+exclude .gitignore
+exclude Dockerfile
+exclude go
+exclude *.tpl
+exclude *.ini
