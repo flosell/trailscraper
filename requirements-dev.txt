@@ -3,7 +3,7 @@ pylint==3.3.7
 pip==25.1.1
 pytest==8.3.5
 pytest-runner==6.0.1
-setuptools==80.3.1
+setuptools==80.4.0
 freezegun==1.5.1
 moto==4.2.14
 wheel==0.45.1
