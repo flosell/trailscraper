@@ -104,7 +104,7 @@ goal_test-setuptools() {
     pushd "${SCRIPT_DIR}" > /dev/null
         docker run -i -v $(pwd):/app python:${python_version} bash <<-EOF
 cd /app
-python setup.py install
+python -m pip install .
 
 echo '{
    "Version":"2012-10-17",
@@ -157,8 +157,7 @@ goal_setup() {
 
     pushd "${SCRIPT_DIR}" > /dev/null
       activate_venv
-      pip3 install -r requirements-dev.txt
-      python3 setup.py develop
+      pip3 install -e .[dev]
     popd > /dev/null
 }
 
@@ -223,7 +222,7 @@ goal_tag_version() {
 goal_bump_version() {
     part=${1:-patch}
     activate_venv
-    bumpversion ${part}
+    bump-my-version bump ${part}
 }
 
 goal_bump-homebrew-release() {
@@ -271,10 +270,9 @@ goal_release() {
     echo
     echo "A few things to check:"
     echo "* Is this really the version you want to release? Have there been major changes that require a different version?"
-    echo "* Are you sure that CHANGELOG.md, setup.cfg, setup.py and __init__.py all show this version?"
+    echo "* Are you sure that CHANGELOG.md, pyproject.toml and __init__.py all show this version?"
     echo
-    (cd ${SCRIPT_DIR} && grep ${VERSION} setup.cfg \
-                                      setup.py \
+    (cd ${SCRIPT_DIR} && grep ${VERSION} pyproject.toml \
                                       CHANGELOG.md \
                                       trailscraper/__init__.py | sed 's/^/  /')
     echo
@@ -286,7 +284,7 @@ goal_release() {
 
     goal_generate-rst
 
-    python3 setup.py sdist bdist_wheel
+    python3 -m build
     twine upload --sign --identity 'florian.sellmayr@gmail.com' dist/*
 
     goal_tag_version
