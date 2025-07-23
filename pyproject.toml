@@ -1,0 +1,61 @@
+[project]
+name = "trailscraper"
+version = "0.9.2"
+description = "A command-line tool to get valuable information out of AWS CloudTrail"
+keywords = ["aws", "cloud", "iam", "cloudtrail", "trailscraper"]
+readme = "README.md"
+authors = [{ name = "Florian Sellmayr", email = "florian.sellmayr@gmail.com" }]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: Apache Software License",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Utilities",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Security",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+requires-python = ">=3.9"
+license = { text = "Apache License 2.0" }
+dynamic = ["dependencies", "optional-dependencies"]
+
+[project.urls]
+Homepage = "http://github.com/flosell/trailscraper"
+Changelog = "https://github.com/flosell/trailscraper/blob/master/CHANGELOG.md"
+
+[project.scripts]
+trailscraper = "trailscraper.cli:root_group"
+
+[tool.setuptools.dynamic]
+dependencies = { file = "requirements.txt" }
+optional-dependencies.dev = { file = "requirements-dev.txt" }
+
+[tool.setuptools.packages.find]
+include = ["trailscraper*"]
+
+[tool.setuptools.package-data]
+"*" = ["known-iam-actions.txt"]
+
+[tool.bumpversion]
+commit = true
+tag = false
+files = [{ filename = "trailscraper/__init__.py" }]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore:.*:DeprecationWarning:dateutil",
+    "ignore:.*:DeprecationWarning:dateparser",
+    "ignore:.*:DeprecationWarning:werkzeug",
+    "ignore:.*:DeprecationWarning:botocore",
+]
+
+[build-system]
+requires = ["setuptools>=68.1.0"]
+build-backend = "setuptools.build_meta"

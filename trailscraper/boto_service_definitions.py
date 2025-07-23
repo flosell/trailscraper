@@ -1,27 +1,30 @@
 """Helper Methods to get service definition information out of the boto library"""
+
 import fnmatch
 import gzip
 import json
-import os
-
-from pkg_resources import resource_filename, Requirement
+from importlib import resources
+from pathlib import Path
 
 
 def boto_service_definition_files():
     """Return paths to all service definition files from botocore"""
 
-    botocore_data_dir = resource_filename(Requirement.parse("botocore"), "botocore/data")
-    files = [os.path.join(dirname, file_in_dir)
-             for dirname, _, files_in_dir in os.walk(botocore_data_dir)
-             for file_in_dir in files_in_dir
-             if fnmatch.fnmatch(file_in_dir, 'service-*.json.gz')]
+    botocore_data_dir = resources.files("botocore") / "data"
+    stack = [botocore_data_dir]
+    files = []
+    while stack:
+        for item in stack.pop().iterdir():
+            if item.is_dir():
+                stack.append(item)
+            elif fnmatch.fnmatch(item.name, "service-*.json.gz"):
+                files.append(str(item))
     return files
 
 
 def service_definition_file(servicename):
     """Returns the path to the most recent service definition file for a service"""
 
-    boto_service_definition_files()
     service_definitions_for_service = fnmatch.filter(boto_service_definition_files(),
                                                      "**/" + servicename + "/*/service-*.json.gz")
 
@@ -32,6 +35,8 @@ def service_definition_file(servicename):
 
 def operation_definition(servicename, operationname):
     """Returns the operation definition for a specific service and operation"""
-    with gzip.open(service_definition_file(servicename), 'rb') as definition_file:
-        service_definition = json.loads(definition_file.read())
-        return service_definition['operations'][operationname]
+    botocore = resources.files("botocore")
+    file = service_definition_file(servicename)
+    res = botocore / str(Path(file).relative_to(str(botocore)))
+    service_definition = json.loads(gzip.decompress(res.read_bytes()))
+    return service_definition["operations"][operationname]

@@ -7,9 +7,7 @@ COPY . /src
 WORKDIR /src
 
 RUN mkdir /install
-RUN pip install --prefix=/install -r requirements.txt
-RUN python3 setup.py sdist bdist_wheel
-RUN pip install --prefix=/install dist/trailscraper*.tar.gz
+RUN pip install --prefix=/install .
 
 
 FROM base
