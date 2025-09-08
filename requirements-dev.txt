@@ -7,4 +7,4 @@ setuptools==80.9.0
 freezegun==1.5.5
 moto==4.2.14
 wheel==0.45.1
-twine==6.1.0
+twine==6.2.0
