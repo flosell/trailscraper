@@ -2,16 +2,13 @@ from setuptools import setup, find_packages
 
 
 def read_file(filename):
-    try:
-        with open(filename) as readme_file:
-            return readme_file.read()
-    except:
-        return ''
+    with open(filename) as readme_file:
+        return readme_file.read()
 
 requirements = read_file('requirements.txt')
 
-readme = read_file('README.rst')
-changelog = read_file('CHANGELOG.rst')
+readme = read_file('README.md')
+changelog = read_file('CHANGELOG.md')
 
 setup(
     name='trailscraper',
