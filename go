@@ -57,7 +57,7 @@ goal_in-version() {
                -v $(pwd):/code \
                -w /code \
                -e VENV_POSTFIX=${python_version} \
-               python:${python_version} ${cmd}
+               ghcr.io/astral-sh/uv:python${python_version}-trixie-slim ${cmd}
 
     echo "=============== END Python ${python_version} ${cmd}   ==============="
 }
@@ -75,10 +75,9 @@ goal_in-all-versions() {
 create_venv() {
     venv_dir="$1"
     python3 --version
-    pip3 --version
     which python3
 
-    python3 -m venv "${venv_dir}"
+    uv venv "${venv_dir}"
 }
 
 goal_test() {
@@ -103,7 +102,8 @@ goal_test-setuptools() {
     pushd "${SCRIPT_DIR}" > /dev/null
         docker run -i -v $(pwd):/app python:${python_version} bash <<-EOF
 cd /app
-python setup.py install
+pip install uv
+uv pip install --system .
 
 echo '{
    "Version":"2012-10-17",
@@ -158,8 +158,7 @@ goal_setup() {
 
     pushd "${SCRIPT_DIR}" > /dev/null
       activate_venv
-      pip3 install -r requirements-dev.txt
-      python3 setup.py develop
+      uv pip install -e ".[dev]"
     popd > /dev/null
 }
 
@@ -272,10 +271,9 @@ goal_release() {
     echo
     echo "A few things to check:"
     echo "* Is this really the version you want to release? Have there been major changes that require a different version?"
-    echo "* Are you sure that CHANGELOG.md, setup.cfg, setup.py and __init__.py all show this version?"
+    echo "* Are you sure that CHANGELOG.md, pyproject.toml and __init__.py all show this version?"
     echo
-    (cd ${SCRIPT_DIR} && grep ${VERSION} setup.cfg \
-                                      setup.py \
+    (cd ${SCRIPT_DIR} && grep ${VERSION} pyproject.toml \
                                       CHANGELOG.md \
                                       trailscraper/__init__.py | sed 's/^/  /')
     echo
@@ -287,7 +285,7 @@ goal_release() {
 
     goal_generate-rst
 
-    python3 setup.py sdist bdist_wheel
+    uv build
     twine upload --sign --identity 'florian.sellmayr@gmail.com' dist/*
 
     goal_tag_version

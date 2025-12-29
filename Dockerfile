@@ -2,14 +2,15 @@ FROM python:3.11-alpine as base
 FROM base as builder
 
 RUN apk add build-base
+RUN pip install uv
 
 COPY . /src
 WORKDIR /src
 
 RUN mkdir /install
-RUN pip install --prefix=/install -r requirements.txt
-RUN python3 setup.py sdist bdist_wheel
-RUN pip install --prefix=/install dist/trailscraper*.tar.gz
+RUN uv pip install --prefix=/install .
+RUN uv build
+RUN uv pip install --prefix=/install dist/trailscraper*.whl
 
 
 FROM base
