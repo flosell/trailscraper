@@ -5,6 +5,7 @@ This file contains notes from what could be further improved while modernising t
 
 - deprecation warnings during tests
 - is bumpversion still the way to go?
+- bumpversion config in setup.cfg and elsewhere
 - Dockerfile - we pip install twice, once for dependencies, the other one for the real package. is this still necessary with UV?
 - twine - do we still need it or can uv do this on its own?
 - venv handling - can uv do this natively?
@@ -14,3 +15,5 @@ This file contains notes from what could be further improved while modernising t
 - use uv base images in Dockerfile and elsewhere? 
 - use uvs own build system instead of hatchling?
 - delete old files? 
+- do we need pip as an explicit dependency? 
+- do we need pytest-runner as an explicit dependency? 
