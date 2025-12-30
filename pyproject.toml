@@ -4,10 +4,10 @@ build-backend = "hatchling.build"
 
 [project]
 name = "trailscraper"
-version = "0.9.2"
+version = "0.10.0"
 description = "A command-line tool to get valuable information out of AWS CloudTrail"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = {text = "Apache License 2.0"}
 authors = [
     {name = "Florian Sellmayr", email = "florian.sellmayr@gmail.com"}
