@@ -93,18 +93,19 @@ goal_test() {
     popd > /dev/null
 }
 
-goal_test-setuptools() {
-    goal_clean
+goal_build() {
+  uv build
+}
+
+goal_smoketest-build-artifact() {
     local last_python_version=$(echo "${VERSIONS}" | sort | tail -n 1)
-    local python_version="${TRAVIS_PYTHON_VERSION:-${last_python_version}}"
+    local python_version="${PYTHON_VERSION:-${last_python_version}}"
 
     echo "Running Python ${python_version} in clean docker container..."
 
     pushd "${SCRIPT_DIR}" > /dev/null
         docker run -i -v $(pwd):/app python:${python_version} bash <<-EOF
-cd /app
-pip install uv
-uv pip install --system .
+pip install /app/dist/*.whl
 
 echo '{
    "Version":"2012-10-17",
@@ -119,12 +120,12 @@ echo '{
    ]
 }' | trailscraper guess
 
-cat tests/integration/events-for-smoke-test.json | trailscraper generate
+cat /app/tests/integration/events-for-smoke-test.json | trailscraper generate
 EOF
     popd > /dev/null
 }
 
-goal_test-docker-build() {
+goal_smoketest-docker-build() {
     goal_clean
     cd ${SCRIPT_DIR}
     docker build -t trailscraper-docker-test .
@@ -310,22 +311,24 @@ if type -t "goal_$1" &>/dev/null; then
 else
   echo "usage: $0 <goal>
 goal:
-    setup               -- set up development environment
-    test                -- run all functional tests
-    test-setuptools     -- run a smoke-test after installing in a clean environment
-    test-docker-build   -- run a smoke-test after building a clean docker container
-    check               -- run all style checks
+    setup                     -- set up development environment
+    test                      -- run all functional tests
+    check                     -- run all style checks
 
-    trailscraper        -- call the current development state
+    build                     -- build artifacts that can be installed with pip (wheel/sdist)
+    smoketest-build-artifact  -- run a smoke-test after installing in a clean environment
+    smoketest-docker-build    -- run a smoke-test after building a clean docker container
 
-    in-version          -- run a go-command in a particular version of python
-    in-all-versions     -- run a go-command in all supported versions of python
+    trailscraper              -- call the current development state
 
-    release             -- create and publish a new release
-    bump_version        -- bump version
+    in-version                -- run a go-command in a particular version of python
+    in-all-versions           -- run a go-command in all supported versions of python
 
-    regenerate_iam_data -- regenerate list of known iam actions
-    unknown-actions     -- regenerate list of unknown actions
+    release                   -- create and publish a new release
+    bump_version              -- bump version
+
+    regenerate_iam_data       -- regenerate list of known iam actions
+    unknown-actions           -- regenerate list of unknown actions
     "
   exit 1
 fi

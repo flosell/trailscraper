@@ -30,20 +30,12 @@ jobs:
         run: ./go check
       - name: Run Tests
         run: ./go test
-  release-readiness-setuptools:
-    runs-on: ubuntu-24.04
-    needs: check-and-test
-    steps:
-      - uses: actions/checkout@v6
-      - name: Test setuptools
-        run: ./go test-setuptools
-  release-readiness-docker-build:
-    runs-on: ubuntu-24.04
-    needs: check-and-test
-    steps:
-      - uses: actions/checkout@v6
-      - name: Test docker build
-        run: ./go test-docker-build
+      - name: Build artifacts
+        run: ./go build
+      - name: Test artifacts can be installed and run correctly
+        run: PYTHON_VERSION=${{ matrix.python-version }} ./go smoketest-build-artifact
+      - name: Test docker container can be built and runs correctly
+        run: ./go smoketest-docker-build
   codeql-analyse:
     runs-on: ubuntu-24.04
     steps:

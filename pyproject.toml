@@ -59,6 +59,9 @@ trailscraper = "trailscraper.cli:root_group"
 [project.urls]
 Homepage = "http://github.com/flosell/trailscraper"
 
+[tool.uv]
+python-preference = "only-system"
+
 [tool.hatchling.build.targets.wheel]
 packages = ["trailscraper"]
 
