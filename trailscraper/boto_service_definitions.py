@@ -7,9 +7,12 @@ import botocore.data
 
 
 def boto_services():
+    """Returns all AWS service names supported by the boto library"""
     return [entry.name for entry in files(botocore.data).iterdir() if entry.is_dir()]
 
+
 def boto_service_definition(servicename):
+    """Returns the boto definition for a particular AWS service"""
     servicepath = files(botocore.data).joinpath(servicename)
     all_versions = [entry.name for entry in servicepath.iterdir()]
     all_versions.sort()
@@ -21,5 +24,6 @@ def boto_service_definition(servicename):
 
 
 def boto_operation_definition(servicename, operationname):
+    """Returns the boto definition for a particular AWS service and operation"""
     service_definition = boto_service_definition(servicename)
     return service_definition['operations'][operationname]
