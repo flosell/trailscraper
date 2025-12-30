@@ -117,6 +117,8 @@ echo '{
       }
    ]
 }' | trailscraper guess
+
+cat tests/integration/events-for-smoke-test.json | trailscraper generate
 EOF
     popd > /dev/null
 }
