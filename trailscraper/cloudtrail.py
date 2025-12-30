@@ -10,7 +10,7 @@ import pytz
 from toolz import pipe
 from toolz.curried import filter as filterz
 
-from trailscraper.boto_service_definitions import operation_definition
+from trailscraper.boto_service_definitions import boto_operation_definition
 from trailscraper.iam import Statement, Action
 
 ALL_RECORDS_FILTERED = "No records matching your criteria found! Did you use the right filters? " \
@@ -137,7 +137,7 @@ class Record:
                     _regex_sub(r"Cors$", "CORS"))
 
     def _to_api_gateway_statement(self):
-        op_def = operation_definition("apigateway", self.event_name)
+        op_def = boto_operation_definition("apigateway", self.event_name)
 
         http_method = op_def['http']['method']
         request_uri = op_def['http']['requestUri']
