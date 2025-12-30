@@ -17,3 +17,12 @@ This file contains notes from what could be further improved while modernising t
 - delete old files? 
 - do we need pip as an explicit dependency? 
 - do we need pytest-runner as an explicit dependency? 
+- do we still need homebrew-formula.rb.tpl
+- do we still need setuptools as dependency?
+- restructure build and publish
+  - on every commit and for all python versions:
+    - uv build
+    - in plain container: pip install <wheel> or <sdist>, then smoke test like test-setuptools
+    - run docker build, same as above (or maybe we can combine these two?)
+  - on publish:
+    - uv publish
