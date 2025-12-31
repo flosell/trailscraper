@@ -138,15 +138,6 @@ goal_trailscraper() {
     ${VENV_DIR}/bin/trailscraper "$@"
 }
 
-goal_generate-rst() {
-    pushd "${SCRIPT_DIR}" > /dev/null
-    for f in "README.md" "CHANGELOG.md"; do
-        output_file="$(basename ${f} .md).rst"
-        pandoc --from=markdown --to=rst --output="${output_file}" "${f}"
-    done
-    popd > /dev/null
-}
-
 goal_setup() {
     if [ ! -d "${VENV_DIR}" ]; then
         create_venv "${VENV_DIR}"
@@ -168,8 +159,6 @@ goal_clean() {
     rm -fr build/
 	rm -fr dist/
 	rm -fr .eggs/
-	rm -f README.rst
-	rm -f CHANGELOG.rst
 	find . -name '*.egg-info' -exec rm -vfr {} +
 	find . -name '*.egg' -exec rm -vf {} +
 
