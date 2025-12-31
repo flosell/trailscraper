@@ -278,6 +278,7 @@ goal_release() {
 
     UV_PUBLISH_TOKEN="${PYPI_TEST_TOKEN}" uv publish --publish-url https://test.pypi.org/legacy/
     echo "Published to Test PyPI, verify the package and hit ENTER to continue"
+    echo "You can install the package from Test PyPi using 'pip install --index https://test.pypi.org/simple trailscraper==0.10.0'"
     read
 
     goal_tag_version
