@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "trailscraper"
-version = "0.10.0"
+version = "0.10.1"
 description = "A command-line tool to get valuable information out of AWS CloudTrail"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -61,7 +61,7 @@ python-preference = "only-system"
 packages = ["trailscraper"]
 
 [tool.bumpversion]
-current_version = "0.10.0"
+current_version = "0.10.1"
 commit = true
 tag = false
 
