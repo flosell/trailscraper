@@ -13,6 +13,11 @@ activate_venv() {
     source "${VENV_DIR}/bin/activate"
 }
 
+die() {
+    echo "$1"
+    exit 1
+}
+
 goal_regenerate_iam_data_from_cloudonaut() {
     tmp_dir=$(mktemp -d)
     pushd ${tmp_dir} > /dev/null
@@ -233,16 +238,10 @@ goal_create_github_container_registry_release() {
 
 goal_release() {
     echo "Checking GitHub Login..."
-    gh auth status | grep -E 'Token scopes.*workflow'
-    if [ $? -ne 0 ]; then
-      echo "Please login to GitHub using 'gh auth login' and afterwards, ensure the token has the 'workflow' scope using 'gh auth refresh -s workflow'"
-      exit 1
-    fi
-    gh auth status | grep -E 'Token scopes.*write:packages'
-    if [ $? -ne 0 ]; then
-      echo "Please login to GitHub using 'gh auth login' and afterwards, ensure the token has the 'workflow' scope using 'gh auth refresh -s workflow'"
-      exit 1
-    fi
+
+    gh auth status > /dev/null || die "Please login to GitHub using 'gh auth login'"
+    gh auth status | grep -E 'Token scopes.*workflow' || die "Please ensure the GitHub token has the 'workflow' scope using 'gh auth refresh -s workflow'"
+    gh auth status | grep -E 'Token scopes.*write:packages' || die "Please ensure the GitHub token has the 'write:packages' scope using 'gh auth refresh -s write:packages'"
 
     if [ -z "$PYPI_TEST_TOKEN" ]; then
       echo "PYPI_TEST_TOKEN is not set"
