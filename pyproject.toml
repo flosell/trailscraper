@@ -43,11 +43,9 @@ dependencies = [
 dev = [
     "bumpversion==0.6.0",
     "pylint==3.3.6",
-    "pip==25.1",
     "pytest==8.3.5",
     "freezegun==1.5.1",
     "moto==4.2.14",
-    "wheel==0.45.1",
 ]
 
 [project.scripts]
