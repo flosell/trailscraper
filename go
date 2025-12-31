@@ -180,7 +180,6 @@ goal_clean() {
 
 goal_create_github_release() {
     # make sure you have the following:
-    # https://github.com/aktau/github-release
     # https://github.com/mtdowling/chag
     # $GITHUB_TOKEN is set
 
@@ -195,12 +194,9 @@ goal_create_github_release() {
     echo "${CHANGELOG}"
     echo
 
-    github-release release \
-        --user ${USER} \
-        --repo ${REPO} \
-        --tag ${VERSION} \
-        --name ${VERSION} \
-        --description "${CHANGELOG}"
+    gh release create ${VERSION} \
+        --notes "${CHANGELOG}" \
+        --title ${VERSION}
 
     echo "Published release on GitHub"
     popd > /dev/null
