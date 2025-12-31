@@ -242,6 +242,16 @@ goal_release() {
       exit 1
     fi
 
+    if [ -z "$PYPI_TEST_TOKEN" ]; then
+      echo "PYPI_TEST_TOKEN is not set"
+      exit 1
+    fi
+
+    if [ -z "$PYPI_TOKEN" ]; then
+      echo "PYPI_TOKEN is not set"
+      exit 1
+    fi
+
     export GITHUB_TOKEN=$(gh auth token)
 
     VERSION=$(chag latest)
@@ -262,14 +272,18 @@ goal_release() {
     goal_test
     goal_check
 
-    goal_generate-rst
-
     goal_build-artifacts
     goal_smoketest-artifacts
-    twine upload --sign --identity 'florian.sellmayr@gmail.com' dist/*
+
+    UV_PUBLISH_TOKEN="${PYPI_TEST_TOKEN}" uv publish --publish-url https://test.pypi.org/legacy/
+    echo "Published to Test PyPI, verify the package and hit ENTER to continue"
+    read
 
     goal_tag_version
     goal_create_github_release
+
+    UV_PUBLISH_TOKEN="${PYPI_PROD_TOKEN}" uv publish
+
     goal_build-docker
     goal_smoketest-docker
     goal_create_github_container_registry_release ${VERSION}
