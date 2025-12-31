@@ -11,6 +11,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 * Support for Python 3.14
 
+### Changed
+
+* Updated supporting dependencies
+* Changed to UV as a build system, removing dependency on legacy things
+
 ### Removed
 
 * **Removed official support for EOL Python 3.9**. TrailScraper might still run but we no longer actively test for it.
