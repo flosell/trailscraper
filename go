@@ -127,6 +127,7 @@ EOF
 
 goal_smoketest-docker-build() {
     goal_clean
+    goal_build
     cd ${SCRIPT_DIR}
     docker build -t trailscraper-docker-test .
     docker run --rm trailscraper-docker-test --version

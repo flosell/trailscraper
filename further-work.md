@@ -10,7 +10,7 @@ This file contains notes from what could be further improved while modernising t
 - twine - do we still need it or can uv do this on its own?
 - venv handling - can uv do this natively?
 - ./go trailscraper maybe could be built with uv itself, no need for the venv stuff? 
-- use uv base images in Dockerfile and elsewhere? 
+- use uv base images? 
 - use uvs own build system instead of hatchling?
 - do we need pip as an explicit dependency? 
 - restructure build and publish

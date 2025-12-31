@@ -1,20 +1,10 @@
-FROM python:3.11-alpine as base
-FROM base as builder
+FROM python:3.11-alpine
 
-RUN apk add build-base
-RUN pip install uv
+# Copy the pre-built wheel (assumes ./go build has been run)
+COPY dist/trailscraper*.whl /tmp/
 
-COPY . /src
-WORKDIR /src
-
-RUN mkdir /install
-RUN uv pip install --prefix=/install .
-RUN uv build
-RUN uv pip install --prefix=/install dist/trailscraper*.whl
-
-
-FROM base
-
-COPY --from=builder /install /usr/local
+# Install the wheel
+RUN pip install --no-cache-dir /tmp/trailscraper*.whl && \
+    rm -rf /tmp/trailscraper*.whl
 
 ENTRYPOINT ["/usr/local/bin/trailscraper"]
