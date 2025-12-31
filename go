@@ -119,7 +119,7 @@ goal_smoketest-docker-build() {
     goal_build
     cd ${SCRIPT_DIR}
     docker build -t trailscraper-docker-test .
-    docker run --rm -it trailscraper-docker-test --version
+    docker run --rm -i trailscraper-docker-test --version
     cat ./tests/smoke/policy-to-guess.json | docker run --rm -i trailscraper-docker-test  guess
     cat ./tests/smoke/events-for-smoke-test.json | docker run --rm -i trailscraper-docker-test generate
 }
