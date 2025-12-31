@@ -6,7 +6,6 @@ This file contains notes from what could be further improved while modernising t
 - deprecation warnings during tests
 - is bumpversion still the way to go?
 - bumpversion config in setup.cfg and elsewhere
-- Dockerfile - we pip install twice, once for dependencies, the other one for the real package. is this still necessary with UV?
 - twine - do we still need it or can uv do this on its own?
 - venv handling - can uv do this natively?
 - ./go trailscraper maybe could be built with uv itself, no need for the venv stuff? 
