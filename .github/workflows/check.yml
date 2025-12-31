@@ -31,11 +31,13 @@ jobs:
       - name: Run Tests
         run: ./go test
       - name: Build artifacts
-        run: ./go build
+        run: ./go build-artifacts
       - name: Test artifacts can be installed and run correctly
-        run: PYTHON_VERSION=${{ matrix.python-version }} ./go smoketest-build-artifact
-      - name: Test docker container can be built and runs correctly
-        run: ./go smoketest-docker-build
+        run: PYTHON_VERSION=${{ matrix.python-version }} ./go smoketest-artifacts
+      - name: Build docker container
+        run: PYTHON_VERSION=${{ matrix.python-version }} ./go build-docker
+      - name: Test docker container runs correctly
+        run: ./go smoketest-docker
   codeql-analyse:
     runs-on: ubuntu-24.04
     steps:

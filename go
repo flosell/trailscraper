@@ -93,11 +93,11 @@ goal_test() {
     popd > /dev/null
 }
 
-goal_build() {
+goal_build-artifacts() {
   uv build
 }
 
-goal_smoketest-build-artifact() {
+goal_smoketest-artifacts() {
     local last_python_version=$(echo "${VERSIONS}" | sort | tail -n 1)
     local python_version="${PYTHON_VERSION:-${last_python_version}}"
 
@@ -114,14 +114,16 @@ EOF
     popd > /dev/null
 }
 
-goal_smoketest-docker-build() {
-    goal_clean
-    goal_build
+goal_build-docker() {
+    docker build -t ghcr.io/flosell/trailscraper:latest . 
+}
+
+goal_smoketest-docker() {
     cd ${SCRIPT_DIR}
-    docker build -t trailscraper-docker-test .
-    docker run --rm -i trailscraper-docker-test --version
-    cat ./tests/smoke/policy-to-guess.json | docker run --rm -i trailscraper-docker-test  guess
-    cat ./tests/smoke/events-for-smoke-test.json | docker run --rm -i trailscraper-docker-test generate
+    
+    docker run --rm -i ghcr.io/flosell/trailscraper:latest --version
+    cat ./tests/smoke/policy-to-guess.json | docker run --rm -i ghcr.io/flosell/trailscraper:latest guess
+    cat ./tests/smoke/events-for-smoke-test.json | docker run --rm -i ghcr.io/flosell/trailscraper:latest generate
 }
 
 goal_check() {
@@ -232,16 +234,10 @@ goal_create_github_container_registry_release() {
   local version="$1"
   echo $GITHUB_TOKEN | docker login ghcr.io -u flosell --password-stdin
 
-  pushd "${SCRIPT_DIR}" > /dev/null
-
-  docker build -t ghcr.io/flosell/trailscraper:latest \
-               -t ghcr.io/flosell/trailscraper:${version} \
-               .
+  docker tag ghcr.io/flosell/trailscraper:latest ghcr.io/flosell/trailscraper:${version}
 
   docker push ghcr.io/flosell/trailscraper:latest
   docker push ghcr.io/flosell/trailscraper:${version}
-
-  popd > /dev/null
 }
 
 goal_release() {
@@ -279,11 +275,14 @@ goal_release() {
 
     goal_generate-rst
 
-    uv build
+    goal_build-artifacts
+    goal_smoketest-artifacts
     twine upload --sign --identity 'florian.sellmayr@gmail.com' dist/*
 
     goal_tag_version
     goal_create_github_release
+    goal_build-docker
+    goal_smoketest-docker
     goal_create_github_container_registry_release ${VERSION}
 
     goal_bump_version
@@ -307,9 +306,11 @@ goal:
     test                      -- run all functional tests
     check                     -- run all style checks
 
-    build                     -- build artifacts that can be installed with pip (wheel/sdist)
-    smoketest-build-artifact  -- run a smoke-test after installing in a clean environment
-    smoketest-docker-build    -- run a smoke-test after building a clean docker container
+    build-artifacts           -- build artifacts that can be installed with pip (wheel/sdist)
+    smoketest-artifacts       -- run a smoke-test after installing in a clean environment
+    
+    build-docker              -- build a docker image
+    smoketest-docker          -- run a smoke-test after building a clean docker container
 
     trailscraper              -- call the current development state
 
