@@ -61,7 +61,7 @@ python-preference = "only-system"
 packages = ["trailscraper"]
 
 [tool.bumpversion]
-current_version = "0.9.2"
+current_version = "0.10.0"
 commit = true
 tag = false
 
