@@ -107,20 +107,9 @@ goal_smoketest-build-artifact() {
         docker run -i -v $(pwd):/app python:${python_version} bash <<-EOF
 pip install /app/dist/*.whl
 
-echo '{
-   "Version":"2012-10-17",
-   "Statement":[
-      {
-         "Effect":"Allow",
-         "Action":[
-            "s3:GetObject"
-         ],
-         "Resource":"arn:aws:s3:::my_corporate_bucket/home/${aws:userid}/*"
-      }
-   ]
-}' | trailscraper guess
-
-cat /app/tests/integration/events-for-smoke-test.json | trailscraper generate
+trailscraper --version
+cat /app/tests/smoke/policy-to-guess.json | trailscraper guess
+cat /app/tests/smoke/events-for-smoke-test.json | trailscraper generate
 EOF
     popd > /dev/null
 }
@@ -130,7 +119,9 @@ goal_smoketest-docker-build() {
     goal_build
     cd ${SCRIPT_DIR}
     docker build -t trailscraper-docker-test .
-    docker run --rm trailscraper-docker-test --version
+    docker run --rm -it trailscraper-docker-test --version
+    cat ./tests/smoke/policy-to-guess.json | docker run --rm -i trailscraper-docker-test  guess
+    cat ./tests/smoke/events-for-smoke-test.json | docker run --rm -i trailscraper-docker-test generate
 }
 
 goal_check() {
