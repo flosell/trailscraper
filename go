@@ -117,7 +117,7 @@ EOF
 goal_build-docker() {
     local last_python_version=$(echo "${VERSIONS}" | sort | tail -n 1)
     local python_version="${PYTHON_VERSION:-${last_python_version}}"
-    
+
     docker build --build-arg PYTHON_VERSION=${python_version} -t ghcr.io/flosell/trailscraper:latest . 
 }
 
@@ -137,8 +137,7 @@ goal_check() {
 }
 
 goal_trailscraper() {
-    activate_venv
-    ${VENV_DIR}/bin/trailscraper "$@"
+    uv run trailscraper "$@"
 }
 
 goal_setup() {
