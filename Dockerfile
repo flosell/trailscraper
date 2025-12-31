@@ -1,4 +1,6 @@
-FROM python:3.11-alpine
+ARG PYTHON_VERSION="TBD"
+
+FROM python:${PYTHON_VERSION}-alpine
 
 # Copy the pre-built wheel (assumes ./go build has been run)
 COPY dist/trailscraper*.whl /tmp/
