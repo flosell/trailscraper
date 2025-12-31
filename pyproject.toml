@@ -48,7 +48,6 @@ dev = [
     "freezegun==1.5.1",
     "moto==4.2.14",
     "wheel==0.45.1",
-    "twine==6.1.0",
 ]
 
 [project.scripts]
