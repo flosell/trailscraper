@@ -280,7 +280,7 @@ goal_release() {
     goal_tag_version
     goal_create_github_release
 
-    UV_PUBLISH_TOKEN="${PYPI_PROD_TOKEN}" uv publish
+    UV_PUBLISH_TOKEN="${PYPI_TOKEN}" uv publish
 
     goal_build-docker
     goal_smoketest-docker
