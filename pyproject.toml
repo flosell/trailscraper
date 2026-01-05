@@ -34,7 +34,7 @@ dependencies = [
     "boto3==1.38.3",
     "click==8.1.8",
     "toolz==1.0.0",
-    "dateparser==1.2.1",
+    "dateparser==1.2.2",
     "pytz==2025.2",
     "ruamel.yaml==0.18.10",
 ]
