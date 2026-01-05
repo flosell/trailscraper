@@ -36,7 +36,7 @@ dependencies = [
     "toolz==1.0.0",
     "dateparser==1.2.2",
     "pytz==2025.2",
-    "ruamel.yaml==0.18.10",
+    "ruamel.yaml==0.19.1",
 ]
 
 [project.optional-dependencies]
