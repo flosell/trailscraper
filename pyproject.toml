@@ -33,7 +33,7 @@ classifiers = [
 dependencies = [
     "boto3==1.42.21",
     "click==8.1.8",
-    "toolz==1.0.0",
+    "toolz==1.1.0",
     "dateparser==1.2.2",
     "pytz==2025.2",
     "ruamel.yaml==0.19.1",
