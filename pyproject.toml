@@ -42,7 +42,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "bumpversion==0.6.0",
-    "pylint==4.0.4",
+    "pylint==4.0.5",
     "pytest==9.0.2",
     "freezegun==1.5.5",
     "moto==4.2.14",
