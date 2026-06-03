@@ -32,7 +32,7 @@ classifiers = [
 ]
 dependencies = [
     "boto3==1.43.12",
-    "click==8.4.0",
+    "click==8.4.1",
     "toolz==1.1.0",
     "dateparser==1.4.0",
     "pytz==2026.2",
