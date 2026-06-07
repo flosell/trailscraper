@@ -48,6 +48,8 @@ jobs:
     steps:
       - run: echo "Dummy, to have a branch condition"
   codeql-analyse:
+    permissions:
+      security-events: write
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
