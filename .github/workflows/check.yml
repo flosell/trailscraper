@@ -9,6 +9,8 @@ on:
   schedule:
     - cron: '0 0 1 * *'
 
+permissions: {}
+
 jobs:
   check-and-test:
     runs-on: ubuntu-24.04
