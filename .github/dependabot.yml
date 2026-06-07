@@ -5,10 +5,10 @@ updates:
     schedule:
       interval: "weekly"
     cooldown:
-      default-days: 5
+      default-days: 7
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
     cooldown:
-      default-days: 5
+      default-days: 7
