@@ -42,6 +42,11 @@ jobs:
         run: PYTHON_VERSION=${{ matrix.python-version }} ./go build-docker
       - name: Test docker container runs correctly
         run: ./go smoketest-docker
+  all-tests-green: # to match in branch protection rules that don't work for matrix jobs
+    needs: check-and-test
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo "Dummy, to have a branch condition"
   codeql-analyse:
     runs-on: ubuntu-24.04
     steps:
