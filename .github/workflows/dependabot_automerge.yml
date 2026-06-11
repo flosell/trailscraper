@@ -12,7 +12,6 @@ jobs:
     if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'flosell/trailscraper'
     steps:
       - name: Enable auto-merge for Dependabot PRs
-        if: contains(steps.metadata.outputs.dependency-names, 'my-dependency') && steps.metadata.outputs.update-type == 'version-update:semver-patch'
         run: gh pr merge --auto --merge "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
