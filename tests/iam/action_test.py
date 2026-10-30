@@ -13,6 +13,13 @@ from trailscraper.iam import Action
     (Action('ecr', 'ListImages'), "Image"),
     (Action('s3', 'PutObject'), "Object"),
     (Action('s3', 'GetObject'), "Object"),
+    (Action('kms', 'Encrypt'), ""),
+    (Action('kms', 'GenerateDataKey'), ""),
+    (Action('ecr', 'BatchDeleteImage'), "Image"),
+    (Action('ec2', 'DeregisterImage'), "Image"),
+    (Action('dms', 'ModifyEndpoint'), "Endpoint"),
+    (Action('elasticloadbalancing', 'RemoveTags'), "Tag"),
+    (Action('apigateway', 'GET'), ""),
 ])
 def test_base_action(test_input, expected):
     assert test_input._base_action() == expected
@@ -45,6 +52,7 @@ def test_base_action(test_input, expected):
         Action('ec2', 'CreateVolume'),
         Action('ec2', 'DeleteVolume'),
         Action('ec2', 'AttachVolume'),
+        Action('ec2', 'ModifyVolume'),
         Action('ec2', 'DescribeVolumes'),
     ]),
     (Action('ecr', 'ListImages'), [
@@ -55,6 +63,37 @@ def test_base_action(test_input, expected):
         Action('s3', 'DeleteObject'),
         Action('s3', 'GetObject'),
         Action('s3', 'ListObjects'),
+    ]),
+    (Action('kms', 'Encrypt'), [
+        Action('kms', 'GenerateDataKey'),
+        Action('kms', 'Decrypt'),
+    ]),
+    (Action('ecr', 'BatchDeleteImage'), [
+        Action('ecr', 'PutImage'),
+        Action('ecr', 'DescribeImages'),
+        Action('ecr', 'ListImages'),
+    ]),
+    (Action('ec2', 'DeregisterImage'), [
+        Action('ec2', 'CreateImage'),
+        Action('ec2', 'RegisterImage'),
+        Action('ec2', 'DescribeImages'),
+    ]),
+    (Action('dms', 'ModifyEndpoint'), [
+        Action('dms', 'CreateEndpoint'),
+        Action('dms', 'DeleteEndpoint'),
+        Action('dms', 'DescribeEndpoints'),
+    ]),
+    (Action('elasticloadbalancing', 'RemoveTags'), [
+        Action('elasticloadbalancing', 'DescribeTags'),
+        Action('elasticloadbalancing', 'AddTags'),
+    ]),
+    (Action('apigateway', 'GET'), [
+        Action('apigateway', 'DELETE'),
+        Action('apigateway', 'HEAD'),
+        Action('apigateway', 'OPTIONS'),
+        Action('apigateway', 'PATCH'),
+        Action('apigateway', 'POST'),
+        Action('apigateway', 'PUT'),
     ]),
 ])
 def test_find_matching_actions_without_filtering(test_input, expected):
