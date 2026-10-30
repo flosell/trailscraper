@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 ### Added
 
 * Support for Python 3.14
+* Additional IAM action prefixes for `trailscraper guess` (KMS crypto operations, ECR batch actions, deregister/register/modify/remove/add patterns, API Gateway HTTP methods) #52
 
 ### Changed
 
