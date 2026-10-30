@@ -9,7 +9,12 @@ from toolz import pipe
 from toolz.curried import groupby as groupbyz
 from toolz.curried import map as mapz
 
-BASE_ACTION_PREFIXES = ["Describe", "Create", "Delete", "Update", "Detach", "Attach", "List", "Put", "Get", ]
+BASE_ACTION_PREFIXES = [
+    "Describe", "Create", "Delete", "Update", "Detach", "Attach", "List", "Put", "Get",
+    "GenerateDataKey", "Batch", "Deregister", "Register", "Modify", "Remove", "Add",
+    "Encrypt", "Decrypt", "Generate",
+    "DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT",
+]
 
 # pylint: disable=invalid-name
 class BaseElement:
