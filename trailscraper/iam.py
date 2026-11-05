@@ -65,15 +65,21 @@ class Action(BaseElement):
         if not allowed_prefixes:
             allowed_prefixes = BASE_ACTION_PREFIXES
 
-        potential_matches = [Action(prefix=self.prefix, action=action_prefix + self._base_action())
-                             for action_prefix in allowed_prefixes]
+        base_action = None
+        potential_matches = []
+        for plural in (False, True):
+            for action_prefix in allowed_prefixes:
+                if base_action is None:
+                    base_action = self._base_action()
+                action = action_prefix + base_action
+                if plural:
+                    action = action + "s"
+                potential_matches.append(Action(prefix=self.prefix, action=action))
 
-        potential_matches += [Action(prefix=self.prefix, action=action_prefix + self._base_action() + "s")
-                              for action_prefix in allowed_prefixes]
-
+        known_actions = known_iam_actions(self.prefix) if potential_matches else []
         return [potential_match
                 for potential_match in potential_matches
-                if potential_match in known_iam_actions(self.prefix) and potential_match != self]
+                if potential_match in known_actions and potential_match != self]
 
 
 
