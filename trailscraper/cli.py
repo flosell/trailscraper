@@ -107,7 +107,13 @@ def select(log_dir, filter_assumed_role_arn, use_cloudtrail_api, from_s, to_s):
 def generate():
     """Generates a policy that allows the events passed in through STDIN"""
     stdin = click.get_text_stream('stdin')
-    records = parse_records(json.load(stdin)['Records'])
+    try:
+        records = parse_records(json.load(stdin)['Records'])
+    except (ValueError, KeyError) as e:
+        raise click.ClickException(
+            "Could not parse CloudTrail records from STDIN: "
+            "expected JSON with a 'Records' list (e.g. from `trailscraper select`)."
+        ) from e
 
     policy = policy_generator.generate_policy(records)
     click.echo(policy.to_json())

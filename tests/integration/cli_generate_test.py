@@ -6,6 +6,22 @@ from tests.test_utils_testdata import cloudtrail_data_dir, cloudtrail_data
 from trailscraper import cli
 
 
+def test_should_fail_cleanly_for_invalid_stdin_input():
+    runner = CliRunner()
+    result = runner.invoke(cli.root_group, args=["generate"], input="not json at all")
+    assert result.exit_code != 0
+    assert isinstance(result.exception, SystemExit)
+    assert "Could not parse CloudTrail records from STDIN" in result.output
+
+
+def test_should_fail_cleanly_when_records_key_is_missing():
+    runner = CliRunner()
+    result = runner.invoke(cli.root_group, args=["generate"], input='{"foo": 1}')
+    assert result.exit_code != 0
+    assert isinstance(result.exception, SystemExit)
+    assert "Could not parse CloudTrail records from STDIN" in result.output
+
+
 def test_should_output_an_iam_policy_for_a_set_of_cloudtrail_records_input_from_stdin():
     runner = CliRunner()
     records = open(cloudtrail_data("111111111111_CloudTrail_eu-central-1_20171211T1505Z_A6kvhMoVeCsc7v8U.json")).read()
