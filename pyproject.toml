@@ -35,7 +35,7 @@ dependencies = [
     "click==8.5.0",
     "toolz==1.2.0",
     "dateparser==1.4.3",
-    "pytz==2026.5",
+    "pytz==2026.6",
     "ruamel.yaml==0.19.1",
 ]
 
