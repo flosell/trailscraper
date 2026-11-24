@@ -31,7 +31,7 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
-    "boto3==1.43.127",
+    "boto3==1.44.4",
     "click==8.5.1",
     "toolz==1.2.0",
     "dateparser==1.5.0",
